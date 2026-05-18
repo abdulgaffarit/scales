@@ -25,7 +25,10 @@ import json
 import os
 import sys
 import time
-import requests
+try:
+    import requests
+except ImportError:
+    requests = None
 from pathlib import Path
 
 DATA_DIR = Path(__file__).parent / "data"
