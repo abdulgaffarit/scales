@@ -1,7 +1,7 @@
 job_slug,job_title,category,national_avg,national_median,national_low,national_high,yoy_growth,demand,employment
-registered-nurse,Registered Nurse,Healthcare,89010,81220,61340,129400,4.2,Very High,3130600
+registered-nurse,Registered Nurse,Healthcare,98430,93600,61340,129400,4.2,Very High,3130600
 family-medicine-physician,Family Medicine Physician,Healthcare,235930,212000,88820,239200,3.2,Very High,124900
-nurse-practitioner,Nurse Practitioner,Healthcare,124680,121610,82460,161880,5.8,Very High,385300
+nurse-practitioner,Nurse Practitioner,Healthcare,132000,128110,82460,161880,5.8,Very High,385300
 licensed-practical-nurse,Licensed Practical Nurse,Healthcare,55860,54220,38100,75050,3.5,High,703200
 speech-language-pathologist,Speech-Language Pathologist,Healthcare,85410,82080,54380,124520,3.8,High,162200
 physical-therapist,Physical Therapist,Healthcare,97720,95620,63380,127060,4.5,Very High,242100
@@ -9,8 +9,8 @@ occupational-therapist,Occupational Therapist,Healthcare,93180,91510,60730,12568
 diagnostic-medical-sonographer,Diagnostic Medical Sonographer,Healthcare,81350,78680,56280,108980,3.9,High,82900
 dental-hygienist,Dental Hygienist,Healthcare,81400,77810,52670,107530,3.5,High,213700
 pharmacy-technician,Pharmacy Technician,Healthcare,39420,37790,27820,53610,2.8,High,432700
-pharmacist,Pharmacist,Healthcare,132750,128710,93020,162900,2.0,Medium,322700
-veterinarian,Veterinarian,Healthcare,124260,115110,72470,183580,4.8,Very High,82100
+pharmacist,Pharmacist,Healthcare,137210,133000,93020,162900,2.0,Medium,322700
+veterinarian,Veterinarian,Healthcare,140270,119100,72470,183580,4.8,Very High,82100
 health-information-technician,Health Information Technician,Healthcare,48780,47180,31090,72920,3.3,High,53200
 mental-health-counselor,Mental Health Counselor,Healthcare,53710,49710,32510,83840,5.2,Very High,374900
 software-developer,Software Developer,Technology,130160,124200,74510,208620,5.1,Very High,1847900
@@ -26,19 +26,19 @@ information-security-analyst,Information Security Analyst,Technology,120360,1120
 database-administrator,Database Administrator,Technology,107070,101810,57490,168900,4.5,High,106700
 operations-research-analyst,Operations Research Analyst,Technology,100380,91280,53640,161900,4.8,High,107800
 computer-programmer,Computer Programmer,Technology,97800,93000,51420,166960,2.0,Medium,152750
-accountant,Accountant,Finance,79880,77250,48260,128680,2.9,High,1349700
+accountant,Accountant,Finance,84290,81680,48260,128680,2.9,High,1349700
 financial-analyst,Financial Analyst,Finance,99890,91580,56540,166260,3.8,High,371200
 personal-financial-advisor,Personal Financial Advisor,Finance,130740,94170,47570,239200,4.6,High,330300
 credit-analyst,Credit Analyst,Finance,80390,73600,44290,133530,2.5,Medium,68200
 financial-examiner,Financial Examiner,Finance,104660,86080,51900,173670,3.5,High,67100
 compliance-officer,Compliance Officer,Finance,79270,70050,40730,135610,3.2,High,340800
 loan-officer,Loan Officer,Finance,79680,65630,36890,137800,2.2,Medium,318400
-lawyer,Lawyer,Legal,163770,135740,62310,239200,3.5,High,691700
+lawyer,Lawyer,Legal,171540,145760,62310,239200,3.5,High,691700
 paralegal,Paralegal,Legal,59200,56230,35320,91710,3.8,High,378000
-elementary-school-teacher,Elementary School Teacher,Education,62360,60390,41910,92310,1.8,High,1502700
+elementary-school-teacher,Elementary School Teacher,Education,65540,63750,41910,92310,1.8,High,1502700
 middle-school-teacher,Middle School Teacher,Education,64490,62590,43230,96300,1.9,High,627500
-secondary-school-teacher,High School Teacher,Education,67340,65090,45800,101710,2.0,High,1088000
-college-professor,College Professor,Education,84380,76000,43360,160380,2.5,Medium,1211400
+secondary-school-teacher,High School Teacher,Education,70440,67540,45800,101710,2.0,High,1088000
+college-professor,College Professor,Education,103470,80000,43360,160380,2.5,Medium,1211400
 instructional-coordinator,Instructional Coordinator,Education,70030,66290,41490,108130,3.2,High,162700
 special-education-teacher,Special Education Teacher,Education,66280,63620,43870,98250,3.5,Very High,469400
 mechanical-engineer,Mechanical Engineer,Engineering,99510,96310,59870,153120,2.8,High,299200
@@ -49,7 +49,7 @@ industrial-engineer,Industrial Engineer,Engineering,99380,96980,61080,147980,3.2
 aerospace-engineer,Aerospace Engineer,Engineering,126880,122270,76160,183860,2.8,High,61400
 environmental-engineer,Environmental Engineer,Engineering,98210,94590,57780,151290,3.9,High,56200
 industrial-engineering-technician,Industrial Engineering Technician,Engineering,61810,59560,37180,94560,2.5,Medium,62700
-general-manager,General and Operations Manager,Management,122560,98100,49440,239200,3.5,High,3554500
+general-manager,General and Operations Manager,Management,133120,103800,49440,239200,3.5,High,3554500
 marketing-manager,Marketing Manager,Management,141490,136850,73320,239200,4.0,High,330900
 compensation-and-benefits-manager,Compensation and Benefits Manager,Management,131280,125130,73360,206640,3.2,High,21100
 architectural-manager,Architectural and Engineering Manager,Management,158970,152350,101350,239200,3.0,High,189000

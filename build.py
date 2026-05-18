@@ -575,6 +575,21 @@ def main():
     generate_sitemap(jobs, states, cities)
     generate_robots()
 
+    # Copy favicon files to output automatically
+    favicon_files = ["favicon.ico","favicon_16.png","favicon_32.png",
+        "favicon_48.png","favicon_64.png","favicon_128.png","favicon_256.png","apple-touch-icon.png"]
+    copied = 0
+    for fname in favicon_files:
+        src = BASE_DIR / fname
+        if src.exists():
+            shutil.copy2(src, OUTPUT_DIR / fname)
+            copied += 1
+    for src_name, dst_name in [("favicon_32.png","favicon-32x32.png"),("favicon_16.png","favicon-16x16.png")]:
+        src = BASE_DIR / src_name
+        if src.exists():
+            shutil.copy2(src, OUTPUT_DIR / dst_name)
+    print(f"✅ Copied {copied} favicon files to output" if copied else "⚠️  No favicon files found")
+
     print(f"\n🎉 BUILD COMPLETE!")
     print(f"📄 Total pages: {total_pages:,}")
     print(f"📁 Output: {OUTPUT_DIR}")
