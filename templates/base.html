@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_title }}</title>
+  <meta name="description" content="{{ meta_description }}">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://{{ site_domain }}{{ canonical_url }}">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:description" content="{{ meta_description }}">
+  <meta property="og:url" content="https://{{ site_domain }}{{ canonical_url }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ site_name }}">
+
+  <!-- Schema Markup -->
+  <script type="application/ld+json">{{ schema_json }}</script>
+
+  <!-- Breadcrumb Schema -->
+  <script type="application/ld+json">{{ breadcrumb_schema }}</script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ adsense_id }}" crossorigin="anonymous"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #1a56db;
+      --primary-dark: #1240a8;
+      --accent: #16a34a;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+      --radius: 10px;
+      --max-width: 1100px;
+    }
+
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 16px; }
+
+    /* Header */
+    header { background: #fff; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); }
+    .header-inner { max-width: var(--max-width); margin: 0 auto; padding: 0 20px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-size: 1.4rem; font-weight: 800; color: var(--primary); text-decoration: none; letter-spacing: -0.5px; }
+    .logo span { color: var(--accent); }
+    nav a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; margin-left: 20px; font-weight: 500; transition: color 0.2s; }
+    nav a:hover { color: var(--primary); }
+
+    /* Breadcrumb */
+    .breadcrumb { background: #fff; border-bottom: 1px solid var(--border); }
+    .breadcrumb-inner { max-width: var(--max-width); margin: 0 auto; padding: 10px 20px; font-size: 0.83rem; color: var(--text-muted); }
+    .breadcrumb-inner a { color: var(--primary); text-decoration: none; }
+    .breadcrumb-inner a:hover { text-decoration: underline; }
+    .breadcrumb-inner span { margin: 0 6px; }
+
+    /* Main layout */
+    .container { max-width: var(--max-width); margin: 0 auto; padding: 30px 20px; display: grid; grid-template-columns: 1fr 300px; gap: 30px; }
+    @media(max-width: 768px) { .container { grid-template-columns: 1fr; } .sidebar { display: none; } }
+
+    /* Hero salary card */
+    .hero-card { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; border-radius: var(--radius); padding: 35px; margin-bottom: 25px; }
+    .hero-card h1 { font-size: 1.7rem; font-weight: 800; margin-bottom: 6px; line-height: 1.3; }
+    .hero-card .subtitle { opacity: 0.85; font-size: 0.95rem; margin-bottom: 25px; }
+    .salary-highlights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+    @media(max-width: 500px) { .salary-highlights { grid-template-columns: 1fr 1fr; } }
+    .salary-item { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 15px; text-align: center; }
+    .salary-item .label { font-size: 0.78rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .salary-item .value { font-size: 1.5rem; font-weight: 800; }
+    .salary-item .sub { font-size: 0.75rem; opacity: 0.75; margin-top: 2px; }
+
+    /* AdSense banner */
+    .ad-banner { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px; margin-bottom: 25px; text-align: center; min-height: 100px; display: flex; align-items: center; justify-content: center; }
+    .ad-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+
+    /* Cards */
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 25px; margin-bottom: 25px; box-shadow: var(--shadow); }
+    .card h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 18px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .card h2::before { content: ''; display: block; width: 4px; height: 20px; background: var(--primary); border-radius: 2px; }
+
+    /* Salary table */
+    .salary-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    .salary-table th { background: var(--bg); color: var(--text-muted); font-weight: 600; text-align: left; padding: 10px 12px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 2px solid var(--border); }
+    .salary-table td { padding: 11px 12px; border-bottom: 1px solid var(--border); }
+    .salary-table tr:last-child td { border-bottom: none; }
+    .salary-table tr:hover td { background: #f1f5f9; }
+    .badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .badge-green { background: #dcfce7; color: #15803d; }
+    .badge-blue { background: #dbeafe; color: #1d4ed8; }
+    .badge-orange { background: #ffedd5; color: #c2410c; }
+
+    /* Trend chart placeholder */
+    .trend-bars { display: flex; align-items: flex-end; gap: 8px; height: 120px; padding: 10px 0; }
+    .trend-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .trend-bar { width: 100%; background: var(--primary); border-radius: 4px 4px 0 0; opacity: 0.85; transition: opacity 0.2s; }
+    .trend-bar:hover { opacity: 1; }
+    .trend-label { font-size: 0.7rem; color: var(--text-muted); }
+    .trend-val { font-size: 0.68rem; color: var(--primary); font-weight: 600; }
+
+    /* Progress bars (percentile) */
+    .percentile-row { margin-bottom: 14px; }
+    .percentile-row .p-label { display: flex; justify-content: space-between; font-size: 0.87rem; margin-bottom: 5px; }
+    .percentile-row .p-label span:last-child { font-weight: 700; color: var(--primary); }
+    .progress-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--primary), #60a5fa); }
+
+    /* FAQ */
+    .faq-item { border-bottom: 1px solid var(--border); padding: 16px 0; }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q { font-weight: 700; font-size: 0.97rem; color: var(--text); margin-bottom: 8px; }
+    .faq-a { color: var(--text-muted); font-size: 0.93rem; line-height: 1.6; }
+
+    /* Comparison grid */
+    .compare-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .compare-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+    .compare-card .c-name { font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
+    .compare-card .c-salary { font-size: 1.1rem; font-weight: 800; color: var(--primary); }
+    .compare-card .c-diff { font-size: 0.75rem; margin-top: 3px; }
+    .diff-up { color: var(--accent); }
+    .diff-down { color: #dc2626; }
+
+    /* Related links */
+    .related-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .rel-link { display: block; padding: 12px 15px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; text-decoration: none; color: var(--text); font-size: 0.88rem; font-weight: 500; transition: all 0.2s; }
+    .rel-link:hover { border-color: var(--primary); color: var(--primary); background: #eff6ff; }
+
+    /* Sidebar */
+    .sidebar-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow); }
+    .sidebar-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 14px; color: var(--text); }
+    .sidebar-list { list-style: none; }
+    .sidebar-list li { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+    .sidebar-list li:last-child { border-bottom: none; }
+    .sidebar-list a { color: var(--primary); text-decoration: none; }
+    .sidebar-list a:hover { text-decoration: underline; }
+
+    /* Footer */
+    footer { background: #1e293b; color: #94a3b8; padding: 40px 20px; margin-top: 50px; }
+    .footer-inner { max-width: var(--max-width); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+    @media(max-width: 600px) { .footer-inner { grid-template-columns: 1fr; } }
+    footer h4 { color: #e2e8f0; font-size: 0.9rem; margin-bottom: 12px; }
+    footer a { color: #94a3b8; text-decoration: none; display: block; font-size: 0.85rem; margin-bottom: 6px; }
+    footer a:hover { color: #e2e8f0; }
+    .footer-bottom { max-width: var(--max-width); margin: 30px auto 0; padding-top: 20px; border-top: 1px solid #334155; font-size: 0.82rem; text-align: center; }
+
+    /* Utility */
+    .text-green { color: var(--accent); }
+    .text-primary { color: var(--primary); }
+    .font-bold { font-weight: 700; }
+    .mt-10 { margin-top: 10px; }
+    .insight-box { background: #eff6ff; border-left: 4px solid var(--primary); border-radius: 0 8px 8px 0; padding: 15px 18px; margin: 18px 0; font-size: 0.93rem; color: #1e40af; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">USA <span>Salaries</span></a>
+    <nav>
+      <a href="/salary/">Browse Salaries</a>
+      <a href="/compare/">Compare</a>
+      <a href="/about/">About</a>
+    </nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">{{ breadcrumb_html }}</div>
+</div>
+
+<div class="container">
+  <main>
+    <!-- Hero -->
+    <div class="hero-card">
+      <h1>{{ h1_title }}</h1>
+      <p class="subtitle">{{ hero_subtitle }}</p>
+      <div class="salary-highlights">
+        <div class="salary-item">
+          <div class="label">Average</div>
+          <div class="value">${{ avg_salary_fmt }}</div>
+          <div class="sub">per year</div>
+        </div>
+        <div class="salary-item">
+          <div class="label">Median</div>
+          <div class="value">${{ median_salary_fmt }}</div>
+          <div class="sub">per year</div>
+        </div>
+        <div class="salary-item">
+          <div class="label">Hourly</div>
+          <div class="value">${{ hourly_rate }}</div>
+          <div class="sub">per hour</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AdSense Top Banner -->
+    <div class="ad-banner">
+      <div>
+        <div class="ad-label">Advertisement</div>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="{{ adsense_id }}" data-ad-slot="{{ ad_slot_top }}" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </div>
+
+    <!-- Salary Range by Percentile -->
+    <div class="card">
+      <h2>Salary Range & Percentiles</h2>
+      <div class="percentile-row">
+        <div class="p-label"><span>10th Percentile (Entry)</span><span>${{ p10_fmt }}</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:20%"></div></div>
+      </div>
+      <div class="percentile-row">
+        <div class="p-label"><span>25th Percentile</span><span>${{ p25_fmt }}</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:40%"></div></div>
+      </div>
+      <div class="percentile-row">
+        <div class="p-label"><span>50th Percentile (Median)</span><span>${{ median_salary_fmt }}</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:60%"></div></div>
+      </div>
+      <div class="percentile-row">
+        <div class="p-label"><span>75th Percentile</span><span>${{ p75_fmt }}</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:78%"></div></div>
+      </div>
+      <div class="percentile-row">
+        <div class="p-label"><span>90th Percentile (Top Earners)</span><span>${{ p90_fmt }}</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+      </div>
+      <div class="insight-box">💡 {{ percentile_insight }}</div>
+    </div>
+
+    <!-- Salary Trend -->
+    <div class="card">
+      <h2>Salary Trend (2021–2026)</h2>
+      <div class="trend-bars">
+        {% for bar in trend_bars %}
+        <div class="trend-bar-wrap">
+          <div class="trend-val">${{ bar.short }}</div>
+          <div class="trend-bar" style="height:{{ bar.height }}px"></div>
+          <div class="trend-label">{{ bar.year }}</div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="insight-box mt-10">📈 {{ trend_insight }}</div>
+    </div>
+
+    <!-- AdSense Mid -->
+    <div class="ad-banner">
+      <div>
+        <div class="ad-label">Advertisement</div>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="{{ adsense_id }}" data-ad-slot="{{ ad_slot_mid }}" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </div>
+
+    <!-- City / State Comparison Table -->
+    <div class="card">
+      <h2>{{ comparison_table_title }}</h2>
+      <table class="salary-table">
+        <thead>
+          <tr>
+            <th>{{ comparison_col1 }}</th>
+            <th>Avg Salary</th>
+            <th>vs National</th>
+            <th>Demand</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in comparison_rows %}
+          <tr>
+            <td><a href="{{ row.url }}">{{ row.name }}</a></td>
+            <td class="font-bold">${{ row.salary_fmt }}</td>
+            <td class="{{ 'text-green' if row.diff_positive else 'diff-down' }}">{{ '+' if row.diff_positive else '' }}{{ row.diff_pct }}%</td>
+            <td><span class="badge {{ row.demand_class }}">{{ row.demand }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Insight paragraph (AI-resistant content) -->
+    <div class="card">
+      <h2>{{ insight_title }}</h2>
+      <p>{{ insight_p1 }}</p>
+      <br>
+      <p>{{ insight_p2 }}</p>
+      <br>
+      <p>{{ insight_p3 }}</p>
+    </div>
+
+    <!-- Related jobs comparison -->
+    <div class="card">
+      <h2>Compare with Similar Jobs</h2>
+      <div class="compare-grid">
+        {% for job in related_jobs %}
+        <div class="compare-card">
+          <div class="c-name"><a href="{{ job.url }}">{{ job.title }}</a></div>
+          <div class="c-salary">${{ job.salary_fmt }}</div>
+          <div class="c-diff {{ 'diff-up' if job.diff_positive else 'diff-down' }}">{{ '+' if job.diff_positive else '' }}{{ job.diff_pct }}% vs this role</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- FAQ Section (targets People Also Ask) -->
+    <div class="card">
+      <h2>Frequently Asked Questions</h2>
+      {% for faq in faqs %}
+      <div class="faq-item">
+        <div class="faq-q">{{ faq.q }}</div>
+        <div class="faq-a">{{ faq.a }}</div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- AdSense Bottom -->
+    <div class="ad-banner">
+      <div>
+        <div class="ad-label">Advertisement</div>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="{{ adsense_id }}" data-ad-slot="{{ ad_slot_bottom }}" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </div>
+
+    <!-- Related Pages -->
+    <div class="card">
+      <h2>Related Salary Pages</h2>
+      <div class="related-links">
+        {% for link in related_links %}
+        <a href="{{ link.url }}" class="rel-link">{{ link.text }}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </main>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <div class="ad-label" style="margin-bottom:8px">Advertisement</div>
+      <ins class="adsbygoogle" style="display:block;min-height:250px" data-ad-client="{{ adsense_id }}" data-ad-slot="{{ ad_slot_sidebar }}" data-ad-format="auto"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <div class="sidebar-card">
+      <h3>Top Paying States</h3>
+      <ul class="sidebar-list">
+        {% for s in top_states %}
+        <li><a href="{{ s.url }}">{{ s.name }}</a> — ${{ s.salary_fmt }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="sidebar-card">
+      <h3>Top Paying Cities</h3>
+      <ul class="sidebar-list">
+        {% for c in top_cities %}
+        <li><a href="{{ c.url }}">{{ c.name }}</a> — ${{ c.salary_fmt }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="sidebar-card">
+      <h3>Same Category Jobs</h3>
+      <ul class="sidebar-list">
+        {% for j in category_jobs %}
+        <li><a href="{{ j.url }}">{{ j.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="ad-label" style="margin-bottom:8px">Advertisement</div>
+      <ins class="adsbygoogle" style="display:block;min-height:250px" data-ad-client="{{ adsense_id }}" data-ad-slot="{{ ad_slot_sidebar2 }}" data-ad-format="auto"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <h4>USA Salaries</h4>
+      <p style="font-size:0.83rem;line-height:1.6">Comprehensive salary data for every job, state, and city in the United States. Updated quarterly from official BLS sources.</p>
+    </div>
+    <div>
+      <h4>Popular Jobs</h4>
+      <a href="/salary/registered-nurse/">Registered Nurse</a>
+      <a href="/salary/software-engineer/">Software Engineer</a>
+      <a href="/salary/teacher/">Teacher</a>
+      <a href="/salary/accountant/">Accountant</a>
+      <a href="/salary/physician/">Physician</a>
+    </div>
+    <div>
+      <h4>Browse by State</h4>
+      <a href="/salary/registered-nurse/california/">California</a>
+      <a href="/salary/registered-nurse/texas/">Texas</a>
+      <a href="/salary/registered-nurse/new-york/">New York</a>
+      <a href="/salary/registered-nurse/florida/">Florida</a>
+      <a href="/salary/registered-nurse/washington/">Washington</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 USA Salaries. Data sourced from U.S. Bureau of Labor Statistics (BLS). For informational purposes only.</p>
+  </div>
+</footer>
+
+</body>
+</html>

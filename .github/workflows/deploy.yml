@@ -1,0 +1,42 @@
+name: Build & Deploy SalaryScale
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Auto-rebuild every 1st of the month (data refresh)
+    - cron: '0 2 1 * *'
+  workflow_dispatch:  # Manual trigger button in GitHub UI
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: pip install jinja2
+
+      - name: Run Build Script
+        run: python build.py
+
+      - name: Show Build Stats
+        run: |
+          echo "Pages generated: $(find output -name '*.html' | wc -l)"
+          echo "Total size: $(du -sh output | cut -f1)"
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: usasalaries
+          directory: output
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

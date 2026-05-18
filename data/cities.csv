@@ -1,0 +1,100 @@
+city_slug,city_name,state_slug,state_name,population,col_multiplier,metro_type
+new-york-city,New York City,new-york,New York,8336000,1.65,Major Metro
+los-angeles,Los Angeles,california,California,3980000,1.55,Major Metro
+chicago,Chicago,illinois,Illinois,2696000,1.12,Major Metro
+houston,Houston,texas,Texas,2310000,0.97,Major Metro
+phoenix,Phoenix,arizona,Arizona,1608000,1.02,Major Metro
+philadelphia,Philadelphia,pennsylvania,Pennsylvania,1584000,1.08,Major Metro
+san-antonio,San Antonio,texas,Texas,1434000,0.9,Large City
+san-diego,San Diego,california,California,1386000,1.48,Major Metro
+dallas,Dallas,texas,Texas,1304000,0.99,Major Metro
+san-jose,San Jose,california,California,1035000,1.72,Major Metro
+austin,Austin,texas,Texas,978000,1.08,Major Metro
+jacksonville,Jacksonville,florida,Florida,949000,0.94,Large City
+fort-worth,Fort Worth,texas,Texas,918000,0.96,Large City
+columbus,Columbus,ohio,Ohio,905000,0.91,Large City
+charlotte,Charlotte,north-carolina,North Carolina,874000,0.96,Large City
+san-francisco,San Francisco,california,California,874000,1.85,Major Metro
+indianapolis,Indianapolis,indiana,Indiana,867000,0.87,Large City
+seattle,Seattle,washington,Washington,737000,1.38,Major Metro
+denver,Denver,colorado,Colorado,715000,1.15,Major Metro
+nashville,Nashville,tennessee,Tennessee,689000,0.95,Large City
+oklahoma-city,Oklahoma City,oklahoma,Oklahoma,681000,0.84,Large City
+el-paso,El Paso,texas,Texas,678000,0.82,Large City
+washington-dc,Washington,district-of-columbia,District of Columbia,670000,1.52,Major Metro
+boston,Boston,massachusetts,Massachusetts,653000,1.45,Major Metro
+las-vegas,Las Vegas,nevada,Nevada,641000,1.03,Major Metro
+memphis,Memphis,tennessee,Tennessee,633000,0.84,Large City
+louisville,Louisville,kentucky,Kentucky,628000,0.84,Large City
+portland,Portland,oregon,Oregon,620000,1.13,Major Metro
+baltimore,Baltimore,maryland,Maryland,582000,1.12,Large City
+milwaukee,Milwaukee,wisconsin,Wisconsin,577000,0.93,Large City
+albuquerque,Albuquerque,new-mexico,New Mexico,564000,0.87,Large City
+tucson,Tucson,arizona,Arizona,545000,0.92,Large City
+fresno,Fresno,california,California,530000,1.08,Large City
+mesa,Mesa,arizona,Arizona,504000,1.0,Large City
+sacramento,Sacramento,california,California,513000,1.22,Large City
+atlanta,Atlanta,georgia,Georgia,498000,1.05,Major Metro
+kansas-city,Kansas City,missouri,Missouri,495000,0.88,Large City
+omaha,Omaha,nebraska,Nebraska,486000,0.88,Large City
+colorado-springs,Colorado Springs,colorado,Colorado,478000,1.06,Large City
+raleigh,Raleigh,north-carolina,North Carolina,467000,0.98,Large City
+miami,Miami,florida,Florida,442000,1.12,Major Metro
+virginia-beach,Virginia Beach,virginia,Virginia,459000,1.05,Large City
+long-beach,Long Beach,california,California,456000,1.45,Large City
+minneapolis,Minneapolis,minnesota,Minnesota,429000,1.03,Major Metro
+tampa,Tampa,florida,Florida,399000,0.99,Large City
+new-orleans,New Orleans,louisiana,Louisiana,383000,0.92,Large City
+arlington,Arlington,texas,Texas,394000,0.97,Large City
+bakersfield,Bakersfield,california,California,380000,1.08,Large City
+honolulu,Honolulu,hawaii,Hawaii,350000,1.55,Large City
+anaheim,Anaheim,california,California,346000,1.42,Large City
+aurora,Aurora,colorado,Colorado,366000,1.1,Large City
+santa-ana,Santa Ana,california,California,332000,1.4,Large City
+corpus-christi,Corpus Christi,texas,Texas,317000,0.87,Medium City
+riverside,Riverside,california,California,311000,1.28,Large City
+lexington,Lexington,kentucky,Kentucky,322000,0.84,Medium City
+stockton,Stockton,california,California,312000,1.18,Medium City
+st-paul,St. Paul,minnesota,Minnesota,308000,1.02,Large City
+pittsburgh,Pittsburgh,pennsylvania,Pennsylvania,304000,0.98,Large City
+anchorage,Anchorage,alaska,Alaska,290000,1.3,Large City
+st-louis,St. Louis,missouri,Missouri,294000,0.88,Large City
+cincinnati,Cincinnati,ohio,Ohio,308000,0.91,Large City
+henderson,Henderson,nevada,Nevada,310000,1.02,Large City
+greensboro,Greensboro,north-carolina,North Carolina,296000,0.9,Medium City
+plano,Plano,texas,Texas,288000,1.02,Medium City
+newark,Newark,new-jersey,New Jersey,282000,1.22,Large City
+toledo,Toledo,ohio,Ohio,269000,0.84,Medium City
+orlando,Orlando,florida,Florida,307000,1.0,Large City
+irvine,Irvine,california,California,307000,1.55,Large City
+laredo,Laredo,texas,Texas,262000,0.8,Medium City
+madison,Madison,wisconsin,Wisconsin,269000,0.97,Medium City
+chandler,Chandler,arizona,Arizona,275000,1.03,Large City
+buffalo,Buffalo,new-york,New York,256000,0.92,Medium City
+durham,Durham,north-carolina,North Carolina,278000,0.97,Medium City
+lubbock,Lubbock,texas,Texas,258000,0.82,Medium City
+north-las-vegas,North Las Vegas,nevada,Nevada,262000,0.99,Large City
+garland,Garland,texas,Texas,238000,0.95,Medium City
+winston-salem,Winston-Salem,north-carolina,North Carolina,249000,0.87,Medium City
+glendale,Glendale,arizona,Arizona,248000,0.99,Medium City
+hialeah,Hialeah,florida,Florida,220000,1.06,Large City
+scottsdale,Scottsdale,arizona,Arizona,241000,1.12,Large City
+richmond,Richmond,virginia,Virginia,226000,1.02,Medium City
+baton-rouge,Baton Rouge,louisiana,Louisiana,220000,0.88,Medium City
+spokane,Spokane,washington,Washington,222000,1.0,Medium City
+des-moines,Des Moines,iowa,Iowa,214000,0.88,Medium City
+tacoma,Tacoma,washington,Washington,219000,1.2,Medium City
+san-bernardino,San Bernardino,california,California,222000,1.18,Medium City
+modesto,Modesto,california,California,218000,1.12,Medium City
+fontana,Fontana,california,California,213000,1.22,Medium City
+moreno-valley,Moreno Valley,california,California,208000,1.15,Medium City
+glendale-ca,Glendale,california,California,196000,1.48,Large City
+akron,Akron,ohio,Ohio,189000,0.85,Medium City
+yonkers,Yonkers,new-york,New York,200000,1.38,Large City
+fremont,Fremont,california,California,230000,1.6,Large City
+salt-lake-city,Salt Lake City,utah,Utah,200000,1.02,Large City
+huntsville,Huntsville,alabama,Alabama,215000,0.9,Medium City
+grand-rapids,Grand Rapids,michigan,Michigan,198000,0.91,Medium City
+little-rock,Little Rock,arkansas,Arkansas,202000,0.83,Medium City
+birmingham,Birmingham,alabama,Alabama,212000,0.86,Medium City
+aurora-il,Aurora,illinois,Illinois,180000,1.02,Medium City
