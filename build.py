@@ -470,8 +470,8 @@ def generate_homepage(jobs, states):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>US Salary Data 2026 — Every Job, Every State, Every City | {SITE_NAME}</title>
-  <meta name="description" content="Find accurate 2026 salary data for {len(jobs)}+ jobs in any US state or city. Data sourced from BLS. Compare salaries by state, city, and career level.">
+  <title>US Salary Data 2026 by Job, State &amp; City | {SITE_NAME}</title>
+  <meta name="description" content="Explore 2026 US salary data for {len(jobs)}+ jobs across every state and major city. Compare pay by location, career level, and industry using BLS data.">
   <link rel="canonical" href="https://{SITE_DOMAIN}/">
   <!-- Favicons -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -532,18 +532,11 @@ def generate_homepage(jobs, states):
   </div>
 </header>
 <div class="hero">
-  <h1>2026 USA Salary Guide</h1>
+  <h1>USA Salary Data 2026 for Every Job, State &amp; City</h1>
   <p>Accurate salary data for every job, state, and city in America. Updated from BLS official data.</p>
-  <div class="stats-row">
-    <div class="stat"><div class="stat-num">{len(jobs)}+</div><div class="stat-label">Job Titles</div></div>
-    <div class="stat"><div class="stat-num">51</div><div class="stat-label">States</div></div>
-    <div class="stat"><div class="stat-num">99</div><div class="stat-label">Cities</div></div>
-    <div class="stat"><div class="stat-num">{total_pages:,}+</div><div class="stat-label">Salary Pages</div></div>
-  </div>
 </div>
 
 <div class="container">
-  </div>
 
   <!-- Category quick nav -->
   <div class="cat-nav">
