@@ -596,9 +596,10 @@ def generate_sitemap(jobs, states, cities):
         urls.append(f"https://{SITE_DOMAIN}/salary/{j['job_slug']}/")
         for s in states:
             urls.append(f"https://{SITE_DOMAIN}/salary/{j['job_slug']}/{s['state_slug']}/")
-            state_cities = [c for c in cities if c["state_slug"] == s["state_slug"]]
-            for c in state_cities:
-                urls.append(f"https://{SITE_DOMAIN}/salary/{j['job_slug']}/{s['state_slug']}/{c['city_slug']}/")
+            # City URLs disabled — staying under Cloudflare 20k file limit
+            # state_cities = [c for c in cities if c["state_slug"] == s["state_slug"]]
+            # for c in state_cities:
+            #     urls.append(f"https://{SITE_DOMAIN}/salary/{j['job_slug']}/{s['state_slug']}/{c['city_slug']}/")
 
     # Split into sitemap index if > 50k URLs
     chunk_size = 49000
@@ -716,15 +717,15 @@ def main():
 
     print(f"✅ {len(jobs) * len(states)} state pages generated")
 
-    # City pages
-    for job in jobs:
-        for state in states:
-            state_cities = [c for c in cities if c["state_slug"] == state["state_slug"]]
-            for city in state_cities:
-                generate_job_city(job, state, city, jobs)
-                total_pages += 1
-
-    print(f"✅ City pages generated")
+    # City pages — disabled to stay under Cloudflare 20k file limit
+    # Will be enabled when upgrading to Cloudflare Workers
+    # for job in jobs:
+    #     for state in states:
+    #         state_cities = [c for c in cities if c["state_slug"] == state["state_slug"]]
+    #         for city in state_cities:
+    #             generate_job_city(job, state, city, jobs)
+    #             total_pages += 1
+    print(f"✅ City pages skipped (staying under 20k limit)")
 
     # Sitemap + robots
     generate_sitemap(jobs, states, cities)
