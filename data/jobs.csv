@@ -102,3 +102,265 @@ childcare-worker,Childcare Worker,Personal Services,30010,28520,21750,43110,2.8,
 human-resources-specialist,Human Resources Specialist,Human Resources,67650,64240,39720,109650,3.5,High,848800
 human-resources-manager,Human Resources Manager,Human Resources,136350,126230,72380,221700,3.7,High,173600
 training-development-specialist,Training and Development Specialist,Human Resources,64340,62220,37780,106490,3.8,High,381900
+dentist,Dentist,Healthcare,180830,163220,79060,239200,3.8,High,103100
+podiatrist,Podiatrist,Healthcare,148720,138480,74970,239200,2.8,Medium,11200
+optometrist,Optometrist,Healthcare,125590,119980,67460,193120,3.2,High,44100
+physician-assistant,Physician Assistant,Healthcare,126010,121530,79810,162470,5.9,Very High,148100
+nurse-anesthetist,Nurse Anesthetist,Healthcare,214060,203090,134060,239200,4.5,Very High,44400
+nurse-midwife,Nurse Midwife,Healthcare,122450,120880,80120,163650,4.2,High,8100
+medical-laboratory-technician,Medical Laboratory Technician,Healthcare,57800,55360,35110,83940,3.5,High,336000
+medical-laboratory-technologist,Medical Laboratory Technologist,Healthcare,60780,57800,38410,85210,3.5,High,186700
+dental-assistant,Dental Assistant,Healthcare,45940,43760,30330,63500,3.8,High,345600
+cardiovascular-technician,Cardiovascular Technician,Healthcare,64780,60820,36190,100710,3.2,High,57200
+radiologic-technologist,Radiologic Technologist,Healthcare,67180,64840,44580,97370,3.0,High,230600
+mri-technologist,MRI Technologist,Healthcare,80090,77360,54730,110700,3.5,High,40500
+emergency-medical-technician,Emergency Medical Technician,Healthcare,40560,37440,27010,62840,4.5,High,265200
+paramedic,Paramedic,Healthcare,49690,46280,30530,77430,4.5,High,98600
+dietetic-technician,Dietetic Technician,Healthcare,35440,33420,24010,53670,2.5,Medium,21800
+dietitian,Dietitian and Nutritionist,Healthcare,70280,66450,43320,103990,4.2,High,80700
+psychiatric-technician,Psychiatric Technician,Healthcare,42820,39500,27820,66720,3.0,High,68000
+respiratory-therapist,Respiratory Therapist,Healthcare,73080,70540,50440,99020,4.0,High,136400
+surgical-technologist,Surgical Technologist,Healthcare,60370,57700,38280,89350,3.8,High,116700
+veterinary-technician,Veterinary Technician,Healthcare,41430,39180,28280,57440,4.8,Very High,121800
+respiratory-therapist-advanced,Respiratory Care Practitioner,Healthcare,75420,72580,51230,101920,4.0,High,142100
+substance-abuse-counselor,Substance Abuse Counselor,Healthcare,50280,47210,31580,76220,5.8,Very High,346200
+marriage-family-therapist,Marriage and Family Therapist,Healthcare,58680,54790,35030,95310,5.5,Very High,76200
+recreational-therapist,Recreational Therapist,Healthcare,51810,50410,34440,73790,3.0,Medium,19100
+medical-assistant,Medical Assistant,Healthcare,40700,38270,29110,55950,5.8,Very High,743500
+nursing-assistant,Nursing Assistant,Healthcare,35760,33520,25760,48210,3.5,Very High,1450000
+personal-care-aide,Personal Care Aide,Healthcare,30180,28730,21840,42310,6.0,Very High,3690000
+home-health-aide,Home Health Aide,Healthcare,31480,29430,22350,45080,6.0,Very High,3528000
+computer-network-support,Computer Network Support Specialist,Technology,77200,74580,44820,119790,3.5,High,193100
+blockchain-developer,Blockchain Developer,Technology,134500,128000,78000,210000,8.5,Very High,18200
+machine-learning-engineer,Machine Learning Engineer,Technology,148000,142000,90000,225000,9.2,Very High,42000
+devops-engineer,DevOps Engineer,Technology,120580,115000,72000,185000,7.5,Very High,98000
+cloud-architect,Cloud Architect,Technology,142000,136000,88000,215000,8.0,Very High,55000
+cybersecurity-engineer,Cybersecurity Engineer,Technology,128000,122000,76000,196000,8.5,Very High,72000
+mobile-app-developer,Mobile App Developer,Technology,112000,106000,65000,172000,6.5,Very High,95000
+ui-ux-designer,UI/UX Designer,Technology,95580,90000,55000,152000,5.8,High,142000
+product-manager-tech,Technical Product Manager,Technology,138000,132000,85000,205000,6.0,Very High,82000
+site-reliability-engineer,Site Reliability Engineer,Technology,145000,138000,90000,218000,7.8,Very High,48000
+full-stack-developer,Full Stack Developer,Technology,108000,102000,62000,168000,6.2,Very High,225000
+backend-developer,Backend Developer,Technology,114000,108000,65000,175000,5.8,Very High,198000
+frontend-developer,Frontend Developer,Technology,102000,96000,58000,162000,5.5,High,186000
+statistician,Statistician,Technology,104860,99180,60280,166900,5.8,Very High,44800
+ai-engineer,Artificial Intelligence Engineer,Technology,158000,150000,95000,235000,12.0,Very High,35000
+data-engineer,Data Engineer,Technology,118000,112000,70000,180000,7.2,Very High,156000
+scrum-master,Scrum Master,Technology,105000,99000,65000,158000,4.8,High,78000
+game-developer,Game Developer,Technology,108000,101000,62000,168000,5.0,High,52000
+embedded-systems-engineer,Embedded Systems Engineer,Technology,112000,107000,68000,172000,4.5,High,42000
+quality-assurance-engineer,Quality Assurance Engineer,Technology,88000,83000,52000,138000,4.2,High,168000
+systems-administrator,Systems Administrator,Technology,90520,86040,53180,138670,2.8,Medium,301200
+penetration-tester,Penetration Tester,Technology,118000,112000,70000,180000,8.0,Very High,28000
+purchasing-agent,Purchasing Agent,Finance,68150,64050,40450,106200,2.5,Medium,270200
+claims-adjuster,Claims Adjuster,Finance,72040,67760,43360,113580,2.0,Medium,282100
+cost-estimator,Cost Estimator,Finance,73560,70180,43280,115460,3.0,High,219600
+emergency-management-director,Emergency Management Director,Management,79580,76730,46230,130420,3.5,High,11500
+meeting-event-planner,Meeting and Event Planner,Business,56380,52560,33090,90360,4.8,High,136400
+fundraiser,Fundraiser,Business,64840,59420,36680,105540,3.8,Medium,102800
+compensation-specialist,Compensation and Benefits Specialist,Human Resources,74620,70560,44030,118580,3.5,High,89700
+business-analyst,Business Analyst,Business,88850,84520,51200,142000,5.2,Very High,456000
+appraiser,Appraiser and Assessor,Finance,65460,59320,35830,112030,2.5,Medium,71700
+budget-analyst,Budget Analyst,Finance,82260,79940,52290,124440,2.8,Medium,58600
+tax-examiner,Tax Examiner,Finance,61670,57590,37440,95720,1.8,Medium,52700
+tax-preparer,Tax Preparer,Finance,51080,44280,27990,89410,2.5,Medium,68100
+financial-risk-analyst,Financial Risk Analyst,Finance,102580,96340,58200,166000,4.5,High,78200
+supply-chain-analyst,Supply Chain Analyst,Business,79580,74820,46200,124000,5.5,Very High,142000
+logistics-manager,Logistics Manager,Business,98420,92580,57800,152000,4.8,High,185000
+operations-manager,Operations Manager,Management,112580,105420,62000,175000,4.2,High,528000
+preschool-teacher,Preschool Teacher,Education,38520,34480,25410,60180,3.2,High,469400
+kindergarten-teacher,Kindergarten Teacher,Education,61350,59470,41310,89250,1.8,Medium,106900
+adult-literacy-teacher,Adult Literacy Teacher,Education,57680,55890,34710,88310,2.5,Medium,68300
+self-enrichment-teacher,Self-Enrichment Teacher,Education,45620,40870,24510,79820,4.5,High,260300
+librarian,Librarian,Education,65330,62780,40440,97060,2.0,Medium,143800
+library-technician,Library Technician,Education,40310,37560,26040,61810,1.5,Low,93900
+teacher-assistant,Teacher Assistant,Education,33580,30450,22690,51580,2.8,High,1334600
+health-education-teacher,Health Education Teacher,Education,81580,74580,42010,141380,3.5,High,16200
+business-teacher,Business Teacher,Education,95980,86340,49020,168720,2.5,Medium,83300
+math-teacher-college,Mathematics Professor,Education,91540,79110,46570,167920,2.8,Medium,51800
+biological-science-teacher,Biological Science Professor,Education,99120,87450,50680,177820,3.0,Medium,56100
+chemistry-teacher-college,Chemistry Professor,Education,97380,85910,49780,174560,2.5,Medium,19800
+computer-science-teacher,Computer Science Professor,Education,112580,98340,56280,194320,4.5,High,42800
+education-teacher-college,Education Professor,Education,82640,74820,45920,142580,2.0,Medium,56200
+english-teacher-college,English Language Professor,Education,80580,71420,43280,143800,1.5,Low,66800
+esl-teacher,ESL Teacher,Education,60420,58670,38200,90480,4.2,High,73200
+school-counselor,School Counselor,Education,63830,61410,38920,97210,3.8,High,360100
+agricultural-engineer,Agricultural Engineer,Engineering,82640,78710,51240,125230,2.5,Medium,2700
+biomedical-engineer,Biomedical Engineer,Engineering,101420,97410,58550,163980,5.0,High,23100
+computer-hardware-engineer,Computer Hardware Engineer,Engineering,132360,128170,77540,208000,3.2,High,67200
+marine-engineer,Marine Engineer,Engineering,98230,93380,60410,149200,2.5,Medium,8200
+materials-engineer,Materials Engineer,Engineering,101130,96820,62280,155380,2.8,Medium,27800
+mining-engineer,Mining Engineer,Engineering,97580,93520,56290,163820,2.0,Medium,6500
+nuclear-engineer,Nuclear Engineer,Engineering,122480,120380,74640,185820,1.5,Medium,16800
+petroleum-engineer,Petroleum Engineer,Engineering,137720,131800,73180,208000,2.8,Medium,31600
+robotics-engineer,Robotics Engineer,Engineering,105340,99580,64200,162000,6.5,Very High,26800
+electrical-engineering-technician,Electrical Engineering Technician,Engineering,65680,63280,39280,100480,2.2,Medium,139600
+civil-engineering-technician,Civil Engineering Technician,Engineering,57820,55430,35280,87690,2.5,Medium,73100
+mechanical-engineering-technician,Mechanical Engineering Technician,Engineering,60310,57870,37210,91280,2.5,Medium,44800
+renewable-energy-engineer,Renewable Energy Engineer,Engineering,102580,97420,62000,158000,7.8,Very High,32000
+structural-engineer,Structural Engineer,Engineering,96580,91240,58200,148000,3.2,High,58000
+boilermaker,Boilermaker,Skilled Trades,72280,67610,43570,106530,2.0,Medium,13500
+brickmason,Brickmason and Blocklayer,Skilled Trades,63870,59650,38450,100680,2.5,Medium,71100
+carpet-installer,Carpet Installer,Skilled Trades,49580,47120,29840,76840,1.8,Medium,26800
+cement-mason,Cement Mason,Skilled Trades,56840,52580,33720,91380,2.5,Medium,196800
+pipelayer,Pipelayer,Skilled Trades,58620,55280,35620,89680,2.8,High,66200
+operating-engineer,Operating Engineer,Skilled Trades,65380,60560,37480,106480,3.5,High,440800
+drywall-installer,Drywall Installer,Skilled Trades,55620,52480,33420,89350,2.5,Medium,143800
+glazier,Glazier,Skilled Trades,57240,54180,34250,88680,2.5,Medium,42800
+insulation-worker,Insulation Worker,Skilled Trades,50280,46820,30420,82580,3.5,High,62400
+painter-construction,Painter and Decorator,Skilled Trades,49820,46240,30280,80680,2.5,High,440200
+pipeliner,Pipefitter,Skilled Trades,68580,63480,38200,110480,3.0,High,462800
+plasterer,Plasterer and Stucco Mason,Skilled Trades,57840,54580,34520,88620,2.0,Medium,42800
+reinforcing-iron-worker,Reinforcing Iron Worker,Skilled Trades,68280,63280,38480,105580,2.8,High,84800
+sheet-metal-worker,Sheet Metal Worker,Skilled Trades,62480,58280,36680,98280,3.0,High,148800
+structural-iron-worker,Structural Iron Worker,Skilled Trades,72580,68280,42820,110580,2.8,High,96800
+computer-repair-technician,Computer Repair Technician,Skilled Trades,56280,53180,33280,87580,2.5,Medium,144800
+telecommunications-technician,Telecommunications Technician,Skilled Trades,62480,59480,38280,96480,3.5,High,218400
+electrical-installer,Electrical and Electronics Installer,Skilled Trades,66380,63280,40280,103580,3.2,High,158400
+aircraft-mechanic,Aircraft Mechanic,Skilled Trades,75280,72380,47480,110580,3.8,High,142800
+bus-mechanic,Bus and Truck Mechanic,Skilled Trades,58280,56280,37280,82480,3.0,High,220800
+farm-equipment-mechanic,Farm Equipment Mechanic,Skilled Trades,52480,49380,33280,77380,2.5,Medium,46800
+industrial-machinery-mechanic,Industrial Machinery Mechanic,Skilled Trades,61280,58480,37280,92580,3.5,High,395200
+elevator-mechanic,Elevator Mechanic,Skilled Trades,101580,97280,59280,153280,3.8,High,24800
+machinst,Machinist,Skilled Trades,52480,49380,31280,79380,2.5,High,375200
+model-maker,Model Maker and Patternmaker,Skilled Trades,55280,52480,34280,83280,2.0,Medium,14800
+aircraft-cargo-handler,Aircraft Cargo Handler,Transportation,44280,41280,29280,65280,2.5,High,98400
+commercial-pilot,Commercial Pilot,Transportation,108480,99280,49280,180480,3.8,High,43800
+air-traffic-controller,Air Traffic Controller,Transportation,138580,132480,71480,184480,2.5,High,21800
+ambulance-driver,Ambulance Driver,Transportation,34280,31280,23280,52280,3.5,High,18800
+driver-sales-worker,Driver and Sales Worker,Transportation,39480,36280,24280,63280,2.0,High,411800
+light-truck-driver,Light Truck Driver,Transportation,44280,41280,28280,67280,3.5,High,1048800
+locomotive-engineer,Locomotive Engineer,Transportation,79480,76280,50280,112480,2.0,Medium,38800
+sailor,Sailor and Marine Oiler,Transportation,50280,47280,32280,75280,2.5,Medium,26800
+captain-boat,Captain and Pilot of Water Vessels,Transportation,90480,85280,52280,145480,2.5,Medium,38800
+transportation-inspector,Transportation Inspector,Transportation,80480,77280,49280,120480,2.5,Medium,28800
+conveyor-operator,Conveyor Operator,Transportation,42280,39280,28280,60280,1.5,Medium,45800
+crane-operator,Crane Operator,Skilled Trades,68480,64280,40280,106480,3.0,High,48800
+industrial-truck-operator,Industrial Truck Operator,Transportation,44480,42280,30280,62280,2.5,High,505800
+first-line-sales-supervisor,Retail Sales Supervisor,Sales,52280,46280,29280,87280,2.5,High,1448800
+cashier,Cashier,Sales,30280,28280,21280,41280,0.5,High,3288800
+counter-clerk,Counter and Rental Clerk,Sales,35480,33280,23280,51280,2.0,Medium,418800
+retail-salesperson,Retail Salesperson,Sales,36480,32280,22280,62280,2.0,High,4088800
+advertising-sales-agent,Advertising Sales Agent,Sales,62280,54280,31280,110280,2.0,Medium,108800
+insurance-sales-agent,Insurance Sales Agent,Sales,77280,57280,32280,144280,3.5,High,508800
+securities-sales-agent,Securities Sales Agent,Finance,106280,63280,35280,208280,3.8,High,458800
+travel-agent,Travel Agent,Sales,47280,43280,28280,73280,4.5,High,68800
+wholesale-sales-rep,Wholesale Sales Representative,Sales,82280,65280,36280,148280,3.0,High,998800
+writer-author,Writer and Author,Creative,73280,63280,35280,128280,3.5,Medium,148800
+editor,Editor,Creative,73280,67280,38280,123280,2.5,Medium,118800
+photographer,Photographer,Creative,50280,42280,24280,87280,3.0,Medium,138800
+camera-operator,Camera Operator,Creative,62280,55280,30280,108280,3.5,Medium,28800
+interior-designer,Interior Designer,Creative,63280,60280,34280,100280,3.0,Medium,78800
+fashion-designer,Fashion Designer,Creative,80280,75280,40280,145280,2.0,Low,18800
+producer-director,Producer and Director,Creative,84280,75280,40280,155280,4.5,High,178800
+actor,Actor,Creative,63280,45280,23280,127280,3.0,Medium,68800
+musician,Musician and Singer,Creative,58280,48280,23280,107280,3.0,Medium,158800
+broadcast-announcer,Broadcast Announcer,Creative,50280,41280,24280,97280,2.0,Low,38800
+news-reporter,News Reporter,Creative,57280,48280,28280,99280,1.5,Low,38800
+medical-health-manager,Medical and Health Services Manager,Healthcare,119840,104830,60780,205720,5.5,Very High,509500
+social-community-manager,Social and Community Service Manager,Social Services,74000,69600,43220,123280,4.8,High,189600
+environmental-science-technician,Environmental Science Technician,Science,56280,52480,34280,86280,4.5,High,38800
+nuclear-technician,Nuclear Technician,Science,84280,81280,54280,115280,1.5,Medium,6800
+probation-officer,Probation Officer,Public Safety,62280,58280,38280,96280,2.5,Medium,93800
+community-health-worker,Community Health Worker,Social Services,45280,42280,28280,66280,6.8,Very High,68800
+fire-inspector,Fire Inspector,Public Safety,65280,62280,40280,100280,3.5,High,16800
+fire-investigator,Fire Investigator,Public Safety,70280,67280,44280,105280,3.0,Medium,8800
+detective,Detective and Criminal Investigator,Public Safety,89280,83280,52280,140280,2.5,Medium,108800
+security-guard,Security Guard,Public Safety,36280,33280,24280,54280,2.5,High,1128800
+security-manager,Security Manager,Public Safety,58280,54280,34280,90280,3.0,High,148800
+first-line-food-supervisor,Food Service Supervisor,Hospitality,41280,38280,27280,59280,3.0,High,968800
+cook-fast-food,Fast Food Cook,Hospitality,30280,28280,21280,40280,2.5,High,688800
+cook-institution,Institution and Cafeteria Cook,Hospitality,36280,33280,24280,52280,2.5,High,408800
+restaurant-cook,Restaurant Cook,Hospitality,38280,35280,24280,57280,3.0,High,1148800
+bartender,Bartender,Hospitality,34280,30280,22280,56280,3.5,High,558800
+fast-food-worker,Fast Food Worker,Hospitality,29280,27280,20280,39280,2.0,High,3788800
+waiter-waitress,Waiter and Waitress,Hospitality,32280,28280,20280,52280,3.0,High,2148800
+host-hostess,Host and Hostess,Hospitality,28280,26280,20280,38280,2.5,High,368800
+fitness-trainer,Fitness Trainer and Instructor,Personal Services,48280,42280,24280,82280,5.5,Very High,368800
+animal-trainer,Animal Trainer,Personal Services,41280,37280,24280,66280,3.5,Medium,48800
+gambling-dealer,Gambling Dealer,Hospitality,34280,31280,22280,52280,2.0,Medium,108800
+amusement-attendant,Amusement Attendant,Hospitality,29280,27280,20280,40280,3.0,Medium,138800
+barber,Barber,Personal Services,36280,32280,22280,57280,3.5,Medium,68800
+manicurist,Manicurist and Pedicurist,Personal Services,31280,28280,20280,48280,3.5,Medium,128800
+skincare-specialist,Skincare Specialist,Personal Services,40280,36280,23280,65280,4.5,High,78800
+tour-guide,Tour and Travel Guide,Hospitality,34280,30280,21280,55280,4.5,High,18800
+recreation-worker,Recreation Worker,Personal Services,33280,30280,21280,52280,4.0,High,368800
+animal-scientist,Animal Scientist,Science,74280,67280,43280,120280,3.0,Medium,8800
+food-scientist,Food Scientist,Science,78280,73280,46280,122280,4.5,High,18800
+soil-scientist,Soil and Plant Scientist,Science,72280,67280,43280,113280,3.5,Medium,18800
+biochemist,Biochemist and Biophysicist,Science,102280,94280,57280,167280,5.5,High,38800
+microbiologist,Microbiologist,Science,84280,79280,50280,138280,4.5,High,28800
+zoologist,Zoologist and Wildlife Biologist,Science,68280,63280,41280,107280,3.5,Medium,18800
+biological-technician,Biological Technician,Science,50280,47280,31280,75280,4.0,High,88800
+physicist,Physicist,Science,147280,137280,74280,231280,3.5,High,18800
+atmospheric-scientist,Atmospheric Scientist,Science,98280,93280,56280,151280,3.5,High,11800
+materials-scientist,Materials Scientist,Science,102280,95280,58280,163280,3.0,Medium,8800
+hydrologist,Hydrologist,Science,88280,83280,54280,137280,4.0,High,9800
+geoscientist,Geoscientist,Science,93280,83280,52280,153280,3.5,High,32800
+farm-manager,Farm Manager,Agriculture,79280,69280,39280,137280,2.0,Medium,948800
+agricultural-inspector,Agricultural Inspector,Agriculture,52280,49280,32280,80280,2.5,Medium,14800
+animal-breeder,Animal Breeder,Agriculture,47280,43280,28280,74280,2.0,Medium,6800
+grader-sorter,Grader and Sorter,Agriculture,31280,29280,22280,46280,1.5,Medium,58800
+forest-conservation-worker,Forest Conservation Worker,Agriculture,42280,39280,27280,65280,3.5,High,11800
+logger,Logger,Agriculture,48280,45280,31280,71280,1.5,Medium,48800
+judicial-law-clerk,Judicial Law Clerk,Legal,62280,58280,38280,96280,2.5,Medium,28800
+administrative-law-judge,Administrative Law Judge,Legal,102280,97280,60280,155280,2.0,Medium,16800
+court-reporter,Court Reporter,Legal,63280,59280,34280,104280,2.5,Medium,14800
+title-examiner,Title Examiner and Abstractor,Legal,58280,54280,34280,91280,2.5,Medium,54800
+production-supervisor,Production Supervisor,Manufacturing,72280,67280,43280,113280,2.5,High,758800
+aircraft-assembler,Aircraft Assembler,Manufacturing,64280,61280,39280,96280,3.0,High,118800
+electrical-assembler,Electrical Assembler,Manufacturing,42280,40280,28280,60280,2.0,Medium,148800
+structural-metal-fabricator,Structural Metal Fabricator,Manufacturing,48280,46280,31280,71280,2.5,High,88800
+team-assembler,Team Assembler,Manufacturing,38280,36280,26280,54280,1.5,High,1288800
+baker,Baker,Manufacturing,36280,33280,24280,52280,3.0,High,198800
+butcher,Butcher and Meat Cutter,Manufacturing,40280,37280,26280,59280,2.5,High,158800
+computer-controlled-machine-operator,CNC Machine Operator,Manufacturing,47280,44280,30280,70280,3.5,High,388800
+cutting-machine-operator,Cutting Machine Operator,Manufacturing,40280,37280,26280,59280,2.0,Medium,148800
+printing-press-operator,Printing Press Operator,Manufacturing,45280,42280,28280,68280,1.5,Medium,128800
+laundry-worker,Laundry and Dry-Cleaning Worker,Manufacturing,30280,28280,21280,42280,2.0,Medium,228800
+sewing-machine-operator,Sewing Machine Operator,Manufacturing,32280,30280,22280,46280,1.0,Low,128800
+cabinetmaker,Cabinetmaker and Bench Carpenter,Manufacturing,44280,41280,28280,66280,2.5,High,108800
+power-plant-operator,Power Plant Operator,Manufacturing,84280,80280,53280,122280,2.0,Medium,38800
+chemical-equipment-operator,Chemical Equipment Operator,Manufacturing,56280,53280,34280,85280,2.0,Medium,38800
+extruding-machine-operator,Extruding Machine Operator,Manufacturing,41280,38280,27280,60280,2.0,Medium,68800
+inspector-tester,Inspector and Tester,Manufacturing,44280,41280,28280,67280,2.0,High,568800
+jeweler,Jeweler and Precious Stone Worker,Manufacturing,44280,40280,25280,71280,2.5,Medium,38800
+administrative-services-manager,Administrative Services Manager,Management,102280,96280,57280,166280,3.5,High,328800
+switchboard-operator,Switchboard Operator,Business,34280,32280,24280,48280,1.0,Low,98800
+bill-account-collector,Bill and Account Collector,Finance,41280,38280,28280,60280,1.5,Medium,218800
+billing-clerk,Billing and Posting Clerk,Finance,44280,41280,28280,64280,1.5,Medium,448800
+bookkeeper,Bookkeeper and Accounting Clerk,Finance,47280,44280,30280,67280,1.5,Medium,1528800
+gaming-cage-worker,Gaming Cage Worker,Hospitality,34280,32280,23280,49280,1.5,Medium,18800
+payroll-clerk,Payroll and Timekeeping Clerk,Human Resources,51280,48280,32280,74280,1.5,Medium,148800
+procurement-clerk,Procurement Clerk,Business,47280,44280,30280,69280,1.5,Medium,68800
+teller,Bank Teller,Finance,38280,36280,27280,52280,0.5,Medium,298800
+brokerage-clerk,Brokerage Clerk,Finance,52280,48280,32280,80280,1.5,Medium,48800
+correspondence-clerk,Correspondence Clerk,Business,42280,39280,27280,63280,1.0,Low,8800
+court-clerk,Court Clerk,Legal,45280,42280,29280,67280,2.0,Medium,88800
+credit-authorizer,Credit Authorizer and Checker,Finance,47280,44280,30280,69280,1.0,Low,48800
+customer-service-representative,Customer Service Representative,Business,39280,36280,26280,57280,2.5,High,2938800
+eligibility-interviewer,Eligibility Interviewer,Social Services,48280,45280,30280,72280,2.5,High,128800
+file-clerk,File Clerk,Business,37280,34280,25280,53280,0.5,Low,98800
+library-assistant,Library Assistant,Education,34280,31280,23280,49280,1.5,Medium,88800
+new-accounts-clerk,New Accounts Clerk,Finance,43280,40280,28280,63280,1.0,Low,38800
+order-clerk,Order Clerk,Business,40280,37280,26280,59280,1.0,Low,128800
+human-resources-assistant,Human Resources Assistant,Human Resources,46280,43280,30280,67280,2.0,Medium,148800
+receptionist,Receptionist and Information Clerk,Business,35280,32280,24280,50280,2.5,High,1008800
+reservation-ticket-agent,Reservation and Ticket Agent,Transportation,46280,43280,29280,68280,3.0,High,188800
+cargo-freight-agent,Cargo and Freight Agent,Transportation,48280,45280,30280,72280,3.5,High,98800
+couriers-messenger,Courier and Messenger,Transportation,38280,35280,25280,56280,4.5,High,118800
+police-fire-dispatcher,Police and Fire Dispatcher,Public Safety,48280,45280,30280,72280,3.5,High,98800
+meter-reader,Meter Reader,Business,42280,40280,27280,62280,1.0,Low,28800
+postal-worker,Postal Service Worker,Transportation,55280,52280,37280,76280,1.0,Medium,308800
+production-planner,Production Planner and Expediter,Manufacturing,57280,53280,35280,87280,3.0,High,308800
+shipping-receiving-clerk,Shipping and Receiving Clerk,Transportation,40280,37280,26280,59280,2.5,High,648800
+weigher-measurer,Weigher and Measurer,Manufacturing,38280,35280,25280,56280,1.5,Medium,68800
+executive-secretary,Executive Secretary,Business,63280,59280,38280,96280,1.0,Low,538800
+secretary,Secretary and Administrative Assistant,Business,43280,40280,28280,63280,1.0,Medium,2068800
+data-entry-keyer,Data Entry Keyer,Business,37280,34280,25280,53280,0.5,Low,148800
+insurance-claims-clerk,Insurance Claims Clerk,Finance,43280,40280,28280,63280,1.5,Medium,128800
+mail-clerk,Mail Clerk and Mail Machine Operator,Business,36280,33280,24280,52280,0.5,Low,68800
+office-clerk,Office Clerk,Business,38280,35280,25280,55280,1.5,High,2648800
+office-machine-operator,Office Machine Operator,Business,37280,34280,24280,54280,1.0,Low,18800
+proofreader,Proofreader and Copy Marker,Creative,44280,41280,27280,67280,1.5,Low,8800
+statistical-assistant,Statistical Assistant,Technology,49280,46280,31280,74280,2.5,Medium,18800
