@@ -422,48 +422,61 @@ def generate_job_city(job, state, city, all_jobs):
 
 
 def generate_homepage(jobs, states):
-    """Generate homepage with category sections"""
+    """Generate modern homepage"""
     out_path = OUTPUT_DIR / "index.html"
 
-    # Group jobs by category
     from collections import defaultdict
     categories = defaultdict(list)
     for j in jobs:
         categories[j["category"]].append(j)
 
-    # Category icons mapping
     cat_icons = {
-        "Healthcare": "🏥", "Technology": "💻", "Finance": "💰",
-        "Engineering": "⚙️", "Education": "🎓", "Management": "📊",
-        "Skilled Trades": "🔧", "Transportation": "🚛", "Sales": "📈",
-        "Legal": "⚖️", "Marketing": "📣", "Creative": "🎨",
-        "Science": "🔬", "Social Services": "🤝", "Public Safety": "🛡️",
-        "Human Resources": "👥", "Construction": "🏗️", "Real Estate": "🏠",
-        "Hospitality": "🍽️", "Personal Services": "✂️", "Business": "💼",
-        "Manufacturing": "🏭", "Agriculture": "🌾",
+        "Healthcare":"🏥","Technology":"💻","Finance":"💰","Engineering":"⚙️",
+        "Education":"🎓","Management":"📊","Skilled Trades":"🔧","Transportation":"🚛",
+        "Sales":"📈","Legal":"⚖️","Marketing":"📣","Creative":"🎨","Science":"🔬",
+        "Social Services":"🤝","Public Safety":"🛡️","Human Resources":"👥",
+        "Construction":"🏗️","Real Estate":"🏠","Hospitality":"🍽️",
+        "Personal Services":"✂️","Business":"💼","Manufacturing":"🏭","Agriculture":"🌾",
     }
 
-    # Build category sections HTML
+    # Category nav pills
+    cat_nav = "".join(
+        f'<a href="#cat-{c.lower().replace(" ","-")}">{cat_icons.get(c,"💼")} {c}</a>'
+        for c in sorted(categories.keys())
+    )
+
+    # Category sections
     cat_sections = ""
     for cat_name in sorted(categories.keys()):
         cat_jobs = sorted(categories[cat_name], key=lambda x: int(x["national_avg"]), reverse=True)
         icon = cat_icons.get(cat_name, "💼")
-        jobs_html = "".join(
-            f'<a href="/salary/{j["job_slug"]}/" class="job-card"><div class="j-title">{j["job_title"]}</div><div class="j-salary">${fmt(int(j["national_avg"]))}/yr</div></a>'
+        anchor = cat_name.lower().replace(" ", "-")
+        cards = "".join(
+            f'<a href="/salary/{j["job_slug"]}/" class="job-tile">'
+            f'<div class="tile-name">{j["job_title"]}</div>'
+            f'<div class="tile-salary">${fmt(int(j["national_avg"]))}<span>/yr</span></div>'
+            f'<div class="tile-demand {("d-high" if j["demand"] in ["Very High","High"] else "d-mid")}">{j["demand"]} Demand</div>'
+            f'</a>'
             for j in cat_jobs
         )
-        cat_sections += f'''
-        <div class="cat-section" id="cat-{cat_name.lower().replace(" ","-")}">
-          <div class="cat-header">
-            <span class="cat-icon">{icon}</span>
-            <h2 class="cat-title">{cat_name}</h2>
-            <span class="cat-count">{len(cat_jobs)} jobs</span>
-          </div>
-          <div class="jobs-grid">{jobs_html}</div>
-        </div>'''
+        cat_sections += (
+            f'<section class="cat-section" id="cat-{anchor}">'
+            f'<div class="cat-hdr"><span class="cat-icon">{icon}</span>'
+            f'<h2 class="cat-name">{cat_name}</h2>'
+            f'<span class="cat-count">{len(cat_jobs)} jobs</span></div>'
+            f'<div class="cat-grid">{cards}</div>'
+            f'</section>'
+        )
 
-    # Stats
-    total_pages = len(jobs) * (len(states) + 1)
+    # Top paying jobs (sidebar)
+    top_jobs = sorted(jobs, key=lambda x: int(x["national_avg"]), reverse=True)[:8]
+    top_jobs_html = "".join(
+        f'<div class="top-job-item">'
+        f'<a href="/salary/{j["job_slug"]}/" class="top-job-name">{j["job_title"]}</a>'
+        f'<span class="top-job-salary">${fmt(int(j["national_avg"]))}</span>'
+        f'</div>'
+        for j in top_jobs
+    )
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -473,116 +486,210 @@ def generate_homepage(jobs, states):
   <title>US Salary Data 2026 by Job, State &amp; City | {SITE_NAME}</title>
   <meta name="description" content="Explore 2026 US salary data for {len(jobs)}+ jobs across every state and major city. Compare pay by location, career level, and industry using BLS data.">
   <link rel="canonical" href="https://{SITE_DOMAIN}/">
-  <!-- Favicons -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <meta name="theme-color" content="#1a56db">
+  <meta name="theme-color" content="#2563eb">
+  <script type="application/ld+json">{{
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"{SITE_NAME}",
+    "url":"https://{SITE_DOMAIN}",
+    "description":"Comprehensive US salary data for {len(jobs)}+ occupations across all 50 states.",
+    "potentialAction":{{"@type":"SearchAction","target":"https://{SITE_DOMAIN}/salary/{{search_term_string}}/","query-input":"required name=search_term_string"}}
+  }}</script>
   <style>
-    *,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
-    :root{{--primary:#1a56db;--accent:#16a34a;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:10px;--max:1100px}}
-    body{{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text)}}
-    @media(max-width:600px){{
-      .hero{{padding:40px 16px}}
-      .hero h1{{font-size:1.8rem}}
-      .cat-nav{{padding:14px;gap:6px}}
-      .cat-nav a{{padding:5px 10px;font-size:0.78rem}}
-      .jobs-grid{{grid-template-columns:1fr 1fr;gap:10px}}
-      .job-card{{padding:12px}}
-      .j-title{{font-size:0.85rem}}
-      .j-salary{{font-size:0.92rem}}
-      .cat-title{{font-size:1rem}}
-      .header-inner{{padding:0 14px}}
-      nav a{{font-size:0.82rem;margin-left:10px}}
-      .footer-inner{{grid-template-columns:1fr}}
-    }}
-    @media(max-width:380px){{
-      .jobs-grid{{grid-template-columns:1fr}}
-      .hero h1{{font-size:1.5rem}}
-      nav{{display:none}}
-    }}
-    header{{background:#fff;border-bottom:1px solid var(--border);padding:0 20px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.08)}}
-    .header-inner{{max-width:var(--max);margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between}}
-    .logo{{font-size:1.4rem;font-weight:800;color:var(--primary);text-decoration:none}}
-    .logo span{{color:var(--accent)}}
-    nav a{{color:var(--muted);text-decoration:none;font-size:0.9rem;margin-left:20px;font-weight:500}}
-    nav a:hover{{color:var(--primary)}}
-    .hero{{background:linear-gradient(135deg,#1a56db,#1240a8);color:white;padding:65px 20px;text-align:center}}
-    .hero h1{{font-size:2.4rem;font-weight:900;margin-bottom:12px}}
-    .hero p{{opacity:0.85;font-size:1.05rem;max-width:580px;margin:0 auto 25px}}
-    .stats-row{{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;margin-top:20px}}
-    .stat{{text-align:center}}
-    .stat-num{{font-size:1.8rem;font-weight:900}}
-    .stat-label{{font-size:0.8rem;opacity:0.75;text-transform:uppercase;letter-spacing:0.5px}}
-    .container{{max-width:var(--max);margin:0 auto;padding:40px 20px}}
-    .cat-nav{{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:35px;padding:20px;background:#fff;border-radius:var(--radius);border:1px solid var(--border)}}
-    .cat-nav a{{padding:6px 14px;border-radius:20px;text-decoration:none;font-size:0.83rem;font-weight:600;background:var(--bg);color:var(--muted);border:1px solid var(--border);transition:all 0.2s}}
-    .cat-nav a:hover{{background:var(--primary);color:white;border-color:var(--primary)}}
-    .cat-section{{margin-bottom:45px}}
-    .cat-header{{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid var(--border)}}
-    .cat-icon{{font-size:1.4rem}}
-    .cat-title{{font-size:1.2rem;font-weight:800;color:var(--text)}}
-    .cat-count{{margin-left:auto;font-size:0.8rem;color:var(--muted);background:var(--bg);padding:3px 10px;border-radius:20px;border:1px solid var(--border)}}
-    .jobs-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}}
-    .job-card{{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-decoration:none;color:var(--text);transition:all 0.2s;box-shadow:0 1px 2px rgba(0,0,0,0.05)}}
-    .job-card:hover{{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 4px 12px rgba(26,86,219,0.15)}}
-    .j-title{{font-weight:700;font-size:0.92rem;margin-bottom:5px;line-height:1.3}}
-    .j-salary{{color:var(--primary);font-size:1rem;font-weight:800}}
-    .ad-banner{{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:10px;margin:30px 0;text-align:center;min-height:90px}}
-    .ad-label{{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}}
-    footer{{background:#1e293b;color:#94a3b8;padding:40px 20px;margin-top:50px}}
-    .footer-inner{{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:30px}}
-    @media(max-width:600px){{.footer-inner{{grid-template-columns:1fr}}.stats-row{{gap:15px}}}}
-    footer h4{{color:#e2e8f0;font-size:0.9rem;margin-bottom:12px}}
-    footer a{{color:#94a3b8;text-decoration:none;display:block;font-size:0.85rem;margin-bottom:6px}}
-    footer a:hover{{color:#e2e8f0}}
-    .footer-bottom{{max-width:var(--max);margin:25px auto 0;padding-top:20px;border-top:1px solid #334155;font-size:0.82rem;text-align:center}}
+:root{{--blue:#2563eb;--blue-d:#1d4ed8;--blue-50:#eff6ff;--blue-100:#dbeafe;--green:#16a34a;--green-50:#f0fdf4;--gray-900:#111827;--gray-700:#374151;--gray-600:#4b5563;--gray-500:#6b7280;--gray-300:#d1d5db;--gray-200:#e5e7eb;--gray-100:#f3f4f6;--gray-50:#f9fafb;--white:#fff;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07);--radius:10px;--radius-lg:16px;--max:1140px;--tr:0.18s ease;--font:'Inter','Segoe UI',system-ui,sans-serif}}
+*,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
+body{{font-family:var(--font);background:var(--gray-50);color:var(--gray-900);-webkit-font-smoothing:antialiased}}
+a{{color:var(--blue);text-decoration:none}}
+a:hover{{text-decoration:underline}}
+
+/* HEADER */
+.site-header{{background:var(--white);border-bottom:1px solid var(--gray-200);position:sticky;top:0;z-index:200;box-shadow:0 1px 2px rgba(0,0,0,.05)}}
+.header-inner{{max-width:var(--max);margin:0 auto;padding:0 24px;height:62px;display:flex;align-items:center;gap:20px}}
+.logo{{font-size:1.2rem;font-weight:800;color:var(--blue);text-decoration:none;white-space:nowrap;flex-shrink:0}}
+.logo span{{color:var(--green)}}
+.header-search{{flex:1;max-width:400px;position:relative}}
+.header-search input{{width:100%;padding:8px 14px 8px 36px;border:1.5px solid var(--gray-200);border-radius:50px;font-size:0.875rem;color:var(--gray-900);background:var(--gray-50);outline:none;transition:all var(--tr)}}
+.header-search input:focus{{border-color:var(--blue);background:var(--white);box-shadow:0 0 0 3px var(--blue-100)}}
+.search-icon{{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--gray-400);width:15px;height:15px;pointer-events:none}}
+.header-nav{{display:flex;align-items:center;gap:2px;margin-left:auto}}
+.header-nav a{{color:var(--gray-600);font-size:0.85rem;font-weight:500;padding:6px 11px;border-radius:6px;transition:all var(--tr);white-space:nowrap}}
+.header-nav a:hover{{color:var(--blue);background:var(--blue-50);text-decoration:none}}
+
+/* HERO */
+.hero{{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-d) 100%);color:var(--white);padding:60px 24px 50px;text-align:center;position:relative;overflow:hidden}}
+.hero::before{{content:'';position:absolute;left:-100px;top:-100px;width:400px;height:400px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none}}
+.hero::after{{content:'';position:absolute;right:-80px;bottom:-80px;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none}}
+.hero-inner{{max-width:720px;margin:0 auto;position:relative;z-index:1}}
+.hero-label{{display:inline-block;background:rgba(255,255,255,.15);border-radius:50px;padding:4px 14px;font-size:0.75rem;font-weight:600;letter-spacing:.4px;margin-bottom:18px}}
+.hero h1{{font-size:2.6rem;font-weight:900;line-height:1.2;margin-bottom:14px;letter-spacing:-.5px}}
+.hero-desc{{font-size:1.05rem;opacity:.85;margin-bottom:30px;line-height:1.6}}
+.hero-search{{display:flex;max-width:540px;margin:0 auto 24px;background:var(--white);border-radius:50px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.2)}}
+.hero-search input{{flex:1;border:none;padding:15px 20px;font-size:0.975rem;outline:none;color:var(--gray-900)}}
+.hero-search button{{background:var(--green);color:var(--white);border:none;padding:15px 24px;font-weight:700;cursor:pointer;font-size:0.9rem;white-space:nowrap;transition:background var(--tr)}}
+.hero-search button:hover{{background:#15803d}}
+.hero-stats{{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}}
+.hero-stat{{text-align:center}}
+.hero-stat-num{{font-size:1.6rem;font-weight:900}}
+.hero-stat-label{{font-size:0.75rem;opacity:.75;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}}
+
+/* MAIN LAYOUT */
+.main-wrap{{max-width:var(--max);margin:0 auto;padding:32px 24px 60px;display:grid;grid-template-columns:1fr 280px;gap:28px;align-items:start}}
+
+/* CATEGORY NAV */
+.cat-nav{{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:16px 18px;margin-bottom:24px;box-shadow:var(--shadow)}}
+.cat-nav-label{{font-size:0.76rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}}
+.cat-pills{{display:flex;flex-wrap:wrap;gap:7px}}
+.cat-pills a{{padding:5px 13px;border-radius:50px;text-decoration:none;font-size:0.8rem;font-weight:500;background:var(--gray-100);color:var(--gray-700);border:1px solid var(--gray-200);transition:all var(--tr)}}
+.cat-pills a:hover{{background:var(--blue);color:var(--white);border-color:var(--blue);text-decoration:none}}
+
+/* CATEGORY SECTION */
+.cat-section{{margin-bottom:36px}}
+.cat-hdr{{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--gray-200)}}
+.cat-icon{{font-size:1.3rem}}
+.cat-name{{font-size:1.05rem;font-weight:800;color:var(--gray-900)}}
+.cat-count{{margin-left:auto;font-size:0.76rem;color:var(--gray-500);background:var(--gray-100);padding:3px 9px;border-radius:50px}}
+.cat-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}}
+
+/* JOB TILE */
+.job-tile{{background:var(--white);border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:14px;transition:all var(--tr);display:block;text-decoration:none}}
+.job-tile:hover{{border-color:var(--blue);box-shadow:var(--shadow-md);transform:translateY(-1px);text-decoration:none}}
+.tile-name{{font-size:0.84rem;font-weight:600;color:var(--gray-900);margin-bottom:5px;line-height:1.3}}
+.tile-salary{{font-size:1rem;font-weight:800;color:var(--blue)}}
+.tile-salary span{{font-size:.73rem;font-weight:500;color:var(--gray-500)}}
+.tile-demand{{font-size:0.7rem;margin-top:4px;font-weight:500}}
+.d-high{{color:var(--green)}}
+.d-mid{{color:var(--gray-500)}}
+
+/* SIDEBAR */
+.hp-sidebar{{display:flex;flex-direction:column;gap:16px}}
+.sidebar-card{{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:18px;box-shadow:var(--shadow)}}
+.s-title{{font-size:0.85rem;font-weight:700;color:var(--gray-900);margin-bottom:12px}}
+.top-job-item{{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--gray-100);font-size:0.83rem}}
+.top-job-item:last-child{{border-bottom:none}}
+.top-job-name{{color:var(--gray-700);font-weight:500}}
+.top-job-name:hover{{color:var(--blue);text-decoration:none}}
+.top-job-salary{{font-weight:700;color:var(--gray-900);font-size:0.8rem}}
+.trending-list{{list-style:none}}
+.trending-list li{{padding:7px 0;border-bottom:1px solid var(--gray-100);font-size:0.84rem}}
+.trending-list li:last-child{{border-bottom:none}}
+.trending-list a{{color:var(--gray-700);font-weight:500}}
+.trending-list a:hover{{color:var(--blue)}}
+.trending-num{{display:inline-block;width:18px;height:18px;border-radius:50%;background:var(--blue-100);color:var(--blue);font-size:0.65rem;font-weight:700;text-align:center;line-height:18px;margin-right:6px}}
+
+/* FOOTER */
+.site-footer{{background:var(--gray-900);color:#9ca3af;padding:48px 24px 28px;margin-top:60px}}
+.footer-grid{{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:36px}}
+.footer-logo{{font-size:1.15rem;font-weight:800;color:var(--white);margin-bottom:9px}}
+.footer-desc{{font-size:0.82rem;line-height:1.65;max-width:260px}}
+.footer-col h4{{font-size:0.76rem;font-weight:700;color:#e2e8f0;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px}}
+.footer-col a{{display:block;font-size:0.84rem;color:#9ca3af;margin-bottom:7px;transition:color var(--tr)}}
+.footer-col a:hover{{color:var(--white);text-decoration:none}}
+.footer-bottom{{max-width:var(--max);margin:0 auto;padding-top:22px;border-top:1px solid #1f2937;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:0.79rem}}
+.footer-links{{display:flex;gap:18px}}
+.footer-links a{{color:#6b7280}}
+.footer-links a:hover{{color:#d1d5db;text-decoration:none}}
+
+/* RESPONSIVE */
+@media(max-width:960px){{.main-wrap{{grid-template-columns:1fr}}.hp-sidebar{{display:none}}.footer-grid{{grid-template-columns:1fr 1fr}}}}
+@media(max-width:640px){{.header-inner{{padding:0 14px;height:54px}}.header-search{{display:none}}.header-nav a{{font-size:0.78rem;padding:5px 7px}}.hero{{padding:40px 16px 36px}}.hero h1{{font-size:1.8rem}}.hero-stats{{gap:18px}}.main-wrap{{padding:16px 12px 40px}}.cat-grid{{grid-template-columns:1fr 1fr}}.footer-grid{{grid-template-columns:1fr;gap:20px}}.footer-bottom{{flex-direction:column;text-align:center}}}}
+@media(max-width:380px){{.hero h1{{font-size:1.5rem}}.cat-grid{{grid-template-columns:1fr}}.header-nav{{display:none}}}}
   </style>
 </head>
 <body>
-<header>
+
+<header class="site-header">
   <div class="header-inner">
-    <a href="/" class="logo">USA <span>Salaries</span></a>
-    <nav>
-      <a href="/salary/">Browse All</a>
-      <a href="#healthcare">Healthcare</a>
-      <a href="#technology">Technology</a>
+    <a href="/" class="logo">USA<span>Salaries</span></a>
+    <div class="header-search">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" placeholder="Search by job title or state…" aria-label="Search">
+    </div>
+    <nav class="header-nav">
+      <a href="/salary/">Browse</a>
+      <a href="/salary/registered-nurse/">Healthcare</a>
+      <a href="/salary/software-developer/">Tech</a>
+      <a href="/salary/electrician/">Trades</a>
     </nav>
   </div>
 </header>
-<div class="hero">
-  <h1>USA Salary Data 2026 for Every Job, State &amp; City</h1>
-  <p>Accurate salary data for every job, state, and city in America. Updated from BLS official data.</p>
-</div>
 
-<div class="container">
-
-  <!-- Category quick nav -->
-  <div class="cat-nav">
-    {"".join(f'<a href="#cat-{c.lower().replace(" ","-")}">{cat_icons.get(c,"💼")} {c}</a>' for c in sorted(categories.keys()))}
-  </div>
-
-  <!-- Category sections -->
-  {cat_sections}
-  </div>
-</div>
-
-<footer>
-  <div class="footer-inner">
-    <div>
-      <h4>{SITE_NAME}</h4>
-      <p style="font-size:0.83rem;line-height:1.6">Comprehensive salary data for {len(jobs)}+ jobs across every US state and city. Updated quarterly from official BLS sources.</p>
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">📊 BLS Official Data · May 2025 Release</div>
+    <h1>USA Salary Data 2026 for Every Job, State &amp; City</h1>
+    <p class="hero-desc">Explore accurate salary data for {len(jobs)}+ occupations across all 50 states and major cities. Updated from official U.S. Bureau of Labor Statistics data.</p>
+    <div class="hero-search">
+      <input type="text" placeholder="Search job titles, states, or cities…" aria-label="Search salaries">
+      <button type="button">Search Salaries</button>
     </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-num">{len(jobs)}+</div><div class="hero-stat-label">Job Titles</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">51</div><div class="hero-stat-label">States</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">18,981</div><div class="hero-stat-label">Salary Pages</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">2026</div><div class="hero-stat-label">Data Year</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="main-wrap">
+  <main>
+    <div class="cat-nav">
+      <div class="cat-nav-label">Browse by Category</div>
+      <div class="cat-pills">{cat_nav}</div>
+    </div>
+    {cat_sections}
+  </main>
+
+  <aside class="hp-sidebar">
+    <div class="sidebar-card">
+      <div class="s-title">🏆 Highest Paying Jobs</div>
+      {top_jobs_html}
+    </div>
+
+    <div class="sidebar-card">
+      <div class="s-title">🔥 Trending Searches</div>
+      <ul class="trending-list">
+        {"".join(f'<li><span class="trending-num">{i+1}</span><a href="/salary/{j["job_slug"]}/">{j["job_title"]}</a></li>' for i, j in enumerate(sorted(jobs, key=lambda x: float(x["yoy_growth"]), reverse=True)[:7]))}
+      </ul>
+    </div>
+
+    <div class="sidebar-card" style="background:var(--blue-50);border-color:var(--blue-100)">
+      <div class="s-title" style="color:#1e40af">🏛️ About This Data</div>
+      <p style="font-size:0.79rem;color:#1e40af;line-height:1.6">All salary data sourced from the U.S. Bureau of Labor Statistics Occupational Employment and Wage Statistics (OES) program. May 2025 national release.</p>
+    </div>
+  </aside>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-grid">
     <div>
-      <h4>Top Paying Jobs</h4>
+      <div class="footer-logo">USASalaries</div>
+      <p class="footer-desc">Salary intelligence for every job, state, and city in America. Sourced from official BLS data. Updated annually.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Top Jobs</h4>
       {"".join(f'<a href="/salary/{j["job_slug"]}/">{j["job_title"]}</a>' for j in sorted(jobs, key=lambda x: int(x["national_avg"]), reverse=True)[:6])}
     </div>
-    <div>
+    <div class="footer-col">
       <h4>Browse by State</h4>
       {"".join(f'<a href="/salary/registered-nurse/{s["state_slug"]}/">{s["state_name"]}</a>' for s in states[:6])}
     </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="/about/">About</a>
+      <a href="/methodology/">Methodology</a>
+      <a href="/privacy/">Privacy Policy</a>
+      <a href="/contact/">Contact</a>
+      <a href="/sitemap.xml">Sitemap</a>
+    </div>
   </div>
-  <div class="footer-bottom">© 2026 {SITE_NAME} · Data sourced from U.S. Bureau of Labor Statistics (BLS). For informational purposes only.</div>
+  <div class="footer-bottom">
+    <span>© 2026 USASalaries · Data from U.S. Bureau of Labor Statistics · For informational purposes only.</span>
+    <div class="footer-links"><a href="/privacy/">Privacy</a><a href="/methodology/">Methodology</a><a href="/sitemap.xml">Sitemap</a></div>
+  </div>
 </footer>
 </body>
 </html>"""
