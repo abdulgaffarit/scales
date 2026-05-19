@@ -422,60 +422,168 @@ def generate_job_city(job, state, city, all_jobs):
 
 
 def generate_homepage(jobs, states):
-    """Generate homepage"""
+    """Generate homepage with category sections"""
     out_path = OUTPUT_DIR / "index.html"
-    top_jobs = jobs[:12]
+
+    # Group jobs by category
+    from collections import defaultdict
+    categories = defaultdict(list)
+    for j in jobs:
+        categories[j["category"]].append(j)
+
+    # Category icons mapping
+    cat_icons = {
+        "Healthcare": "🏥", "Technology": "💻", "Finance": "💰",
+        "Engineering": "⚙️", "Education": "🎓", "Management": "📊",
+        "Skilled Trades": "🔧", "Transportation": "🚛", "Sales": "📈",
+        "Legal": "⚖️", "Marketing": "📣", "Creative": "🎨",
+        "Science": "🔬", "Social Services": "🤝", "Public Safety": "🛡️",
+        "Human Resources": "👥", "Construction": "🏗️", "Real Estate": "🏠",
+        "Hospitality": "🍽️", "Personal Services": "✂️", "Business": "💼",
+        "Manufacturing": "🏭", "Agriculture": "🌾",
+    }
+
+    # Build category sections HTML
+    cat_sections = ""
+    for cat_name in sorted(categories.keys()):
+        cat_jobs = sorted(categories[cat_name], key=lambda x: int(x["national_avg"]), reverse=True)
+        icon = cat_icons.get(cat_name, "💼")
+        jobs_html = "".join(
+            f'<a href="/salary/{j["job_slug"]}/" class="job-card"><div class="j-title">{j["job_title"]}</div><div class="j-salary">${fmt(int(j["national_avg"]))}/yr</div></a>'
+            for j in cat_jobs
+        )
+        cat_sections += f'''
+        <div class="cat-section" id="cat-{cat_name.lower().replace(" ","-")}">
+          <div class="cat-header">
+            <span class="cat-icon">{icon}</span>
+            <h2 class="cat-title">{cat_name}</h2>
+            <span class="cat-count">{len(cat_jobs)} jobs</span>
+          </div>
+          <div class="jobs-grid">{jobs_html}</div>
+        </div>'''
+
+    # Stats
+    total_pages = len(jobs) * (len(states) + 1)
+
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>US Salary Data 2026 — Every Job, Every State, Every City | {SITE_NAME}</title>
-  <meta name="description" content="Find accurate 2026 salary data for any job in any US state or city. Data sourced from BLS. Compare salaries, see trends, and make informed career decisions.">
+  <meta name="description" content="Find accurate 2026 salary data for {len(jobs)}+ jobs in any US state or city. Data sourced from BLS. Compare salaries by state, city, and career level.">
   <link rel="canonical" href="https://{SITE_DOMAIN}/">
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#1a56db">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={ADSENSE_ID}" crossorigin="anonymous"></script>
   <style>
-    *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    :root {{ --primary: #1a56db; --accent: #16a34a; --bg: #f8fafc; --card: #fff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0; --radius: 10px; --max: 1100px; }}
-    body {{ font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); }}
-    header {{ background: #fff; border-bottom: 1px solid var(--border); padding: 0 20px; }}
-    .header-inner {{ max-width: var(--max); margin: 0 auto; height: 60px; display: flex; align-items: center; justify-content: space-between; }}
-    .logo {{ font-size: 1.4rem; font-weight: 800; color: var(--primary); text-decoration: none; }}
-    .logo span {{ color: var(--accent); }}
-    .hero {{ background: linear-gradient(135deg, #1a56db, #1240a8); color: white; padding: 70px 20px; text-align: center; }}
-    .hero h1 {{ font-size: 2.5rem; font-weight: 900; margin-bottom: 15px; }}
-    .hero p {{ opacity: 0.85; font-size: 1.1rem; max-width: 600px; margin: 0 auto 30px; }}
-    .search-bar {{ display: flex; max-width: 500px; margin: 0 auto; background: white; border-radius: 50px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }}
-    .search-bar input {{ flex: 1; border: none; padding: 15px 20px; font-size: 1rem; outline: none; color: var(--text); }}
-    .search-bar button {{ background: var(--accent); color: white; border: none; padding: 15px 25px; font-weight: 700; cursor: pointer; font-size: 0.95rem; }}
-    .container {{ max-width: var(--max); margin: 0 auto; padding: 50px 20px; }}
-    .section-title {{ font-size: 1.4rem; font-weight: 800; margin-bottom: 25px; }}
-    .jobs-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-bottom: 50px; }}
-    .job-card {{ background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-decoration: none; color: var(--text); transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }}
-    .job-card:hover {{ border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(26,86,219,0.15); }}
-    .job-card .j-title {{ font-weight: 700; margin-bottom: 5px; }}
-    .job-card .j-salary {{ color: var(--primary); font-size: 1.1rem; font-weight: 800; }}
-    .job-card .j-cat {{ font-size: 0.78rem; color: var(--muted); margin-top: 4px; }}
-    footer {{ background: #1e293b; color: #94a3b8; padding: 40px 20px; text-align: center; font-size: 0.85rem; }}
+    *,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
+    :root{{--primary:#1a56db;--accent:#16a34a;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:10px;--max:1100px}}
+    body{{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text)}}
+    header{{background:#fff;border-bottom:1px solid var(--border);padding:0 20px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.08)}}
+    .header-inner{{max-width:var(--max);margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between}}
+    .logo{{font-size:1.4rem;font-weight:800;color:var(--primary);text-decoration:none}}
+    .logo span{{color:var(--accent)}}
+    nav a{{color:var(--muted);text-decoration:none;font-size:0.9rem;margin-left:20px;font-weight:500}}
+    nav a:hover{{color:var(--primary)}}
+    .hero{{background:linear-gradient(135deg,#1a56db,#1240a8);color:white;padding:65px 20px;text-align:center}}
+    .hero h1{{font-size:2.4rem;font-weight:900;margin-bottom:12px}}
+    .hero p{{opacity:0.85;font-size:1.05rem;max-width:580px;margin:0 auto 25px}}
+    .stats-row{{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;margin-top:20px}}
+    .stat{{text-align:center}}
+    .stat-num{{font-size:1.8rem;font-weight:900}}
+    .stat-label{{font-size:0.8rem;opacity:0.75;text-transform:uppercase;letter-spacing:0.5px}}
+    .container{{max-width:var(--max);margin:0 auto;padding:40px 20px}}
+    .cat-nav{{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:35px;padding:20px;background:#fff;border-radius:var(--radius);border:1px solid var(--border)}}
+    .cat-nav a{{padding:6px 14px;border-radius:20px;text-decoration:none;font-size:0.83rem;font-weight:600;background:var(--bg);color:var(--muted);border:1px solid var(--border);transition:all 0.2s}}
+    .cat-nav a:hover{{background:var(--primary);color:white;border-color:var(--primary)}}
+    .cat-section{{margin-bottom:45px}}
+    .cat-header{{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid var(--border)}}
+    .cat-icon{{font-size:1.4rem}}
+    .cat-title{{font-size:1.2rem;font-weight:800;color:var(--text)}}
+    .cat-count{{margin-left:auto;font-size:0.8rem;color:var(--muted);background:var(--bg);padding:3px 10px;border-radius:20px;border:1px solid var(--border)}}
+    .jobs-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}}
+    .job-card{{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-decoration:none;color:var(--text);transition:all 0.2s;box-shadow:0 1px 2px rgba(0,0,0,0.05)}}
+    .job-card:hover{{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 4px 12px rgba(26,86,219,0.15)}}
+    .j-title{{font-weight:700;font-size:0.92rem;margin-bottom:5px;line-height:1.3}}
+    .j-salary{{color:var(--primary);font-size:1rem;font-weight:800}}
+    .ad-banner{{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:10px;margin:30px 0;text-align:center;min-height:90px}}
+    .ad-label{{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}}
+    footer{{background:#1e293b;color:#94a3b8;padding:40px 20px;margin-top:50px}}
+    .footer-inner{{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:30px}}
+    @media(max-width:600px){{.footer-inner{{grid-template-columns:1fr}}.stats-row{{gap:15px}}}}
+    footer h4{{color:#e2e8f0;font-size:0.9rem;margin-bottom:12px}}
+    footer a{{color:#94a3b8;text-decoration:none;display:block;font-size:0.85rem;margin-bottom:6px}}
+    footer a:hover{{color:#e2e8f0}}
+    .footer-bottom{{max-width:var(--max);margin:25px auto 0;padding-top:20px;border-top:1px solid #334155;font-size:0.82rem;text-align:center}}
   </style>
 </head>
 <body>
 <header>
   <div class="header-inner">
     <a href="/" class="logo">USA <span>Salaries</span></a>
+    <nav>
+      <a href="/salary/">Browse All</a>
+      <a href="#healthcare">Healthcare</a>
+      <a href="#technology">Technology</a>
+    </nav>
   </div>
 </header>
 <div class="hero">
   <h1>2026 USA Salary Guide</h1>
   <p>Accurate salary data for every job, state, and city in America. Updated from BLS official data.</p>
-</div>
-<div class="container">
-  <div class="section-title">Browse Salaries by Job Title</div>
-  <div class="jobs-grid">
-    {"".join(f'<a href="/salary/{j["job_slug"]}/" class="job-card"><div class="j-title">{j["job_title"]}</div><div class="j-salary">${fmt(int(j["national_avg"]))}/yr</div><div class="j-cat">{j["category"]}</div></a>' for j in jobs)}
+  <div class="stats-row">
+    <div class="stat"><div class="stat-num">{len(jobs)}+</div><div class="stat-label">Job Titles</div></div>
+    <div class="stat"><div class="stat-num">51</div><div class="stat-label">States</div></div>
+    <div class="stat"><div class="stat-num">99</div><div class="stat-label">Cities</div></div>
+    <div class="stat"><div class="stat-num">{total_pages:,}+</div><div class="stat-label">Salary Pages</div></div>
   </div>
 </div>
-<footer>© 2026 {SITE_NAME} · Data from U.S. Bureau of Labor Statistics</footer>
+
+<div class="container">
+  <!-- AdSense top -->
+  <div class="ad-banner">
+    <div class="ad-label">Advertisement</div>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="{ADSENSE_ID}" data-ad-slot="{AD_SLOT_TOP}" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
+  </div>
+
+  <!-- Category quick nav -->
+  <div class="cat-nav">
+    {"".join(f'<a href="#cat-{c.lower().replace(" ","-")}">{cat_icons.get(c,"💼")} {c}</a>' for c in sorted(categories.keys()))}
+  </div>
+
+  <!-- Category sections -->
+  {cat_sections}
+
+  <!-- AdSense bottom -->
+  <div class="ad-banner">
+    <div class="ad-label">Advertisement</div>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="{ADSENSE_ID}" data-ad-slot="{AD_SLOT_BOTTOM}" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <h4>{SITE_NAME}</h4>
+      <p style="font-size:0.83rem;line-height:1.6">Comprehensive salary data for {len(jobs)}+ jobs across every US state and city. Updated quarterly from official BLS sources.</p>
+    </div>
+    <div>
+      <h4>Top Paying Jobs</h4>
+      {"".join(f'<a href="/salary/{j["job_slug"]}/">{j["job_title"]}</a>' for j in sorted(jobs, key=lambda x: int(x["national_avg"]), reverse=True)[:6])}
+    </div>
+    <div>
+      <h4>Browse by State</h4>
+      {"".join(f'<a href="/salary/registered-nurse/{s["state_slug"]}/">{s["state_name"]}</a>' for s in states[:6])}
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 {SITE_NAME} · Data sourced from U.S. Bureau of Labor Statistics (BLS). For informational purposes only.</div>
+</footer>
 </body>
 </html>"""
     out_path.write_text(html, encoding="utf-8")
