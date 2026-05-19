@@ -482,6 +482,25 @@ def generate_homepage(jobs, states):
     *,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
     :root{{--primary:#1a56db;--accent:#16a34a;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:10px;--max:1100px}}
     body{{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text)}}
+    @media(max-width:600px){{
+      .hero{{padding:40px 16px}}
+      .hero h1{{font-size:1.8rem}}
+      .cat-nav{{padding:14px;gap:6px}}
+      .cat-nav a{{padding:5px 10px;font-size:0.78rem}}
+      .jobs-grid{{grid-template-columns:1fr 1fr;gap:10px}}
+      .job-card{{padding:12px}}
+      .j-title{{font-size:0.85rem}}
+      .j-salary{{font-size:0.92rem}}
+      .cat-title{{font-size:1rem}}
+      .header-inner{{padding:0 14px}}
+      nav a{{font-size:0.82rem;margin-left:10px}}
+      .footer-inner{{grid-template-columns:1fr}}
+    }}
+    @media(max-width:380px){{
+      .jobs-grid{{grid-template-columns:1fr}}
+      .hero h1{{font-size:1.5rem}}
+      nav{{display:none}}
+    }}
     header{{background:#fff;border-bottom:1px solid var(--border);padding:0 20px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.08)}}
     .header-inner{{max-width:var(--max);margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between}}
     .logo{{font-size:1.4rem;font-weight:800;color:var(--primary);text-decoration:none}}

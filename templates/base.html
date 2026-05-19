@@ -158,6 +158,79 @@
     .font-bold { font-weight: 700; }
     .mt-10 { margin-top: 10px; }
     .insight-box { background: #eff6ff; border-left: 4px solid var(--primary); border-radius: 0 8px 8px 0; padding: 15px 18px; margin: 18px 0; font-size: 0.93rem; color: #1e40af; }
+
+    /* ── RESPONSIVE: TABLET (max 900px) ─────────────────────────────────── */
+    @media(max-width: 900px) {
+      .container { grid-template-columns: 1fr; padding: 20px 16px; }
+      .sidebar { display: none; }
+      .salary-highlights { grid-template-columns: repeat(3, 1fr); }
+      .compare-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── RESPONSIVE: MOBILE (max 600px) ─────────────────────────────────── */
+    @media(max-width: 600px) {
+      /* Header */
+      .header-inner { padding: 0 14px; }
+      .logo { font-size: 1.2rem; }
+      nav a { font-size: 0.82rem; margin-left: 12px; }
+
+      /* Breadcrumb */
+      .breadcrumb-inner { font-size: 0.76rem; white-space: nowrap; overflow-x: auto; padding: 8px 14px; }
+
+      /* Hero card */
+      .hero-card { padding: 22px 18px; }
+      .hero-card h1 { font-size: 1.3rem; }
+      .hero-card .subtitle { font-size: 0.85rem; }
+      .salary-highlights { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .salary-item { padding: 12px 8px; }
+      .salary-item .value { font-size: 1.25rem; }
+
+      /* Cards */
+      .card { padding: 18px 14px; margin-bottom: 16px; }
+      .card h2 { font-size: 1rem; }
+
+      /* Salary table — KEY FIX for cutoff numbers */
+      .salary-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .salary-table { min-width: 480px; font-size: 0.82rem; }
+      .salary-table th { padding: 8px 10px; font-size: 0.72rem; }
+      .salary-table td { padding: 9px 10px; }
+
+      /* Percentile labels */
+      .percentile-row .p-label { font-size: 0.8rem; }
+
+      /* Trend bars */
+      .trend-val { font-size: 0.6rem; }
+      .trend-label { font-size: 0.62rem; }
+
+      /* Compare grid */
+      .compare-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .compare-card { padding: 10px; }
+      .compare-card .c-salary { font-size: 0.95rem; }
+
+      /* Related links */
+      .related-links { grid-template-columns: 1fr; }
+      .rel-link { padding: 10px 12px; font-size: 0.84rem; }
+
+      /* Insight box */
+      .insight-box { font-size: 0.85rem; padding: 12px 14px; }
+
+      /* Footer */
+      .footer-inner { grid-template-columns: 1fr; gap: 20px; }
+      footer { padding: 30px 16px; }
+
+      /* FAQ */
+      .faq-q { font-size: 0.9rem; }
+      .faq-a { font-size: 0.86rem; }
+    }
+
+    /* ── RESPONSIVE: SMALL MOBILE (max 380px) ───────────────────────────── */
+    @media(max-width: 380px) {
+      .salary-highlights { grid-template-columns: 1fr; }
+      .salary-item .value { font-size: 1.4rem; }
+      .hero-card h1 { font-size: 1.15rem; }
+      nav { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -246,7 +319,7 @@
     <!-- City / State Comparison Table -->
     <div class="card">
       <h2>{{ comparison_table_title }}</h2>
-      <table class="salary-table">
+      <div class="salary-table-wrap"><table class="salary-table">
         <thead>
           <tr>
             <th>{{ comparison_col1 }}</th>
@@ -265,7 +338,7 @@
           </tr>
           {% endfor %}
         </tbody>
-      </table>
+      </table></div>
     </div>
 
     <!-- Insight paragraph (AI-resistant content) -->
