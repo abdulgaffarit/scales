@@ -27,9 +27,7 @@
 
   <!-- Breadcrumb Schema -->
   <script type="application/ld+json">{{ breadcrumb_schema | safe }}</script>
-
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ adsense_id }}" crossorigin="anonymous"></script>
+  <!-- AdSense: disabled until approved -->
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -203,13 +201,6 @@
         </div>
       </div>
     </div>
-
-    <!-- AdSense Top Banner -->
-    <div class="ad-banner">
-      <div>
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle" style="display:block" data-ad-client="{{ adsense_id }}" data-ad-slot="{{ ad_slot_top }}" data-ad-format="auto" data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
       </div>
     </div>
 
@@ -253,13 +244,6 @@
       </div>
       <div class="insight-box mt-10">📈 {{ trend_insight }}</div>
     </div>
-
-    <!-- AdSense Mid -->
-    <div class="ad-banner">
-      <div>
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle" style="display:block" data-ad-client="{{ adsense_id }}" data-ad-slot="{{ ad_slot_mid }}" data-ad-format="auto" data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
       </div>
     </div>
 
@@ -322,13 +306,6 @@
       </div>
       {% endfor %}
     </div>
-
-    <!-- AdSense Bottom -->
-    <div class="ad-banner">
-      <div>
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle" style="display:block" data-ad-client="{{ adsense_id }}" data-ad-slot="{{ ad_slot_bottom }}" data-ad-format="auto" data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
       </div>
     </div>
 
@@ -345,12 +322,6 @@
 
   <!-- Sidebar -->
   <aside class="sidebar">
-    <div class="sidebar-card">
-      <div class="ad-label" style="margin-bottom:8px">Advertisement</div>
-      <ins class="adsbygoogle" style="display:block;min-height:250px" data-ad-client="{{ adsense_id }}" data-ad-slot="{{ ad_slot_sidebar }}" data-ad-format="auto"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-
     <div class="sidebar-card">
       <h3>Top Paying States</h3>
       <ul class="sidebar-list">
@@ -377,13 +348,7 @@
         {% endfor %}
       </ul>
     </div>
-
-    <div class="sidebar-card">
-      <div class="ad-label" style="margin-bottom:8px">Advertisement</div>
-      <ins class="adsbygoogle" style="display:block;min-height:250px" data-ad-client="{{ adsense_id }}" data-ad-slot="{{ ad_slot_sidebar2 }}" data-ad-format="auto"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-  </aside>
+    </aside>
 </div>
 
 <footer>

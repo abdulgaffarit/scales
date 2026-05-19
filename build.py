@@ -478,7 +478,6 @@ def generate_homepage(jobs, states):
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <meta name="theme-color" content="#1a56db">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={ADSENSE_ID}" crossorigin="anonymous"></script>
   <style>
     *,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
     :root{{--primary:#1a56db;--accent:#16a34a;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:10px;--max:1100px}}
@@ -544,11 +543,6 @@ def generate_homepage(jobs, states):
 </div>
 
 <div class="container">
-  <!-- AdSense top -->
-  <div class="ad-banner">
-    <div class="ad-label">Advertisement</div>
-    <ins class="adsbygoogle" style="display:block" data-ad-client="{ADSENSE_ID}" data-ad-slot="{AD_SLOT_TOP}" data-ad-format="auto" data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
   </div>
 
   <!-- Category quick nav -->
@@ -558,12 +552,6 @@ def generate_homepage(jobs, states):
 
   <!-- Category sections -->
   {cat_sections}
-
-  <!-- AdSense bottom -->
-  <div class="ad-banner">
-    <div class="ad-label">Advertisement</div>
-    <ins class="adsbygoogle" style="display:block" data-ad-client="{ADSENSE_ID}" data-ad-slot="{AD_SLOT_BOTTOM}" data-ad-format="auto" data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
   </div>
 </div>
 
