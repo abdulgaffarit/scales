@@ -347,5 +347,78 @@ a:hover { text-decoration: underline }
     <div class="footer-links"><a href="/privacy/">Privacy</a><a href="/methodology/">Methodology</a><a href="/sitemap.xml">Sitemap</a></div>
   </div>
 </footer>
+<script>
+(function(){
+  var idx=null,dd=null,wrap=null,activeIdx=-1;
+  function init(){
+    document.querySelectorAll('.header-search input, .hero-search input').forEach(function(inp){
+      inp.addEventListener('input',onInput);
+      inp.addEventListener('keydown',onKey);
+      inp.addEventListener('focus',function(){if(inp.value.length>1)onInput.call(inp)});
+    });
+    document.addEventListener('click',function(e){hideAll()});
+  }
+  function getOrCreateDD(inp){
+    var p=inp.closest('.header-search')||inp.closest('.hero-search');
+    if(!p)return null;
+    var d=p.querySelector('.search-dd');
+    if(!d){
+      d=document.createElement('div');
+      d.className='search-dd';
+      d.style.cssText='position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.12);max-height:340px;overflow-y:auto;z-index:999;margin-top:6px;display:none';
+      p.style.position='relative';
+      p.appendChild(d);
+    }
+    return d;
+  }
+  function loadIndex(cb){
+    if(idx)return cb();
+    fetch('/search-index.json').then(function(r){return r.json()}).then(function(d){idx=d;cb()}).catch(function(){});
+  }
+  function onInput(){
+    var inp=this,q=inp.value.trim().toLowerCase();
+    dd=getOrCreateDD(inp);wrap=inp;activeIdx=-1;
+    if(q.length<2){if(dd)dd.style.display='none';return}
+    loadIndex(function(){render(q)});
+  }
+  function render(q){
+    if(!dd||!idx)return;
+    var results=idx.filter(function(item){return item.t.toLowerCase().indexOf(q)>-1}).slice(0,8);
+    if(!results.length){dd.style.display='none';return}
+    dd.innerHTML=results.map(function(r,i){
+      return '<a href="'+r.u+'" class="sr-item" data-i="'+i+'" style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;text-decoration:none;color:#111827;font-size:0.88rem;border-bottom:1px solid #f3f4f6;transition:background .15s">'
+        +'<span style="font-weight:500">'+highlight(r.t,q)+'</span>'
+        +'<span style="font-size:0.78rem;color:#6b7280">'+(r.s?'$'+r.s+'/yr':r.c)+'</span>'
+        +'</a>';
+    }).join('');
+    dd.style.display='block';
+    dd.querySelectorAll('.sr-item').forEach(function(a){
+      a.addEventListener('mouseenter',function(){setActive(+a.dataset.i)});
+    });
+  }
+  function highlight(text,q){
+    var i=text.toLowerCase().indexOf(q);
+    if(0>i)return text;
+    return text.slice(0,i)+'<strong style="color:#2563eb">'+text.slice(i,i+q.length)+'</strong>'+text.slice(i+q.length);
+  }
+  function onKey(e){
+    if(!dd||dd.style.display==='none')return;
+    var items=dd.querySelectorAll('.sr-item');
+    if(e.key==='ArrowDown'){e.preventDefault();setActive(Math.min(activeIdx+1,items.length-1))}
+    else if(e.key==='ArrowUp'){e.preventDefault();setActive(Math.max(activeIdx-1,0))}
+    else if(e.key==='Enter'&&activeIdx>=0){e.preventDefault();items[activeIdx].click()}
+    else if(e.key==='Escape'){dd.style.display='none'}
+  }
+  function setActive(i){
+    activeIdx=i;
+    var items=dd.querySelectorAll('.sr-item');
+    items.forEach(function(a,j){a.style.background=j===i?'#eff6ff':''});
+  }
+  function hideAll(){
+    document.querySelectorAll('.search-dd').forEach(function(d){d.style.display='none'});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 </body>
 </html>

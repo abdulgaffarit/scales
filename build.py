@@ -561,6 +561,27 @@ def generate_sitemap(jobs, states, cities):
     print(f"✅ Sitemap: {len(urls):,} URLs across {len(chunks)} file(s)")
 
 
+def generate_search_index(jobs, states):
+    """Generate a lightweight JSON search index for client-side search"""
+    index = []
+    for j in jobs:
+        index.append({
+            "t": j["job_title"],
+            "u": f"/salary/{j['job_slug']}/",
+            "s": fmt(int(j["national_avg"])),
+            "c": j["category"],
+        })
+    for s in states:
+        index.append({
+            "t": s["state_name"],
+            "u": f"/salary/registered-nurse/{s['state_slug']}/",
+            "s": "",
+            "c": "State",
+        })
+    (OUTPUT_DIR / "search-index.json").write_text(json.dumps(index), encoding="utf-8")
+    print(f"✅ Search index: {len(index)} entries")
+
+
 def generate_robots():
     robots = f"""User-agent: *
 Allow: /
@@ -665,9 +686,10 @@ def main():
     #             total_pages += 1
     print(f"✅ City pages skipped (staying under 20k limit)")
 
-    # Sitemap + robots
+    # Sitemap + robots + search
     generate_sitemap(jobs, states, cities)
     generate_robots()
+    generate_search_index(jobs, states)
 
     # Copy favicon files to output automatically
     favicon_files = ["favicon.ico","favicon_16.png","favicon_32.png",
