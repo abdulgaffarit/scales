@@ -574,12 +574,257 @@ def generate_search_index(jobs, states):
     for s in states:
         index.append({
             "t": s["state_name"],
-            "u": f"/salary/registered-nurse/{s['state_slug']}/",
+            "u": f"/salary/registered-nurses/{s['state_slug']}/",
             "s": "",
             "c": "State",
         })
     (OUTPUT_DIR / "search-index.json").write_text(json.dumps(index), encoding="utf-8")
     print(f"✅ Search index: {len(index)} entries")
+
+
+def generate_static_pages(jobs):
+    """Generate About, Methodology, Privacy, and Contact pages"""
+    static_template = env.get_template("static.html")
+
+    pages = {
+        "about": {
+            "page_title": f"About | {SITE_NAME}",
+            "meta_description": "Learn about USASalaries — a comprehensive salary data platform powered by official U.S. Bureau of Labor Statistics data.",
+            "canonical_url": "/about/",
+            "content": f"""
+<div class="badge">🏛️ About Us</div>
+<h1>About {SITE_NAME}</h1>
+<p class="subtitle">Comprehensive salary intelligence powered by official government data.</p>
+
+<p><strong>{SITE_NAME}</strong> provides accurate, up-to-date salary information for hundreds of occupations across every U.S. state and major city. Our mission is to help workers, job seekers, employers, and researchers make informed decisions about compensation.</p>
+
+<h2>What We Do</h2>
+<p>We transform complex government wage data into clear, accessible salary insights. Every data point on this site comes directly from the U.S. Bureau of Labor Statistics Occupational Employment and Wage Statistics (OES) program — the gold standard for occupational wage data in the United States.</p>
+
+<div class="card">
+<h3>📊 By the Numbers</h3>
+<ul>
+<li><strong>{len(jobs)}+ occupations</strong> with detailed salary breakdowns</li>
+<li><strong>51 geographic areas</strong> (all 50 states + District of Columbia)</li>
+<li><strong>Percentile data</strong> from entry-level (10th) to top earners (90th)</li>
+<li><strong>Year-over-year trends</strong> showing salary growth trajectories</li>
+<li><strong>Updated annually</strong> with each new BLS data release</li>
+</ul>
+</div>
+
+<h2>Who This Is For</h2>
+<ul>
+<li><strong>Job seekers</strong> — Research fair compensation before interviews and negotiations</li>
+<li><strong>Employees</strong> — Benchmark your current salary against national and state averages</li>
+<li><strong>Employers & HR</strong> — Set competitive pay ranges based on real market data</li>
+<li><strong>Students</strong> — Explore career paths and their earning potential</li>
+<li><strong>Researchers</strong> — Access structured wage data for analysis</li>
+</ul>
+
+<h2>Our Data Source</h2>
+<p>All salary figures come from the <strong>BLS Occupational Employment and Wage Statistics (OES)</strong> survey, which collects data from approximately 1.1 million business establishments across the United States. The OES program produces employment and wage estimates for over 800 detailed occupations.</p>
+
+<div class="highlight">The current data reflects the <strong>May 2025 OES release</strong>, published by the Bureau of Labor Statistics. This represents the most recent comprehensive occupational wage data available for the United States.</div>
+
+<h2>How We're Different</h2>
+<p>Unlike salary sites that rely on self-reported data (which can be biased and unreliable), {SITE_NAME} uses exclusively official government statistics. This means our figures represent actual employer-reported wages — not estimates, not crowdsourced guesses, but real compensation data collected through a rigorous federal survey program.</p>
+"""
+        },
+        "methodology": {
+            "page_title": f"Methodology | {SITE_NAME}",
+            "meta_description": "How USASalaries calculates salary estimates, sources data from BLS, and presents occupational wage statistics.",
+            "canonical_url": "/methodology/",
+            "content": f"""
+<div class="badge">📐 Methodology</div>
+<h1>Our Methodology</h1>
+<p class="subtitle">How we source, process, and present salary data.</p>
+
+<h2>Data Source</h2>
+<p>All salary data on {SITE_NAME} is sourced from the <strong>U.S. Bureau of Labor Statistics (BLS) Occupational Employment and Wage Statistics (OES)</strong> program. The OES survey is a semi-annual mail survey of approximately 1.1 million business establishments that produces employment and wage estimates for about 800 occupations.</p>
+
+<div class="card">
+<h3>Current Dataset</h3>
+<ul>
+<li><strong>Survey period:</strong> May 2025</li>
+<li><strong>Published:</strong> 2026</li>
+<li><strong>Coverage:</strong> All 50 states, District of Columbia, and U.S. territories</li>
+<li><strong>Methodology:</strong> Employer-reported data from nonfarm establishments</li>
+<li><strong>Sample size:</strong> ~1.1 million establishments over 3 years</li>
+</ul>
+</div>
+
+<h2>Wage Estimates</h2>
+<p>The OES program produces the following wage estimates that we display:</p>
+<ul>
+<li><strong>Mean (average) wage</strong> — The arithmetic average of all reported wages</li>
+<li><strong>Median wage</strong> — The 50th percentile; half earn more, half earn less</li>
+<li><strong>10th percentile</strong> — Entry-level wages (10% earn less than this)</li>
+<li><strong>25th percentile</strong> — Lower-quarter wages</li>
+<li><strong>75th percentile</strong> — Upper-quarter wages</li>
+<li><strong>90th percentile</strong> — Top-earner wages (only 10% earn more)</li>
+</ul>
+
+<h2>Geographic Adjustments</h2>
+<p>State-level salary estimates are calculated using cost-of-living multipliers derived from BLS regional price data. These multipliers reflect the relative cost of living in each state compared to the national average, providing a more accurate picture of compensation by location.</p>
+
+<div class="highlight">
+<strong>Important:</strong> Geographic salary differences reflect both cost-of-living variations and local labor market conditions. A higher salary in an expensive state may not represent greater purchasing power.
+</div>
+
+<h2>Salary Growth Trends</h2>
+<p>Year-over-year growth rates are calculated from historical OES data releases. The 6-year trend charts show the trajectory of average wages for each occupation, helping users understand whether compensation is growing, stable, or declining.</p>
+
+<h2>Demand Indicators</h2>
+<p>Demand levels (Very High, High, Medium) are determined by total national employment in each occupation:</p>
+<ul>
+<li><strong>Very High:</strong> 500,000+ employed nationally</li>
+<li><strong>High:</strong> 200,000–499,999 employed nationally</li>
+<li><strong>Medium:</strong> 50,000–199,999 employed nationally</li>
+</ul>
+
+<h2>Limitations</h2>
+<ul>
+<li>OES data excludes self-employed workers</li>
+<li>Wages do not include benefits, bonuses, or non-cash compensation</li>
+<li>Some occupations have high margins of error due to small sample sizes</li>
+<li>Data represents a point-in-time snapshot and may not reflect very recent market changes</li>
+</ul>
+
+<h2>Updates</h2>
+<p>We update our data annually when the BLS publishes new OES estimates, typically in spring of each year. The site is rebuilt automatically to reflect the latest available data.</p>
+"""
+        },
+        "privacy": {
+            "page_title": f"Privacy Policy | {SITE_NAME}",
+            "meta_description": f"Privacy policy for {SITE_NAME}. Learn how we handle your data and protect your privacy.",
+            "canonical_url": "/privacy/",
+            "content": f"""
+<div class="badge">🔒 Privacy</div>
+<h1>Privacy Policy</h1>
+<p class="subtitle">Last updated: May 2026</p>
+
+<p>At <strong>{SITE_NAME}</strong>, we respect your privacy. This policy explains what information we collect and how we use it.</p>
+
+<h2>Information We Collect</h2>
+
+<h3>Automatically Collected</h3>
+<p>When you visit our site, our hosting provider (Cloudflare) may automatically collect:</p>
+<ul>
+<li>IP address (anonymized)</li>
+<li>Browser type and version</li>
+<li>Pages visited and time spent</li>
+<li>Referring website</li>
+<li>Device type and screen resolution</li>
+</ul>
+
+<h3>What We Don't Collect</h3>
+<ul>
+<li>We do not require account creation or login</li>
+<li>We do not collect personal information (name, email, phone)</li>
+<li>We do not use tracking cookies for advertising purposes</li>
+<li>We do not sell any data to third parties</li>
+</ul>
+
+<h2>Cookies</h2>
+<p>We use minimal cookies necessary for site functionality:</p>
+<ul>
+<li><strong>Essential cookies:</strong> Required for basic site operation (Cloudflare security)</li>
+<li><strong>Analytics cookies:</strong> Anonymous usage statistics to improve the site</li>
+</ul>
+
+<h2>Third-Party Services</h2>
+<ul>
+<li><strong>Cloudflare:</strong> Hosting and CDN — subject to <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's Privacy Policy</a></li>
+<li><strong>Google Fonts:</strong> Typography — subject to <a href="https://policies.google.com/privacy">Google's Privacy Policy</a></li>
+</ul>
+
+<h2>Advertising</h2>
+<p>If advertising is displayed on this site, it may use cookies to serve relevant ads. Ad partners may collect anonymous browsing data. You can opt out of personalized advertising through your browser settings or at <a href="https://www.aboutads.info/choices/">aboutads.info</a>.</p>
+
+<h2>Data Security</h2>
+<p>Our site is served over HTTPS with TLS encryption. We use Cloudflare's security features including DDoS protection and Web Application Firewall.</p>
+
+<h2>Children's Privacy</h2>
+<p>This site is not directed at children under 13. We do not knowingly collect information from children.</p>
+
+<h2>Your Rights</h2>
+<p>You have the right to:</p>
+<ul>
+<li>Access any personal data we hold about you (we hold none)</li>
+<li>Request deletion of any data</li>
+<li>Opt out of analytics tracking via browser settings</li>
+<li>Use ad-blocking software</li>
+</ul>
+
+<h2>Changes to This Policy</h2>
+<p>We may update this policy periodically. Changes will be posted on this page with an updated date.</p>
+
+<h2>Contact</h2>
+<p>For privacy-related questions, please visit our <a href="/contact/">contact page</a>.</p>
+"""
+        },
+        "contact": {
+            "page_title": f"Contact Us | {SITE_NAME}",
+            "meta_description": f"Get in touch with the {SITE_NAME} team for questions, feedback, or data inquiries.",
+            "canonical_url": "/contact/",
+            "content": f"""
+<div class="badge">✉️ Contact</div>
+<h1>Contact Us</h1>
+<p class="subtitle">Questions, feedback, or data inquiries — we'd like to hear from you.</p>
+
+<div class="card">
+<h3>📧 General Inquiries</h3>
+<p>For questions about salary data, site features, or general feedback:</p>
+<p><strong>Email:</strong> contact@{SITE_DOMAIN}</p>
+</div>
+
+<div class="card">
+<h3>🐛 Report an Issue</h3>
+<p>Found incorrect data, a broken page, or a technical problem? Let us know and we'll fix it promptly.</p>
+<p><strong>Email:</strong> support@{SITE_DOMAIN}</p>
+</div>
+
+<div class="card">
+<h3>📊 Data Questions</h3>
+<p>For questions about our data sources, methodology, or how to interpret salary figures, please review our <a href="/methodology/">Methodology page</a> first. If you still have questions:</p>
+<p><strong>Email:</strong> data@{SITE_DOMAIN}</p>
+</div>
+
+<h2>Frequently Asked Questions</h2>
+
+<h3>Where does your data come from?</h3>
+<p>All salary data comes from the U.S. Bureau of Labor Statistics Occupational Employment and Wage Statistics (OES) program. See our <a href="/methodology/">methodology page</a> for details.</p>
+
+<h3>How often is the data updated?</h3>
+<p>We update annually when BLS publishes new OES estimates, typically in spring. The current data reflects the May 2025 survey period.</p>
+
+<h3>Can I use your data for research?</h3>
+<p>The underlying BLS data is public domain. Our presentation and analysis are copyrighted, but you're welcome to reference our site with attribution. For bulk data access, we recommend downloading directly from <a href="https://www.bls.gov/oes/tables.htm">BLS.gov</a>.</p>
+
+<h3>Why doesn't my job title appear on the site?</h3>
+<p>We cover occupations as defined by the Standard Occupational Classification (SOC) system. Some specific job titles may fall under broader occupation categories. Try searching for a related or more general title.</p>
+
+<div class="highlight">
+<strong>Response time:</strong> We aim to respond to all inquiries within 2–3 business days.
+</div>
+"""
+        },
+    }
+
+    for slug, page in pages.items():
+        out_path = OUTPUT_DIR / slug / "index.html"
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        html = static_template.render(
+            site_domain=SITE_DOMAIN,
+            site_name=SITE_NAME,
+            page_title=page["page_title"],
+            meta_description=page["meta_description"],
+            canonical_url=page["canonical_url"],
+            content=page["content"],
+        )
+        out_path.write_text(html, encoding="utf-8")
+
+    print(f"✅ {len(pages)} static pages generated (about, methodology, privacy, contact)")
 
 
 def generate_robots():
@@ -686,10 +931,11 @@ def main():
     #             total_pages += 1
     print(f"✅ City pages skipped (staying under 20k limit)")
 
-    # Sitemap + robots + search
+    # Sitemap + robots + search + static pages
     generate_sitemap(jobs, states, cities)
     generate_robots()
     generate_search_index(jobs, states)
+    generate_static_pages(jobs)
 
     # Copy favicon files to output automatically
     favicon_files = ["favicon.ico","favicon_16.png","favicon_32.png",

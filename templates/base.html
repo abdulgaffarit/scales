@@ -637,27 +637,51 @@ img { max-width: 100%; display: block }
   .header-inner { padding: 0 16px; height: 56px }
   .header-search { display: none }
   .header-nav a { font-size: 0.78rem; padding: 6px 10px }
-  .page-wrap { padding: 16px 16px 48px }
-  .hero-card { padding: 24px 20px; border-radius: var(--radius-lg) }
-  .hero-card h1 { font-size: 1.35rem }
+  .page-wrap { padding: 16px 14px 48px }
+  .hero-card { padding: 24px 18px; border-radius: var(--radius-lg) }
+  .hero-card h1 { font-size: 1.3rem }
+  .hero-sub { font-size: 0.82rem; margin-bottom: 20px }
   .salary-stats { grid-template-columns: 1fr 1fr 1fr; gap: 8px }
-  .stat-value { font-size: 1.2rem }
-  .stat-box { padding: 14px 10px }
-  .data-card { padding: 18px 16px }
+  .stat-value { font-size: 1.15rem }
+  .stat-box { padding: 12px 8px }
+  .stat-label { font-size: 0.62rem; letter-spacing: 0.5px }
+  .stat-sub { font-size: 0.62rem }
+  .data-card { padding: 16px 14px }
+  .card-header { margin-bottom: 16px; padding-bottom: 12px }
+  .card-title { font-size: 0.92rem }
   .trust-bar { display: none }
   .related-grid { grid-template-columns: 1fr }
   .jobs-grid { grid-template-columns: 1fr 1fr }
   .sidebar { grid-template-columns: 1fr }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px }
   .footer-bottom { flex-direction: column; text-align: center }
+  .pct-row { gap: 8px }
+  .pct-label { font-size: 0.78rem }
+  .pct-value { font-size: 0.82rem; min-width: 70px; text-align: right }
+  .trend-chart { height: 100px; gap: 6px }
+  .trend-amt { font-size: 0.58rem }
+  .trend-year { font-size: 0.62rem }
 }
 @media (max-width: 480px) {
+  .page-wrap { padding: 12px 10px 40px }
   .salary-stats { grid-template-columns: 1fr }
-  .hero-card h1 { font-size: 1.2rem }
+  .stat-box { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; text-align: left }
+  .stat-label { margin-bottom: 0; order: 1 }
+  .stat-value { font-size: 1.3rem; order: 2 }
+  .stat-sub { display: none }
+  .hero-card h1 { font-size: 1.15rem }
+  .hero-card { padding: 20px 16px }
+  .hero-badge { font-size: 0.65rem; padding: 4px 10px }
   .header-nav { display: none }
   .jobs-grid { grid-template-columns: 1fr }
   .footer-grid { grid-template-columns: 1fr; gap: 20px }
-  .trend-chart { height: 90px }
+  .trend-chart { height: 80px }
+  .pct-label { font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+  .pct-value { font-size: 0.8rem; min-width: 65px }
+  .data-card { padding: 14px 12px }
+  .card-icon { width: 30px; height: 30px; font-size: 0.85rem }
+  .info-box { font-size: 0.8rem; padding: 12px 14px }
+  .breadcrumb-inner { padding: 8px 14px; font-size: 0.72rem }
 }
   </style>
 </head>

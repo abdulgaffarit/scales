@@ -235,22 +235,35 @@ a:hover { text-decoration: underline }
   .header-search { display: none }
   .header-nav a { font-size: 0.78rem; padding: 6px 10px }
   .hero { padding: 48px 16px 40px }
-  .hero h1 { font-size: 2rem }
+  .hero h1 { font-size: 1.8rem }
+  .hero-desc { font-size: 0.95rem }
   .hero-stats { gap: 20px }
-  .main-wrap { padding: 20px 16px 48px }
+  .hero-stat-num { font-size: 1.4rem }
+  .main-wrap { padding: 20px 14px 48px }
   .cat-grid { grid-template-columns: 1fr 1fr }
   .hp-sidebar { grid-template-columns: 1fr }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px }
   .footer-bottom { flex-direction: column; text-align: center }
 }
 @media (max-width: 480px) {
-  .hero h1 { font-size: 1.6rem }
+  .hero { padding: 36px 14px 32px }
+  .hero h1 { font-size: 1.5rem }
+  .hero-desc { font-size: 0.88rem; margin-bottom: 24px }
   .hero-search { flex-direction: column; border-radius: var(--radius) }
   .hero-search input { border-radius: var(--radius) var(--radius) 0 0; padding: 14px 18px }
   .hero-search button { border-radius: 0 0 var(--radius) var(--radius); padding: 14px }
+  .hero-stats { gap: 16px }
+  .hero-stat-num { font-size: 1.2rem }
+  .hero-stat-label { font-size: 0.68rem }
   .cat-grid { grid-template-columns: 1fr }
+  .cat-pills { gap: 6px }
+  .cat-pills a { font-size: 0.72rem; padding: 5px 10px }
   .header-nav { display: none }
   .footer-grid { grid-template-columns: 1fr; gap: 20px }
+  .main-wrap { padding: 16px 10px 40px }
+  .job-tile { padding: 12px }
+  .tile-name { font-size: 0.8rem }
+  .tile-salary { font-size: 0.95rem }
 }
   </style>
 </head>
