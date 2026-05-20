@@ -21,6 +21,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script type="application/ld+json">{{ schema_json | safe }}</script>
   <script type="application/ld+json">{{ breadcrumb_schema | safe }}</script>
+  {% if faq_schema_json %}<script type="application/ld+json">{{ faq_schema_json | safe }}</script>{% endif %}
   <style>
 :root {
   --primary: #1e40af;
@@ -184,7 +185,6 @@ img { max-width: 100%; display: block }
   border-radius: var(--radius-xl);
   padding: 36px 32px;
   margin-bottom: 24px;
-  overflow: hidden;
   position: relative;
   box-shadow: 0 20px 40px -12px rgba(30,64,175,.35);
 }
@@ -637,51 +637,79 @@ img { max-width: 100%; display: block }
   .header-inner { padding: 0 16px; height: 56px }
   .header-search { display: none }
   .header-nav a { font-size: 0.78rem; padding: 6px 10px }
-  .page-wrap { padding: 16px 14px 48px }
-  .hero-card { padding: 24px 18px; border-radius: var(--radius-lg) }
-  .hero-card h1 { font-size: 1.3rem }
-  .hero-sub { font-size: 0.82rem; margin-bottom: 20px }
-  .salary-stats { grid-template-columns: 1fr 1fr 1fr; gap: 8px }
-  .stat-value { font-size: 1.15rem }
-  .stat-box { padding: 12px 8px }
-  .stat-label { font-size: 0.62rem; letter-spacing: 0.5px }
-  .stat-sub { font-size: 0.62rem }
-  .data-card { padding: 16px 14px }
-  .card-header { margin-bottom: 16px; padding-bottom: 12px }
-  .card-title { font-size: 0.92rem }
+  .page-wrap { padding: 16px 12px 48px; gap: 20px }
+  .hero-card { padding: 22px 16px; border-radius: var(--radius) }
+  .hero-card h1 { font-size: 1.2rem; word-wrap: break-word }
+  .hero-sub { font-size: 0.8rem; margin-bottom: 18px; line-height: 1.4 }
+  .hero-badge { font-size: 0.63rem; padding: 4px 10px; margin-bottom: 12px }
+  .salary-stats { grid-template-columns: 1fr; gap: 8px }
+  .stat-box {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    flex-direction: row;
+  }
+  .stat-label { margin-bottom: 0; font-size: 0.7rem; letter-spacing: 0.5px }
+  .stat-value { font-size: 1.4rem }
+  .stat-sub { display: none }
+  .data-card { padding: 16px 14px; margin-bottom: 14px }
+  .card-header { margin-bottom: 14px; padding-bottom: 10px; gap: 10px }
+  .card-icon { width: 32px; height: 32px; font-size: 0.9rem }
+  .card-title { font-size: 0.9rem }
+  .card-sub { font-size: 0.72rem }
   .trust-bar { display: none }
+  .pct-item { margin-bottom: 14px }
+  .pct-row { gap: 10px }
+  .pct-label { font-size: 0.8rem; flex: 1; min-width: 0 }
+  .pct-value { font-size: 0.85rem; font-weight: 700; white-space: nowrap; flex-shrink: 0 }
+  .pbar { height: 6px }
+  .trend-chart { height: 90px; gap: 5px }
+  .trend-amt { font-size: 0.55rem }
+  .trend-year { font-size: 0.6rem }
+  .info-box { font-size: 0.82rem; padding: 12px 14px; margin-top: 14px }
+  .table-wrap { margin: 0 -14px; border-radius: 0 }
+  .data-table { font-size: 0.8rem; min-width: 360px }
+  .data-table thead th { padding: 10px 12px; font-size: 0.68rem }
+  .data-table tbody td { padding: 10px 12px }
+  .insight-section p { font-size: 0.85rem; line-height: 1.7 }
   .related-grid { grid-template-columns: 1fr }
-  .jobs-grid { grid-template-columns: 1fr 1fr }
+  .rel-link { padding: 10px 14px; font-size: 0.8rem }
+  .jobs-grid { grid-template-columns: 1fr 1fr; gap: 8px }
+  .job-tile { padding: 12px }
+  .job-tile-name { font-size: 0.78rem }
+  .job-tile-salary { font-size: 0.92rem }
+  .faq-q { font-size: 0.86rem; padding: 12px 0 6px }
+  .faq-a { font-size: 0.82rem; padding-bottom: 12px }
   .sidebar { grid-template-columns: 1fr }
+  .sidebar-card { padding: 16px }
+  .sidebar-title { font-size: 0.82rem }
+  .s-list li { font-size: 0.8rem; padding: 8px 0 }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px }
   .footer-bottom { flex-direction: column; text-align: center }
-  .pct-row { gap: 8px }
-  .pct-label { font-size: 0.78rem }
-  .pct-value { font-size: 0.82rem; min-width: 70px; text-align: right }
-  .trend-chart { height: 100px; gap: 6px }
-  .trend-amt { font-size: 0.58rem }
-  .trend-year { font-size: 0.62rem }
+  .source-tag { font-size: 0.68rem }
+  .breadcrumb-inner { padding: 8px 12px; font-size: 0.72rem; gap: 4px }
 }
-@media (max-width: 480px) {
-  .page-wrap { padding: 12px 10px 40px }
-  .salary-stats { grid-template-columns: 1fr }
-  .stat-box { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; text-align: left }
-  .stat-label { margin-bottom: 0; order: 1 }
-  .stat-value { font-size: 1.3rem; order: 2 }
-  .stat-sub { display: none }
-  .hero-card h1 { font-size: 1.15rem }
-  .hero-card { padding: 20px 16px }
-  .hero-badge { font-size: 0.65rem; padding: 4px 10px }
+@media (max-width: 380px) {
+  .page-wrap { padding: 12px 8px 36px }
+  .hero-card { padding: 18px 14px; border-radius: 10px }
+  .hero-card h1 { font-size: 1.05rem }
+  .hero-sub { font-size: 0.75rem }
+  .stat-value { font-size: 1.25rem }
+  .stat-box { padding: 10px 14px }
   .header-nav { display: none }
+  .data-card { padding: 12px 10px }
+  .card-header { gap: 8px }
+  .card-icon { width: 28px; height: 28px; font-size: 0.8rem }
+  .card-title { font-size: 0.85rem }
+  .pct-label { font-size: 0.75rem }
+  .pct-value { font-size: 0.8rem }
   .jobs-grid { grid-template-columns: 1fr }
+  .trend-chart { height: 70px }
   .footer-grid { grid-template-columns: 1fr; gap: 20px }
-  .trend-chart { height: 80px }
-  .pct-label { font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
-  .pct-value { font-size: 0.8rem; min-width: 65px }
-  .data-card { padding: 14px 12px }
-  .card-icon { width: 30px; height: 30px; font-size: 0.85rem }
-  .info-box { font-size: 0.8rem; padding: 12px 14px }
-  .breadcrumb-inner { padding: 8px 14px; font-size: 0.72rem }
+  .info-box { font-size: 0.78rem; padding: 10px 12px }
+  .breadcrumb-inner { font-size: 0.68rem }
 }
   </style>
 </head>
@@ -695,17 +723,17 @@ img { max-width: 100%; display: block }
       <input type="text" placeholder="Search by job title or state…" aria-label="Search salaries">
     </div>
     <nav class="header-nav">
-      <a href="/salary/">Browse</a>
-      <a href="/salary/registered-nurse/">Healthcare</a>
-      <a href="/salary/software-developer/">Tech</a>
-      <a href="/salary/electrician/">Trades</a>
+      <a href="/">Browse</a>
+      <a href="/salary/registered-nurses/">Healthcare</a>
+      <a href="/salary/software-developers/">Tech</a>
+      <a href="/salary/electricians/">Trades</a>
     </nav>
   </div>
 </header>
 
-<div class="breadcrumb">
+<nav class="breadcrumb" aria-label="Breadcrumb">
   <div class="breadcrumb-inner">{{ breadcrumb_html }}</div>
-</div>
+</nav>
 
 <div class="page-wrap">
   <main>
@@ -783,7 +811,7 @@ img { max-width: 100%; display: block }
             <tr>
               <td><a href="{{ row.url }}" class="cell-link">{{ row.name }}</a></td>
               <td class="cell-salary">${{ row.salary_fmt }}</td>
-              <td class="{{ 'diff-pos' if row.diff_positive else 'diff-neg' }}">{{ '+' if row.diff_positive else '' }}{{ row.diff_pct }}%</td>
+              <td class="{{ 'diff-pos' if row.diff_positive else 'diff-neg' }}">{{ '+' if row.diff_positive else '-' }}{{ row.diff_pct }}%</td>
               <td><span class="badge {{ row.demand_class }}">{{ row.demand }}</span></td>
             </tr>
             {% endfor %}
@@ -910,19 +938,19 @@ img { max-width: 100%; display: block }
     </div>
     <div class="footer-col">
       <h4>Top Jobs</h4>
-      <a href="/salary/registered-nurse/">Registered Nurse</a>
-      <a href="/salary/software-developer/">Software Developer</a>
-      <a href="/salary/physician-assistant/">Physician Assistant</a>
-      <a href="/salary/electrician/">Electrician</a>
-      <a href="/salary/accountant/">Accountant</a>
+      <a href="/salary/registered-nurses/">Registered Nurse</a>
+      <a href="/salary/software-developers/">Software Developer</a>
+      <a href="/salary/physician-assistants/">Physician Assistant</a>
+      <a href="/salary/electricians/">Electrician</a>
+      <a href="/salary/accountants-and-auditors/">Accountant</a>
     </div>
     <div class="footer-col">
       <h4>Browse by State</h4>
-      <a href="/salary/registered-nurse/california/">California</a>
-      <a href="/salary/registered-nurse/texas/">Texas</a>
-      <a href="/salary/registered-nurse/new-york/">New York</a>
-      <a href="/salary/registered-nurse/florida/">Florida</a>
-      <a href="/salary/registered-nurse/washington/">Washington</a>
+      <a href="/salary/registered-nurses/california/">California</a>
+      <a href="/salary/registered-nurses/texas/">Texas</a>
+      <a href="/salary/registered-nurses/new-york/">New York</a>
+      <a href="/salary/registered-nurses/florida/">Florida</a>
+      <a href="/salary/registered-nurses/washington/">Washington</a>
     </div>
     <div class="footer-col">
       <h4>Company</h4>
@@ -946,6 +974,7 @@ img { max-width: 100%; display: block }
       inp.addEventListener('input',onInput);
       inp.addEventListener('keydown',onKey);
       inp.addEventListener('focus',function(){if(inp.value.length>1)onInput.call(inp)});
+      inp.addEventListener('click',function(e){e.stopPropagation()});
     });
     document.addEventListener('click',function(e){hideAll()});
   }
@@ -956,7 +985,7 @@ img { max-width: 100%; display: block }
     if(!d){
       d=document.createElement('div');
       d.className='search-dd';
-      d.style.cssText='position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.12);max-height:340px;overflow-y:auto;z-index:999;margin-top:6px;display:none';
+      d.style.cssText='position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.15);max-height:340px;overflow-y:auto;z-index:9999;margin-top:8px;display:none';
       p.style.position='relative';
       p.appendChild(d);
     }
@@ -965,6 +994,14 @@ img { max-width: 100%; display: block }
   function loadIndex(cb){
     if(idx)return cb();
     fetch('/search-index.json').then(function(r){return r.json()}).then(function(d){idx=d;cb()}).catch(function(){});
+  }
+  function doSearch(q){
+    q=(q||'').trim().toLowerCase();
+    if(q.length<2)return;
+    loadIndex(function(){
+      var results=idx.filter(function(item){return item.t.toLowerCase().indexOf(q)>-1});
+      if(results.length>0)window.location.href=results[0].u;
+    });
   }
   function onInput(){
     var inp=this,q=inp.value.trim().toLowerCase();
@@ -975,9 +1012,9 @@ img { max-width: 100%; display: block }
   function render(q){
     if(!dd||!idx)return;
     var results=idx.filter(function(item){return item.t.toLowerCase().indexOf(q)>-1}).slice(0,8);
-    if(!results.length){dd.style.display='none';return}
+    if(!results.length){dd.innerHTML='<div style="padding:12px 16px;color:#6b7280;font-size:0.85rem">No results found</div>';dd.style.display='block';return}
     dd.innerHTML=results.map(function(r,i){
-      return '<a href="'+r.u+'" class="sr-item" data-i="'+i+'" style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;text-decoration:none;color:#111827;font-size:0.88rem;border-bottom:1px solid #f3f4f6;transition:background .15s">'
+      return '<a href="'+r.u+'" class="sr-item" data-i="'+i+'" style="display:flex;justify-content:space-between;align-items:center;padding:11px 16px;text-decoration:none;color:#111827;font-size:0.88rem;border-bottom:1px solid #f3f4f6;transition:background .15s">'
         +'<span style="font-weight:500">'+highlight(r.t,q)+'</span>'
         +'<span style="font-size:0.78rem;color:#6b7280">'+(r.s?'$'+r.s+'/yr':r.c)+'</span>'
         +'</a>';
@@ -993,11 +1030,20 @@ img { max-width: 100%; display: block }
     return text.slice(0,i)+'<strong style="color:#2563eb">'+text.slice(i,i+q.length)+'</strong>'+text.slice(i+q.length);
   }
   function onKey(e){
+    if(e.key==='Enter'){
+      e.preventDefault();
+      if(dd&&dd.style.display!=='none'&&activeIdx>=0){
+        var items=dd.querySelectorAll('.sr-item');
+        if(items[activeIdx])items[activeIdx].click();
+      }else{
+        doSearch(e.target.value);
+      }
+      return;
+    }
     if(!dd||dd.style.display==='none')return;
     var items=dd.querySelectorAll('.sr-item');
     if(e.key==='ArrowDown'){e.preventDefault();setActive(Math.min(activeIdx+1,items.length-1))}
     else if(e.key==='ArrowUp'){e.preventDefault();setActive(Math.max(activeIdx-1,0))}
-    else if(e.key==='Enter'&&activeIdx>=0){e.preventDefault();items[activeIdx].click()}
     else if(e.key==='Escape'){dd.style.display='none'}
   }
   function setActive(i){

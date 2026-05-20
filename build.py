@@ -126,7 +126,7 @@ def dataset_schema(name, desc, url):
         "creator": {"@type": "Organization", "name": SITE_NAME},
         "variableMeasured": "Annual Salary (USD)",
         "spatialCoverage": "United States",
-        "temporalCoverage": "2026",
+        "temporalCoverage": "2025",
         "license": "https://creativecommons.org/licenses/by/4.0/"
     }, indent=2)
 
@@ -187,8 +187,10 @@ def generate_job_national(job, all_jobs, states):
             "demand_class": demand_badge(job["demand"]),
         })
 
-    # Related jobs (same category or nearby)
-    related = [j for j in all_jobs if j["job_slug"] != job["job_slug"]][:8]
+    # Related jobs (same category first, then others)
+    same_cat = [j for j in all_jobs if j["category"] == job["category"] and j["job_slug"] != job["job_slug"]]
+    other_jobs = [j for j in all_jobs if j["category"] != job["category"]]
+    related = (same_cat[:6] + other_jobs[:2]) if same_cat else [j for j in all_jobs if j["job_slug"] != job["job_slug"]][:8]
     related_jobs = []
     for r in related:
         r_avg = int(r["national_avg"])
@@ -249,6 +251,7 @@ def generate_job_national(job, all_jobs, states):
         "related_jobs": related_jobs,
         "faqs": faqs,
         "schema_json": dataset_schema(f"{title} Salary 2026", f"Comprehensive salary data for {title} professionals in the United States.", url),
+        "faq_schema_json": faq_schema(faqs),
         "breadcrumb_schema": breadcrumb_schema([{"name": "Salaries", "url": "/salary/"}, {"name": f"{title} Salary", "url": url}]),
         "breadcrumb_html": breadcrumb_html([{"name": "Salaries", "url": "/salary/"}, {"name": f"{title} Salary", "url": url}]),
         "top_states": sidebar_states,
@@ -280,7 +283,7 @@ def generate_job_state(job, state, all_cities, all_jobs):
         diff_pct = round((c_salary - avg) / avg * 100, 1)
         city_rows.append({
             "name": c["city_name"],
-            "url": f"/salary/{job['job_slug']}/{state['state_slug']}/{c['city_slug']}/",
+            "url": f"/salary/{job['job_slug']}/{state['state_slug']}/",
             "salary_fmt": fmt(c_salary),
             "diff_pct": abs(diff_pct),
             "diff_positive": diff_pct >= 0,
@@ -290,7 +293,7 @@ def generate_job_state(job, state, all_cities, all_jobs):
 
     # Top cities for sidebar
     top_cities_sidebar = sorted(state_cities, key=lambda c: float(c["col_multiplier"]), reverse=True)[:5]
-    sidebar_cities = [{"name": c["city_name"], "url": f"/salary/{job['job_slug']}/{state['state_slug']}/{c['city_slug']}/", "salary_fmt": fmt(calc_salary(avg, c["col_multiplier"]))} for c in top_cities_sidebar]
+    sidebar_cities = [{"name": c["city_name"], "url": f"/salary/{job['job_slug']}/{state['state_slug']}/", "salary_fmt": fmt(calc_salary(avg, c["col_multiplier"]))} for c in top_cities_sidebar]
 
     diff_national = round((avg - nat_avg) / nat_avg * 100, 1)
 
@@ -332,6 +335,7 @@ def generate_job_state(job, state, all_cities, all_jobs):
         "related_jobs": [],
         "faqs": faqs,
         "schema_json": dataset_schema(f"{title} Salary in {sname} 2026", f"Salary data for {title} professionals in {sname}.", url),
+        "faq_schema_json": faq_schema(faqs),
         "breadcrumb_schema": breadcrumb_schema([{"name": "Salaries", "url": "/salary/"}, {"name": f"{title} Salary", "url": f"/salary/{job['job_slug']}/"}, {"name": sname, "url": url}]),
         "breadcrumb_html": breadcrumb_html([{"name": "Salaries", "url": "/salary/"}, {"name": f"{title} Salary", "url": f"/salary/{job['job_slug']}/"}, {"name": sname, "url": url}]),
         "top_states": [],
@@ -411,6 +415,7 @@ def generate_job_city(job, state, city, all_jobs):
         "related_jobs": related_jobs,
         "faqs": faqs,
         "schema_json": dataset_schema(f"{title} Salary in {cname}, {sname} 2026", f"Detailed salary data for {title} professionals in {cname}, {sname}.", url),
+        "faq_schema_json": faq_schema(faqs),
         "breadcrumb_schema": breadcrumb_schema([{"name": "Salaries", "url": "/salary/"}, {"name": f"{title} Salary", "url": f"/salary/{job['job_slug']}/"}, {"name": sname, "url": f"/salary/{job['job_slug']}/{state['state_slug']}/"}, {"name": cname, "url": url}]),
         "breadcrumb_html": breadcrumb_html([{"name": "Salaries", "url": "/salary/"}, {"name": f"{title} Salary", "url": f"/salary/{job['job_slug']}/"}, {"name": sname, "url": f"/salary/{job['job_slug']}/{state['state_slug']}/"}, {"name": cname, "url": url}]),
         "top_states": [],
