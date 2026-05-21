@@ -147,9 +147,33 @@ img { max-width: 100%; display: block }
   background: var(--primary-50);
   text-decoration: none;
 }
+.mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px; color: var(--gray-700); transition: background var(--tr) }
+.mobile-menu-btn:hover { background: var(--gray-100) }
+.mobile-menu-btn svg { width: 22px; height: 22px; display: block }
+.mobile-nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 999; opacity: 0; transition: opacity .25s }
+.mobile-nav-overlay.active { display: block; opacity: 1 }
+.mobile-nav { position: fixed; top: 0; right: -280px; width: 280px; height: 100%; background: var(--white); z-index: 1000; padding: 20px; box-shadow: -4px 0 20px rgba(0,0,0,.15); transition: right .3s cubic-bezier(.4,0,.2,1); overflow-y: auto }
+.mobile-nav.active { right: 0 }
+.mobile-nav-close { display: flex; align-items: center; justify-content: flex-end; margin-bottom: 20px }
+.mobile-nav-close button { background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px; color: var(--gray-600) }
+.mobile-nav-close button:hover { background: var(--gray-100) }
+.mobile-nav-links { display: flex; flex-direction: column; gap: 4px }
+.mobile-nav-links a { display: block; padding: 12px 16px; border-radius: 8px; font-size: 0.95rem; font-weight: 500; color: var(--gray-700); transition: all var(--tr) }
+.mobile-nav-links a:hover { background: var(--primary-50); color: var(--primary); text-decoration: none }
 
 /* BREADCRUMB */
 .breadcrumb { background: var(--white); border-bottom: 1px solid var(--gray-100) }
+.mobile-search { display: none; padding: 10px 16px; background: var(--white); border-bottom: 1px solid var(--gray-100) }
+.mobile-search input {
+  width: 100%; padding: 10px 16px 10px 40px;
+  border: 1.5px solid var(--gray-200); border-radius: 50px;
+  font-size: 0.875rem; color: var(--gray-900); background: var(--gray-50);
+  outline: none; transition: all var(--tr); font-family: var(--font);
+}
+.mobile-search input:focus { border-color: var(--primary-light); background: var(--white); box-shadow: 0 0 0 3px var(--primary-100) }
+.mobile-search input::placeholder { color: var(--gray-400) }
+.mobile-search { position: relative }
+.mobile-search .search-icon { position: absolute; left: 30px; top: 50%; transform: translateY(-50%); color: var(--gray-400); width: 16px; height: 16px; pointer-events: none }
 .breadcrumb-inner {
   max-width: var(--max);
   margin: 0 auto;
@@ -640,7 +664,9 @@ img { max-width: 100%; display: block }
 }
 @media (max-width: 900px) {
   .header-search { display: none }
-  .header-nav { gap: 2px }
+  .header-nav { display: none }
+  .mobile-menu-btn { display: block }
+  .mobile-search { display: block }
 }
 @media (max-width: 768px) {
   .header-inner { padding: 0 16px; height: 56px; gap: 8px }
@@ -753,7 +779,6 @@ img { max-width: 100%; display: block }
   .sidebar-card { padding: 14px }
 }
 @media (max-width: 360px) {
-  .header-nav a:nth-child(n+3) { display: none }
   .logo { font-size: 1rem }
   .page-wrap { padding: 10px 8px 36px }
   .hero-card { padding: 16px 14px }
@@ -783,12 +808,34 @@ img { max-width: 100%; display: block }
       <a href="/salary/software-developers/">Tech</a>
       <a href="/salary/electricians/">Trades</a>
     </nav>
+    <button class="mobile-menu-btn" aria-label="Open menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
   </div>
 </header>
+
+<div class="mobile-nav-overlay" id="mobileOverlay"></div>
+<nav class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-close"><button aria-label="Close menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div class="mobile-nav-links">
+    <a href="/">Browse All Jobs</a>
+    <a href="/salary/registered-nurses/">Healthcare</a>
+    <a href="/salary/software-developers/">Tech</a>
+    <a href="/salary/electricians/">Trades</a>
+    <a href="/about/">About</a>
+    <a href="/methodology/">Methodology</a>
+    <a href="/contact/">Contact</a>
+  </div>
+</nav>
 
 <nav class="breadcrumb" aria-label="Breadcrumb">
   <div class="breadcrumb-inner">{{ breadcrumb_html }}</div>
 </nav>
+
+<div class="mobile-search">
+  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+  <input type="text" placeholder="Search job titles or states…" aria-label="Search salaries">
+</div>
 
 <div class="page-wrap">
   <main>
@@ -1023,9 +1070,21 @@ img { max-width: 100%; display: block }
 
 <script>
 (function(){
+  // Mobile menu
+  var btn=document.querySelector('.mobile-menu-btn');
+  var nav=document.getElementById('mobileNav');
+  var overlay=document.getElementById('mobileOverlay');
+  var closeBtn=nav?nav.querySelector('.mobile-nav-close button'):null;
+  function openMenu(){nav.classList.add('active');overlay.classList.add('active');document.body.style.overflow='hidden'}
+  function closeMenu(){nav.classList.remove('active');overlay.classList.remove('active');document.body.style.overflow=''}
+  if(btn)btn.addEventListener('click',openMenu);
+  if(closeBtn)closeBtn.addEventListener('click',closeMenu);
+  if(overlay)overlay.addEventListener('click',closeMenu);
+
+  // Search
   var idx=null,dd=null,wrap=null,activeIdx=-1;
   function init(){
-    document.querySelectorAll('.header-search input, .hero-search input').forEach(function(inp){
+    document.querySelectorAll('.header-search input, .hero-search input, .mobile-search input').forEach(function(inp){
       inp.addEventListener('input',onInput);
       inp.addEventListener('keydown',onKey);
       inp.addEventListener('focus',function(){if(inp.value.length>1)onInput.call(inp)});
@@ -1034,7 +1093,7 @@ img { max-width: 100%; display: block }
     document.addEventListener('click',function(e){hideAll()});
   }
   function getOrCreateDD(inp){
-    var p=inp.closest('.header-search')||inp.closest('.hero-search');
+    var p=inp.closest('.header-search')||inp.closest('.hero-search')||inp.closest('.mobile-search');
     if(!p)return null;
     var d=p.querySelector('.search-dd');
     if(!d){

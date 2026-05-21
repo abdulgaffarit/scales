@@ -95,6 +95,19 @@ a:hover { text-decoration: underline }
 .header-nav { display: flex; align-items: center; gap: 4px; margin-left: auto }
 .header-nav a { color: var(--gray-600); font-size: 0.84rem; font-weight: 500; padding: 7px 14px; border-radius: 8px; transition: all var(--tr); white-space: nowrap }
 .header-nav a:hover { color: var(--primary); background: var(--primary-50); text-decoration: none }
+.mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px; color: var(--gray-700); transition: background var(--tr) }
+.mobile-menu-btn:hover { background: var(--gray-100) }
+.mobile-menu-btn svg { width: 22px; height: 22px; display: block }
+.mobile-nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 999; opacity: 0; transition: opacity .25s }
+.mobile-nav-overlay.active { display: block; opacity: 1 }
+.mobile-nav { position: fixed; top: 0; right: -280px; width: 280px; height: 100%; background: var(--white); z-index: 1000; padding: 20px; box-shadow: -4px 0 20px rgba(0,0,0,.15); transition: right .3s cubic-bezier(.4,0,.2,1); overflow-y: auto }
+.mobile-nav.active { right: 0 }
+.mobile-nav-close { display: flex; align-items: center; justify-content: flex-end; margin-bottom: 20px }
+.mobile-nav-close button { background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px; color: var(--gray-600) }
+.mobile-nav-close button:hover { background: var(--gray-100) }
+.mobile-nav-links { display: flex; flex-direction: column; gap: 4px }
+.mobile-nav-links a { display: block; padding: 12px 16px; border-radius: 8px; font-size: 0.95rem; font-weight: 500; color: var(--gray-700); transition: all var(--tr) }
+.mobile-nav-links a:hover { background: var(--primary-50); color: var(--primary); text-decoration: none }
 
 /* HERO */
 .hero {
@@ -247,7 +260,8 @@ a:hover { text-decoration: underline }
 }
 @media (max-width: 900px) {
   .header-search { display: none }
-  .header-nav { gap: 2px }
+  .header-nav { display: none }
+  .mobile-menu-btn { display: block }
   .hp-sidebar { grid-template-columns: 1fr 1fr }
 }
 @media (max-width: 768px) {
@@ -325,7 +339,6 @@ a:hover { text-decoration: underline }
   .footer-bottom { font-size: 0.7rem }
 }
 @media (max-width: 360px) {
-  .header-nav a:nth-child(n+3) { display: none }
   .logo { font-size: 1rem }
   .hero h1 { font-size: 1.2rem }
   .hero-desc { font-size: 0.78rem }
@@ -351,8 +364,25 @@ a:hover { text-decoration: underline }
       <a href="/salary/software-developers/">Tech</a>
       <a href="/salary/electricians/">Trades</a>
     </nav>
+    <button class="mobile-menu-btn" aria-label="Open menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
   </div>
 </header>
+
+<div class="mobile-nav-overlay" id="mobileOverlay"></div>
+<nav class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-close"><button aria-label="Close menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div class="mobile-nav-links">
+    <a href="/">Browse All Jobs</a>
+    <a href="/salary/registered-nurses/">Healthcare</a>
+    <a href="/salary/software-developers/">Tech</a>
+    <a href="/salary/electricians/">Trades</a>
+    <a href="/about/">About</a>
+    <a href="/methodology/">Methodology</a>
+    <a href="/contact/">Contact</a>
+  </div>
+</nav>
 
 <section class="hero">
   <div class="hero-inner">
@@ -431,6 +461,18 @@ a:hover { text-decoration: underline }
 </footer>
 <script>
 (function(){
+  // Mobile menu
+  var btn=document.querySelector('.mobile-menu-btn');
+  var nav=document.getElementById('mobileNav');
+  var overlay=document.getElementById('mobileOverlay');
+  var closeBtn=nav?nav.querySelector('.mobile-nav-close button'):null;
+  function openMenu(){nav.classList.add('active');overlay.classList.add('active');document.body.style.overflow='hidden'}
+  function closeMenu(){nav.classList.remove('active');overlay.classList.remove('active');document.body.style.overflow=''}
+  if(btn)btn.addEventListener('click',openMenu);
+  if(closeBtn)closeBtn.addEventListener('click',closeMenu);
+  if(overlay)overlay.addEventListener('click',closeMenu);
+
+  // Search
   var idx=null,dd=null,wrap=null,activeIdx=-1;
   function init(){
     document.querySelectorAll('.header-search input, .hero-search input').forEach(function(inp){
