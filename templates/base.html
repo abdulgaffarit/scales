@@ -628,20 +628,80 @@ img { max-width: 100%; display: block }
 .footer-links a { color: var(--gray-500) }
 .footer-links a:hover { color: var(--gray-300); text-decoration: none }
 
-/* RESPONSIVE */
+/* RESPONSIVE — Mobile-first comprehensive coverage */
+@media (max-width: 1100px) {
+  .header-search { max-width: 320px }
+  .page-wrap { grid-template-columns: 1fr 280px; gap: 24px; padding: 24px 20px 64px }
+}
 @media (max-width: 1024px) {
-  .page-wrap { grid-template-columns: 1fr; }
-  .sidebar { position: static; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .page-wrap { grid-template-columns: 1fr; padding: 24px 20px 60px }
+  .sidebar { position: static; display: grid; grid-template-columns: 1fr 1fr; gap: 16px }
+  .header-search { max-width: 280px }
+}
+@media (max-width: 900px) {
+  .header-search { display: none }
+  .header-nav { gap: 2px }
 }
 @media (max-width: 768px) {
-  .header-inner { padding: 0 16px; height: 56px }
-  .header-search { display: none }
+  .header-inner { padding: 0 16px; height: 56px; gap: 8px }
   .header-nav a { font-size: 0.78rem; padding: 6px 10px }
-  .page-wrap { padding: 16px 12px 48px; gap: 20px }
-  .hero-card { padding: 22px 16px; border-radius: var(--radius) }
-  .hero-card h1 { font-size: 1.2rem; word-wrap: break-word }
-  .hero-sub { font-size: 0.8rem; margin-bottom: 18px; line-height: 1.4 }
-  .hero-badge { font-size: 0.63rem; padding: 4px 10px; margin-bottom: 12px }
+  .page-wrap { padding: 16px 14px 48px; gap: 16px }
+  .hero-card { padding: 24px 18px; border-radius: var(--radius-lg) }
+  .hero-card h1 { font-size: 1.35rem; word-wrap: break-word; line-height: 1.25 }
+  .hero-sub { font-size: 0.85rem; margin-bottom: 20px; line-height: 1.5 }
+  .hero-badge { font-size: 0.66rem; padding: 4px 11px; margin-bottom: 13px }
+  .salary-stats { grid-template-columns: repeat(3, 1fr); gap: 6px }
+  .stat-box { padding: 12px 6px }
+  .stat-label { font-size: 0.6rem; letter-spacing: 0.4px; margin-bottom: 4px }
+  .stat-value { font-size: 1.05rem; font-weight: 800 }
+  .stat-sub { font-size: 0.6rem; margin-top: 2px }
+  .data-card { padding: 18px 16px; margin-bottom: 14px; border-radius: var(--radius) }
+  .card-header { margin-bottom: 14px; padding-bottom: 12px; gap: 10px }
+  .card-icon { width: 32px; height: 32px; font-size: 0.9rem }
+  .card-title { font-size: 0.92rem }
+  .card-sub { font-size: 0.74rem }
+  .trust-bar { padding: 12px 14px; gap: 12px; flex-direction: column; align-items: flex-start }
+  .trust-item { font-size: 0.76rem }
+  .pct-item { margin-bottom: 14px }
+  .pct-row { gap: 10px; margin-bottom: 5px }
+  .pct-label { font-size: 0.78rem; line-height: 1.3 }
+  .pct-value { font-size: 0.84rem; font-weight: 700; flex-shrink: 0 }
+  .pbar { height: 6px }
+  .trend-chart { height: 100px; gap: 4px }
+  .trend-amt { font-size: 0.55rem }
+  .trend-year { font-size: 0.62rem }
+  .info-box { font-size: 0.82rem; padding: 12px 14px; margin-top: 14px }
+  .table-wrap { margin: 0 -16px; border-radius: 0; border-left: none; border-right: none }
+  .data-table { font-size: 0.8rem; min-width: 380px }
+  .data-table thead th { padding: 10px 12px; font-size: 0.66rem }
+  .data-table tbody td { padding: 10px 12px }
+  .insight-section p { font-size: 0.86rem; line-height: 1.7; margin-bottom: 12px }
+  .related-grid { grid-template-columns: 1fr }
+  .rel-link { padding: 11px 14px; font-size: 0.82rem }
+  .jobs-grid { grid-template-columns: 1fr 1fr; gap: 8px }
+  .job-tile { padding: 12px }
+  .job-tile-name { font-size: 0.78rem; margin-bottom: 4px }
+  .job-tile-salary { font-size: 0.95rem }
+  .job-tile-diff { font-size: 0.7rem }
+  .faq-q { font-size: 0.88rem; padding: 14px 0 6px }
+  .faq-a { font-size: 0.84rem; padding-bottom: 14px; line-height: 1.65 }
+  .sidebar { grid-template-columns: 1fr; gap: 12px }
+  .sidebar-card { padding: 16px }
+  .sidebar-title { font-size: 0.84rem; margin-bottom: 12px }
+  .s-list li { font-size: 0.82rem; padding: 8px 0 }
+  .s-salary { font-size: 0.78rem }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; padding: 0 4px }
+  .footer-bottom { flex-direction: column; text-align: center; gap: 8px; font-size: 0.74rem }
+  .footer-links { gap: 14px }
+  .source-tag { font-size: 0.68rem; padding: 5px 10px }
+  .breadcrumb-inner { padding: 8px 14px; font-size: 0.72rem; gap: 4px }
+  .site-footer { padding: 40px 16px 24px; margin-top: 48px }
+  .footer-desc { font-size: 0.78rem }
+  .footer-col h4 { font-size: 0.68rem; margin-bottom: 10px }
+  .footer-col a { font-size: 0.78rem; margin-bottom: 6px }
+}
+@media (max-width: 540px) {
+  .page-wrap { padding: 14px 12px 44px }
   .salary-stats { grid-template-columns: 1fr; gap: 8px }
   .stat-box {
     padding: 12px 16px;
@@ -649,67 +709,62 @@ img { max-width: 100%; display: block }
     align-items: center;
     justify-content: space-between;
     text-align: left;
-    flex-direction: row;
   }
-  .stat-label { margin-bottom: 0; font-size: 0.7rem; letter-spacing: 0.5px }
-  .stat-value { font-size: 1.4rem }
+  .stat-label { margin-bottom: 0; font-size: 0.7rem }
+  .stat-value { font-size: 1.35rem }
   .stat-sub { display: none }
-  .data-card { padding: 16px 14px; margin-bottom: 14px }
-  .card-header { margin-bottom: 14px; padding-bottom: 10px; gap: 10px }
-  .card-icon { width: 32px; height: 32px; font-size: 0.9rem }
-  .card-title { font-size: 0.9rem }
-  .card-sub { font-size: 0.72rem }
-  .trust-bar { display: none }
-  .pct-item { margin-bottom: 14px }
-  .pct-row { gap: 10px }
-  .pct-label { font-size: 0.8rem; flex: 1; min-width: 0 }
-  .pct-value { font-size: 0.85rem; font-weight: 700; white-space: nowrap; flex-shrink: 0 }
-  .pbar { height: 6px }
-  .trend-chart { height: 90px; gap: 5px }
-  .trend-amt { font-size: 0.55rem }
-  .trend-year { font-size: 0.6rem }
-  .info-box { font-size: 0.82rem; padding: 12px 14px; margin-top: 14px }
-  .table-wrap { margin: 0 -14px; border-radius: 0 }
-  .data-table { font-size: 0.8rem; min-width: 360px }
-  .data-table thead th { padding: 10px 12px; font-size: 0.68rem }
-  .data-table tbody td { padding: 10px 12px }
-  .insight-section p { font-size: 0.85rem; line-height: 1.7 }
-  .related-grid { grid-template-columns: 1fr }
-  .rel-link { padding: 10px 14px; font-size: 0.8rem }
-  .jobs-grid { grid-template-columns: 1fr 1fr; gap: 8px }
-  .job-tile { padding: 12px }
-  .job-tile-name { font-size: 0.78rem }
-  .job-tile-salary { font-size: 0.92rem }
-  .faq-q { font-size: 0.86rem; padding: 12px 0 6px }
-  .faq-a { font-size: 0.82rem; padding-bottom: 12px }
-  .sidebar { grid-template-columns: 1fr }
-  .sidebar-card { padding: 16px }
-  .sidebar-title { font-size: 0.82rem }
-  .s-list li { font-size: 0.8rem; padding: 8px 0 }
-  .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px }
-  .footer-bottom { flex-direction: column; text-align: center }
-  .source-tag { font-size: 0.68rem }
-  .breadcrumb-inner { padding: 8px 12px; font-size: 0.72rem; gap: 4px }
+  .hero-card h1 { font-size: 1.2rem }
+  .hero-sub { font-size: 0.8rem }
 }
-@media (max-width: 380px) {
-  .page-wrap { padding: 12px 8px 36px }
-  .hero-card { padding: 18px 14px; border-radius: 10px }
-  .hero-card h1 { font-size: 1.05rem }
-  .hero-sub { font-size: 0.75rem }
+@media (max-width: 480px) {
+  .header-inner { padding: 0 14px; height: 54px; gap: 6px }
+  .logo { font-size: 1.08rem }
+  .header-nav { gap: 0 }
+  .header-nav a { font-size: 0.72rem; padding: 5px 8px }
+  .page-wrap { padding: 12px 10px 40px }
+  .hero-card { padding: 20px 16px; border-radius: 12px }
+  .hero-card h1 { font-size: 1.1rem }
+  .hero-sub { font-size: 0.76rem; margin-bottom: 16px }
+  .hero-badge { font-size: 0.62rem; padding: 3px 9px }
   .stat-value { font-size: 1.25rem }
-  .stat-box { padding: 10px 14px }
-  .header-nav { display: none }
-  .data-card { padding: 12px 10px }
-  .card-header { gap: 8px }
-  .card-icon { width: 28px; height: 28px; font-size: 0.8rem }
-  .card-title { font-size: 0.85rem }
-  .pct-label { font-size: 0.75rem }
-  .pct-value { font-size: 0.8rem }
+  .stat-box { padding: 11px 14px }
+  .data-card { padding: 14px 12px }
+  .card-header { gap: 8px; margin-bottom: 12px; padding-bottom: 10px }
+  .card-icon { width: 28px; height: 28px; font-size: 0.78rem }
+  .card-title { font-size: 0.86rem }
+  .card-sub { font-size: 0.68rem }
+  .pct-label { font-size: 0.74rem }
+  .pct-value { font-size: 0.78rem }
   .jobs-grid { grid-template-columns: 1fr }
-  .trend-chart { height: 70px }
-  .footer-grid { grid-template-columns: 1fr; gap: 20px }
-  .info-box { font-size: 0.78rem; padding: 10px 12px }
-  .breadcrumb-inner { font-size: 0.68rem }
+  .trend-chart { height: 80px; gap: 3px }
+  .footer-grid { grid-template-columns: 1fr; gap: 20px; padding: 0 }
+  .info-box { font-size: 0.78rem; padding: 11px 13px }
+  .breadcrumb-inner { font-size: 0.68rem; padding: 7px 12px }
+  .table-wrap { margin: 0 -12px }
+  .data-table { font-size: 0.76rem; min-width: 340px }
+  .data-table thead th { padding: 9px 10px; font-size: 0.63rem }
+  .data-table tbody td { padding: 9px 10px }
+  .insight-section p { font-size: 0.82rem }
+  .source-tag { font-size: 0.64rem }
+  .trust-bar { padding: 10px 12px; gap: 8px }
+  .trust-item { font-size: 0.72rem }
+  .faq-q { font-size: 0.84rem }
+  .faq-a { font-size: 0.8rem }
+  .sidebar-card { padding: 14px }
+}
+@media (max-width: 360px) {
+  .header-nav a:nth-child(n+3) { display: none }
+  .logo { font-size: 1rem }
+  .page-wrap { padding: 10px 8px 36px }
+  .hero-card { padding: 16px 14px }
+  .hero-card h1 { font-size: 1rem }
+  .hero-sub { font-size: 0.72rem }
+  .stat-value { font-size: 1.15rem }
+  .data-card { padding: 12px 10px }
+  .card-title { font-size: 0.82rem }
+  .info-box { font-size: 0.74rem; padding: 10px 12px }
+  .data-table { min-width: 300px }
+  .footer-bottom { font-size: 0.7rem }
 }
   </style>
 </head>
