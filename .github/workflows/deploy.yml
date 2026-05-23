@@ -25,7 +25,19 @@ jobs:
           python-version: '3.11'
 
       - name: Install Dependencies
-        run: pip install jinja2
+        run: pip install jinja2 markupsafe
+
+      - name: Verify Cloudflare Secrets
+        run: |
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN secret is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ]; then
+            echo "::error::CLOUDFLARE_ACCOUNT_ID secret is not set"
+            exit 1
+          fi
+          echo "✅ Secrets configured"
 
       - name: Run Build Script
         run: python build.py
