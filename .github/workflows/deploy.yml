@@ -1,4 +1,4 @@
-name: Build & Deploy SalaryScale
+name: Build & Deploy USASalaries
 
 on:
   push:
@@ -11,6 +11,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
 
     steps:
       - name: Checkout Repository
@@ -31,12 +34,11 @@ jobs:
         run: |
           echo "Pages generated: $(find output -name '*.html' | wc -l)"
           echo "Total size: $(du -sh output | cut -f1)"
+          echo "Sitemap URLs: $(grep -c '<loc>' output/sitemap.xml)"
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: usasalaries
-          directory: output
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy output --project-name=usasalaries --branch=main
