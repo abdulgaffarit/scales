@@ -172,20 +172,23 @@ def generate_job_national(job, all_jobs, states):
     url     = f"/salary/{job['job_slug']}/"
     title   = job["job_title"]
 
-    # Top states by salary
-    top_states_rows = []
-    for s in states[:10]:
+    # All states sorted by salary (highest first)
+    all_states_rows = []
+    for s in states:
         s_salary = calc_salary(avg, s["col_multiplier"])
         diff_pct  = round((s_salary - avg) / avg * 100, 1)
-        top_states_rows.append({
+        all_states_rows.append({
             "name": s["state_name"],
             "url": f"/salary/{job['job_slug']}/{s['state_slug']}/",
+            "salary_val": s_salary,
             "salary_fmt": fmt(s_salary),
             "diff_pct": abs(diff_pct),
             "diff_positive": diff_pct >= 0,
             "demand": job["demand"],
             "demand_class": demand_badge(job["demand"]),
         })
+    # Sort by salary descending
+    all_states_rows.sort(key=lambda x: x["salary_val"], reverse=True)
 
     # Related jobs (same category first, then others)
     same_cat = [j for j in all_jobs if j["category"] == job["category"] and j["job_slug"] != job["job_slug"]]
@@ -243,7 +246,7 @@ def generate_job_national(job, all_jobs, states):
         "trend_insight": f"{title} salaries have grown {job['yoy_growth']}% year-over-year. Since 2020, the average salary has increased by approximately ${fmt(round(avg - trend[0]['value']))}.",
         "comparison_table_title": "Salary by State",
         "comparison_col1": "State",
-        "comparison_rows": top_states_rows,
+        "comparison_rows": all_states_rows,
         "insight_title": f"What Factors Affect {title} Salary?",
         "insight_p1": f"A {title}'s salary is influenced by several key factors including geographic location, years of experience, employer type, and educational background. States with higher costs of living — such as California, New York, and Washington — typically offer 20–40% higher salaries than the national average to compensate for living expenses.",
         "insight_p2": f"Experience plays a major role in compensation. Entry-level {title}s typically earn ${fmt(pct['p10'])}–${fmt(pct['p25'])} per year, while senior professionals with 10+ years of experience can command ${fmt(pct['p75'])}–${fmt(pct['p90'])} annually. Specialization and advanced certifications can further boost earning potential.",
@@ -257,12 +260,12 @@ def generate_job_national(job, all_jobs, states):
         "top_states": sidebar_states,
         "top_cities": [],
         "category_jobs": category_jobs,
-        "related_links": [{"url": f"/salary/{job['job_slug']}/{s['state_slug']}/", "text": f"{title} Salary in {s['state_name']}"} for s in states[:8]],
+        "related_links": [{"url": r["url"], "text": f"{title} Salary in {r['name']}"} for r in all_states_rows[:8]],
     })
     write_page(f"salary/{job['job_slug']}", ctx)
 
 
-def generate_job_state(job, state, all_cities, all_jobs):
+def generate_job_state(job, state, all_cities, all_jobs, states):
     """Generate /salary/[job]/[state]/ page"""
     nat_avg   = int(job["national_avg"])
     avg       = calc_salary(nat_avg, state["col_multiplier"])
@@ -341,7 +344,7 @@ def generate_job_state(job, state, all_cities, all_jobs):
         "top_states": [],
         "top_cities": sidebar_cities,
         "category_jobs": [],
-        "related_links": [{"url": f"/salary/{job['job_slug']}/{state['state_slug']}/{c['city_slug']}/", "text": f"{title} Salary in {c['city_name']}"} for c in state_cities[:8]],
+        "related_links": [{"url": f"/salary/{job['job_slug']}/{s['state_slug']}/", "text": f"{title} Salary in {s['state_name']}"} for s in sorted([s for s in states if s["state_slug"] != state["state_slug"]], key=lambda s: float(s["col_multiplier"]), reverse=True)[:8]],
     })
     write_page(f"salary/{job['job_slug']}/{state['state_slug']}", ctx)
 
@@ -496,7 +499,7 @@ def generate_homepage(jobs, states):
         for j in sorted(jobs, key=lambda x: int(x["national_avg"]), reverse=True)[:6]
     )
     footer_states = "".join(
-        f'<a href="/salary/registered-nurse/{s["state_slug"]}/">{s["state_name"]}</a>'
+        f'<a href="/salary/registered-nurses/{s["state_slug"]}/">{s["state_name"]}</a>'
         for s in states[:6]
     )
 
@@ -921,7 +924,7 @@ def main():
     # State pages
     for job in jobs:
         for state in states:
-            generate_job_state(job, state, cities, jobs)
+            generate_job_state(job, state, cities, jobs, states)
             total_pages += 1
 
     print(f"✅ {len(jobs) * len(states)} state pages generated")

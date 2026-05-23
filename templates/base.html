@@ -911,7 +911,13 @@ img { max-width: 100%; display: block }
           <tbody>
             {% for row in comparison_rows %}
             <tr>
-              <td><a href="{{ row.url }}" class="cell-link">{{ row.name }}</a></td>
+              <td>
+                {% if row.url and row.url != canonical_url %}
+                  <a href="{{ row.url }}" class="cell-link">{{ row.name }}</a>
+                {% else %}
+                  <strong>{{ row.name }}</strong>
+                {% endif %}
+              </td>
               <td class="cell-salary">${{ row.salary_fmt }}</td>
               <td class="{{ 'diff-pos' if row.diff_positive else 'diff-neg' }}">{{ '+' if row.diff_positive else '-' }}{{ row.diff_pct }}%</td>
               <td><span class="badge {{ row.demand_class }}">{{ row.demand }}</span></td>
@@ -1008,7 +1014,14 @@ img { max-width: 100%; display: block }
       <div class="sidebar-title">🏙️ Top Paying Cities</div>
       <ul class="s-list">
         {% for c in top_cities %}
-        <li><a href="{{ c.url }}">{{ c.name }}</a><span class="s-salary">${{ c.salary_fmt }}</span></li>
+        <li>
+          {% if c.url and c.url != canonical_url %}
+            <a href="{{ c.url }}">{{ c.name }}</a>
+          {% else %}
+            <span>{{ c.name }}</span>
+          {% endif %}
+          <span class="s-salary">${{ c.salary_fmt }}</span>
+        </li>
         {% endfor %}
       </ul>
     </div>
