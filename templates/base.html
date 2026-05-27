@@ -5,13 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ page_title }}</title>
   <meta name="description" content="{{ meta_description }}">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <link rel="canonical" href="https://{{ site_domain }}{{ canonical_url }}">
   <meta property="og:title" content="{{ page_title }}">
   <meta property="og:description" content="{{ meta_description }}">
   <meta property="og:url" content="https://{{ site_domain }}{{ canonical_url }}">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="{{ site_name }}">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{{ page_title }}">
+  <meta name="twitter:description" content="{{ meta_description }}">
+  <meta name="author" content="{{ site_name }}">
+  <meta name="copyright" content="{{ site_name }}">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -201,6 +206,8 @@ img { max-width: 100%; display: block }
   gap: 32px;
   align-items: start;
 }
+/* Prevent grid children from overflowing their cell */
+.page-wrap > main, .page-wrap > .sidebar { min-width: 0 }
 
 /* HERO CARD */
 .hero-card {
@@ -510,7 +517,7 @@ img { max-width: 100%; display: block }
 .job-tile-salary { font-size: 1.05rem; font-weight: 800; color: var(--primary) }
 .job-tile-diff { font-size: 0.75rem; margin-top: 4px }
 
-/* FAQ */
+/* FAQ accordion */
 .faq-list { list-style: none }
 .faq-item { border-bottom: 1px solid var(--gray-100) }
 .faq-item:last-child { border-bottom: none }
@@ -518,14 +525,40 @@ img { max-width: 100%; display: block }
   font-weight: 600;
   font-size: 0.92rem;
   color: var(--gray-900);
-  padding: 16px 0 8px;
+  padding: 16px 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  user-select: none;
+  -webkit-user-select: none;
 }
+.faq-q:hover { color: var(--primary) }
+.faq-toggle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary-50);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 400;
+  flex-shrink: 0;
+  transition: all var(--tr);
+  line-height: 1;
+}
+.faq-item.faq-open .faq-toggle { background: var(--primary); color: var(--white); transform: rotate(45deg) }
 .faq-a {
   font-size: 0.88rem;
   color: var(--gray-600);
   line-height: 1.75;
   padding-bottom: 16px;
+  display: none;
 }
+.faq-item.faq-open .faq-a { display: block }
 
 /* RELATED */
 .related-grid {
@@ -666,7 +699,7 @@ img { max-width: 100%; display: block }
 @media (max-width: 900px) {
   .header-search { display: none }
   .header-nav { display: none }
-  .mobile-menu-btn { display: block }
+  .mobile-menu-btn { display: block; margin-left: auto }
   .mobile-search { display: block }
 }
 @media (max-width: 768px) {
@@ -695,8 +728,9 @@ img { max-width: 100%; display: block }
   .pct-value { font-size: 0.84rem; font-weight: 700; flex-shrink: 0 }
   .pbar { height: 6px }
   .trend-chart { height: 100px; gap: 4px }
-  .trend-amt { display: none }
-  .trend-year { font-size: 0.62rem }
+  .trend-col { overflow: hidden }
+  .trend-amt { font-size: 0.5rem; white-space: nowrap; overflow: hidden; max-width: 100% }
+  .trend-year { font-size: 0.6rem }
   .info-box { font-size: 0.82rem; padding: 12px 14px; margin-top: 14px }
   .table-wrap { margin: 0 -16px; border-radius: 0; border-left: none; border-right: none }
   .data-table { font-size: 0.8rem; min-width: 380px }
@@ -789,6 +823,7 @@ img { max-width: 100%; display: block }
   .data-card { padding: 12px 10px }
   .card-title { font-size: 0.82rem }
   .info-box { font-size: 0.74rem; padding: 10px 12px }
+  .table-wrap { margin: 0 -8px }
   .data-table { min-width: 300px }
   .footer-bottom { font-size: 0.7rem }
 }
@@ -966,7 +1001,10 @@ img { max-width: 100%; display: block }
       <ul class="faq-list">
         {% for faq in faqs %}
         <li class="faq-item">
-          <div class="faq-q">{{ faq.q }}</div>
+          <div class="faq-q" role="button" aria-expanded="false">
+            <span>{{ faq.q }}</span>
+            <span class="faq-toggle" aria-hidden="true">+</span>
+          </div>
           <div class="faq-a">{{ faq.a }}</div>
         </li>
         {% endfor %}
@@ -1183,6 +1221,29 @@ img { max-width: 100%; display: block }
     document.querySelectorAll('.search-dd').forEach(function(d){d.style.display='none'});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+
+  // FAQ accordion
+  (function(){
+    var items=document.querySelectorAll('.faq-item');
+    // Open first by default
+    if(items.length>0)items[0].classList.add('faq-open');
+    items.forEach(function(item){
+      var q=item.querySelector('.faq-q');
+      if(!q)return;
+      q.addEventListener('click',function(){
+        var isOpen=item.classList.contains('faq-open');
+        items.forEach(function(i){
+          i.classList.remove('faq-open');
+          var btn=i.querySelector('.faq-q');
+          if(btn)btn.setAttribute('aria-expanded','false');
+        });
+        if(!isOpen){
+          item.classList.add('faq-open');
+          q.setAttribute('aria-expanded','true');
+        }
+      });
+    });
+  })();
 })();
 </script>
 </body>

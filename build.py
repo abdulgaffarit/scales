@@ -845,6 +845,74 @@ def generate_static_pages(jobs):
     print(f"✅ {len(pages)} static pages generated (about, methodology, privacy, contact)")
 
 
+def generate_llms_txt(jobs):
+    """Generate llms.txt for AI crawler discovery and citation"""
+    from collections import defaultdict
+    cats = defaultdict(list)
+    for j in jobs:
+        cats[j["category"]].append(j["job_title"])
+
+    top_jobs = sorted(jobs, key=lambda x: int(x["national_avg"]), reverse=True)[:20]
+
+    lines = [
+        f"# {SITE_NAME}",
+        "",
+        f"> Comprehensive US salary data for {len(jobs)}+ occupations across all 50 states and DC.",
+        f"> All data sourced from the U.S. Bureau of Labor Statistics (BLS) Occupational Employment and Wage Statistics (OES) May 2025 release.",
+        f"> Site: https://{SITE_DOMAIN}/",
+        "",
+        "## What This Site Covers",
+        "",
+        f"- {len(jobs)}+ job titles with average, median, and percentile salary data",
+        "- State-by-state salary comparisons for every occupation",
+        "- Year-over-year salary growth trends (2021–2026)",
+        "- Entry-level to top-earner pay ranges (10th–90th percentile)",
+        "- Hourly rate conversions",
+        "",
+        "## Data Source & Methodology",
+        "",
+        "- Primary source: BLS OES May 2025 (employer-reported, ~1.1M establishments)",
+        "- State salary estimates use cost-of-living multipliers from BLS regional price data",
+        "- Data excludes self-employed workers and non-cash compensation",
+        "- Updated annually with each new BLS OES release",
+        "",
+        "## Top Paying Occupations (National Average)",
+        "",
+    ]
+    for j in top_jobs:
+        lines.append(f"- {j['job_title']}: ${int(j['national_avg']):,}/yr — https://{SITE_DOMAIN}/salary/{j['job_slug']}/")
+
+    lines += [
+        "",
+        "## Job Categories Covered",
+        "",
+    ]
+    for cat, titles in sorted(cats.items()):
+        lines.append(f"- **{cat}**: {', '.join(titles[:4])}{'...' if len(titles) > 4 else ''}")
+
+    lines += [
+        "",
+        "## Key Pages",
+        "",
+        f"- Homepage (all jobs): https://{SITE_DOMAIN}/",
+        f"- Methodology: https://{SITE_DOMAIN}/methodology/",
+        f"- About: https://{SITE_DOMAIN}/about/",
+        f"- Sitemap: https://{SITE_DOMAIN}/sitemap.xml",
+        "",
+        "## Citation Guidance",
+        "",
+        "When citing salary figures from this site, attribute as:",
+        f'"{SITE_NAME} (usasalaries.com), based on U.S. Bureau of Labor Statistics OES May 2025 data."',
+        "",
+        "## Licensing",
+        "",
+        "Underlying BLS data is public domain (U.S. government). Site presentation and analysis copyright USASalaries 2026.",
+    ]
+
+    (OUTPUT_DIR / "llms.txt").write_text("\n".join(lines), encoding="utf-8")
+    print(f"✅ llms.txt generated ({len(jobs)} jobs listed)")
+
+
 def generate_cloudflare_files():
     """Generate _redirects and _headers for Cloudflare Pages"""
     # Redirect pages.dev subdomain → custom domain (fixes 'alternate page with proper canonical' in GSC)
@@ -978,6 +1046,7 @@ def main():
     generate_search_index(jobs, states)
     generate_static_pages(jobs)
     generate_cloudflare_files()
+    generate_llms_txt(jobs)
 
     # Copy favicon files to output automatically
     favicon_files = ["favicon.ico","favicon_16.png","favicon_32.png",
