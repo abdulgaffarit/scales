@@ -1,6 +1,6 @@
-# USASalaries
+# alaries
 
-Salary data site built with Python + Jinja2. Deploys to Cloudflare Pages.
+Salary site built with Python + Jinja2. Deploys to Cloudflare.
 
 ## Setup
 
