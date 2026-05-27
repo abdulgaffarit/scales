@@ -537,36 +537,46 @@ def generate_homepage(jobs, states):
 
 # ─── SITEMAP GENERATOR ─────────────────────────────────────────────────────────
 def generate_sitemap(jobs, states, cities):
-    urls = [f"https://{SITE_DOMAIN}/"]
+    from datetime import date
+    today = date.today().strftime("%Y-%m-%d")
+
+    # Sitemap 1: high-priority pages (homepage + all national job pages)
+    priority_urls = []
+    priority_urls.append((f"https://{SITE_DOMAIN}/", "1.0", "weekly"))
     for j in jobs:
-        urls.append(f"https://{SITE_DOMAIN}/salary/{j['job_slug']}/")
+        priority_urls.append((f"https://{SITE_DOMAIN}/salary/{j['job_slug']}/", "0.9", "monthly"))
+
+    # Sitemap 2: state pages (lower priority — large volume, less unique)
+    state_urls = []
+    for j in jobs:
         for s in states:
-            urls.append(f"https://{SITE_DOMAIN}/salary/{j['job_slug']}/{s['state_slug']}/")
-            # City URLs disabled — staying under Cloudflare 20k file limit
-            # state_cities = [c for c in cities if c["state_slug"] == s["state_slug"]]
-            # for c in state_cities:
-            #     urls.append(f"https://{SITE_DOMAIN}/salary/{j['job_slug']}/{s['state_slug']}/{c['city_slug']}/")
+            state_urls.append((f"https://{SITE_DOMAIN}/salary/{j['job_slug']}/{s['state_slug']}/", "0.6", "monthly"))
 
-    # Split into sitemap index if > 50k URLs
-    chunk_size = 49000
-    chunks = [urls[i:i+chunk_size] for i in range(0, len(urls), chunk_size)]
-
-    for idx, chunk in enumerate(chunks):
+    def write_urlset(url_list, filename):
         sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        for url in chunk:
-            sm += f"  <url><loc>{url}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n"
+        for loc, pri, freq in url_list:
+            sm += f"  <url><loc>{loc}</loc><lastmod>{today}</lastmod><changefreq>{freq}</changefreq><priority>{pri}</priority></url>\n"
         sm += "</urlset>"
-        fname = f"sitemap-{idx+1}.xml" if len(chunks) > 1 else "sitemap.xml"
-        (OUTPUT_DIR / fname).write_text(sm, encoding="utf-8")
+        (OUTPUT_DIR / filename).write_text(sm, encoding="utf-8")
 
-    if len(chunks) > 1:
-        index = '<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        for i in range(len(chunks)):
-            index += f"  <sitemap><loc>https://{SITE_DOMAIN}/sitemap-{i+1}.xml</loc></sitemap>\n"
-        index += "</sitemapindex>"
-        (OUTPUT_DIR / "sitemap.xml").write_text(index, encoding="utf-8")
+    write_urlset(priority_urls, "sitemap-1.xml")
 
-    print(f"✅ Sitemap: {len(urls):,} URLs across {len(chunks)} file(s)")
+    # Split state pages into chunks of 49k
+    chunk_size = 49000
+    chunks = [state_urls[i:i+chunk_size] for i in range(0, len(state_urls), chunk_size)]
+    for i, chunk in enumerate(chunks):
+        write_urlset(chunk, f"sitemap-{i+2}.xml")
+
+    # Sitemap index
+    all_files = ["sitemap-1.xml"] + [f"sitemap-{i+2}.xml" for i in range(len(chunks))]
+    index = '<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    for fname in all_files:
+        index += f"  <sitemap><loc>https://{SITE_DOMAIN}/{fname}</loc><lastmod>{today}</lastmod></sitemap>\n"
+    index += "</sitemapindex>"
+    (OUTPUT_DIR / "sitemap.xml").write_text(index, encoding="utf-8")
+
+    total = len(priority_urls) + len(state_urls)
+    print(f"✅ Sitemap: {total:,} URLs — {len(priority_urls)} high-priority, {len(state_urls)} state pages")
 
 
 def generate_search_index(jobs, states):
@@ -835,6 +845,29 @@ def generate_static_pages(jobs):
     print(f"✅ {len(pages)} static pages generated (about, methodology, privacy, contact)")
 
 
+def generate_cloudflare_files():
+    """Generate _redirects and _headers for Cloudflare Pages"""
+    # Redirect pages.dev subdomain → custom domain (fixes 'alternate page with proper canonical' in GSC)
+    redirects = f"https://usasalaries.pages.dev/* https://{SITE_DOMAIN}/:splat 301\n"
+    (OUTPUT_DIR / "_redirects").write_text(redirects, encoding="utf-8")
+
+    # Cache headers: HTML pages short TTL (content updates), assets long TTL
+    headers = """/
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/salary/*
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/*.json
+  Cache-Control: public, max-age=3600
+
+/*.xml
+  Cache-Control: public, max-age=3600
+"""
+    (OUTPUT_DIR / "_headers").write_text(headers, encoding="utf-8")
+    print("✅ Cloudflare _redirects and _headers generated")
+
+
 def generate_robots():
     robots = f"""User-agent: *
 Allow: /
@@ -939,11 +972,12 @@ def main():
     #             total_pages += 1
     print(f"✅ City pages skipped (staying under 20k limit)")
 
-    # Sitemap + robots + search + static pages
+    # Sitemap + robots + search + static pages + Cloudflare config
     generate_sitemap(jobs, states, cities)
     generate_robots()
     generate_search_index(jobs, states)
     generate_static_pages(jobs)
+    generate_cloudflare_files()
 
     # Copy favicon files to output automatically
     favicon_files = ["favicon.ico","favicon_16.png","favicon_32.png",
