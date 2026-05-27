@@ -916,7 +916,10 @@ def generate_llms_txt(jobs):
 def generate_cloudflare_files():
     """Generate _redirects and _headers for Cloudflare Pages"""
     # Redirect pages.dev subdomain → custom domain (fixes 'alternate page with proper canonical' in GSC)
-    redirects = f"https://usasalaries.pages.dev/* https://{SITE_DOMAIN}/:splat 301\n"
+    redirects = (
+        f"https://usasalaries.pages.dev/* https://{SITE_DOMAIN}/:splat 301\n"
+        f"/salary/ / 301\n"
+    )
     (OUTPUT_DIR / "_redirects").write_text(redirects, encoding="utf-8")
 
     # Cache headers: HTML pages short TTL (content updates), assets long TTL
