@@ -229,8 +229,8 @@ def generate_job_national(job, all_jobs, states):
 
     ctx = base_context()
     ctx.update({
-        "page_title": f"{title} Salary in 2026 | Average Pay & Hourly Rate | {SITE_NAME}",
-        "meta_description": f"The average {title} salary is ${fmt(avg)}/year in 2026. See salaries by state, city, percentile, and career level. Data updated from BLS.",
+        "page_title": f"{title} Salary 2026 | {SITE_NAME}",
+        "meta_description": f"{title} salary: ${fmt(avg)}/yr avg in 2026. Pay by state, percentile & experience. Source: BLS OES.",
         "canonical_url": url,
         "h1_title": f"{title} Salary in the United States (2026)",
         "hero_subtitle": f"Based on U.S. Bureau of Labor Statistics data · Updated 2026 · {job['demand']} Demand",
@@ -313,8 +313,8 @@ def generate_job_state(job, state, all_cities, all_jobs, states):
 
     ctx = base_context()
     ctx.update({
-        "page_title": f"{title} Salary in {sname} (2026) | ${fmt(avg)}/yr | {SITE_NAME}",
-        "meta_description": f"Average {title} salary in {sname} is ${fmt(avg)}/year in 2026. See city-by-city breakdown, trend data, and how {sname} compares to other states.",
+        "page_title": f"{title} Salary in {sname} (2026) | ${fmt(avg)}/yr",
+        "meta_description": f"{title} salary in {sname}: ${fmt(avg)}/yr (2026). Pay by city, trend data & state comparison. Source: BLS OES.",
         "canonical_url": url,
         "h1_title": f"{title} Salary in {sname} (2026)",
         "hero_subtitle": f"{sname} · {abs(diff_national)}% {'above' if diff_national >= 0 else 'below'} national average · {job['demand']} Demand",
@@ -393,8 +393,8 @@ def generate_job_city(job, state, city, all_jobs):
 
     ctx = base_context()
     ctx.update({
-        "page_title": f"{title} Salary in {cname}, {sname} (2026) | ${fmt(avg)}/yr | {SITE_NAME}",
-        "meta_description": f"Average {title} salary in {cname}, {sname} is ${fmt(avg)}/year. Compare hourly rates, percentiles, and see how {cname} stacks up vs other cities.",
+        "page_title": f"{title} Salary in {cname}, {sname} (2026) | ${fmt(avg)}/yr",
+        "meta_description": f"{title} salary in {cname}, {sname}: ${fmt(avg)}/yr (2026). Hourly rate, percentiles & city comparison. Source: BLS OES.",
         "canonical_url": url,
         "h1_title": f"{title} Salary in {cname}, {sname} (2026)",
         "hero_subtitle": f"{cname}, {sname} · {city['metro_type']} · {abs(diff_national)}% {'above' if diff_national >= 0 else 'below'} national average",
@@ -606,8 +606,8 @@ def generate_static_pages(jobs):
 
     pages = {
         "about": {
-            "page_title": f"About | {SITE_NAME}",
-            "meta_description": "Learn about USASalaries — a comprehensive salary data platform powered by official U.S. Bureau of Labor Statistics data.",
+            "page_title": f"About {SITE_NAME} | US Salary Data from BLS",
+            "meta_description": "USASalaries provides accurate US salary data for 300+ jobs across all 50 states, sourced directly from the U.S. Bureau of Labor Statistics OES program.",
             "canonical_url": "/about/",
             "content": f"""
 <div class="badge">🏛️ About Us</div>
@@ -649,8 +649,8 @@ def generate_static_pages(jobs):
 """
         },
         "methodology": {
-            "page_title": f"Methodology | {SITE_NAME}",
-            "meta_description": "How USASalaries calculates salary estimates, sources data from BLS, and presents occupational wage statistics.",
+            "page_title": f"Data Methodology | How {SITE_NAME} Calculates Salaries",
+            "meta_description": "How USASalaries sources and calculates salary data. All figures come from BLS Occupational Employment and Wage Statistics (OES) May 2025 release.",
             "canonical_url": "/methodology/",
             "content": f"""
 <div class="badge">📐 Methodology</div>
@@ -714,7 +714,7 @@ def generate_static_pages(jobs):
         },
         "privacy": {
             "page_title": f"Privacy Policy | {SITE_NAME}",
-            "meta_description": f"Privacy policy for {SITE_NAME}. Learn how we handle your data and protect your privacy.",
+            "meta_description": f"Privacy policy for {SITE_NAME}. We don't collect personal data. Learn what information Cloudflare and analytics tools may log.",
             "canonical_url": "/privacy/",
             "content": f"""
 <div class="badge">🔒 Privacy</div>
@@ -782,8 +782,8 @@ def generate_static_pages(jobs):
 """
         },
         "contact": {
-            "page_title": f"Contact Us | {SITE_NAME}",
-            "meta_description": f"Get in touch with the {SITE_NAME} team for questions, feedback, or data inquiries.",
+            "page_title": f"Contact {SITE_NAME} | Salary Data Questions & Feedback",
+            "meta_description": f"Contact the {SITE_NAME} team with salary data questions, corrections, or feedback. We aim to respond within 2-3 business days.",
             "canonical_url": "/contact/",
             "content": f"""
 <div class="badge">✉️ Contact</div>
