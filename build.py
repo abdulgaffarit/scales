@@ -916,11 +916,35 @@ def generate_llms_txt(jobs):
 def generate_cloudflare_files():
     """Generate _redirects and _headers for Cloudflare Pages"""
     # Redirect pages.dev subdomain → custom domain (fixes 'alternate page with proper canonical' in GSC)
+    # Old site used singular slugs; new site uses plural BLS-style slugs.
+    # These redirect old cached Google URLs → correct current pages.
+    singular_to_plural = [
+        ("registered-nurse",                   "registered-nurses"),
+        ("training-development-specialist",    "training-development-specialists"),
+        ("real-estate-agent",                  "real-estate-agents"),
+        ("data-analyst",                       "data-analysts"),
+        ("architect",                          "architects"),
+        ("loan-officer",                       "loan-officers"),
+        ("physicist",                          "physicists"),
+        ("economist",                          "economists"),
+        ("hvac-technician",                    "hvac-technicians"),
+        ("roofer",                             "roofers"),
+        ("welder",                             "welders"),
+        ("chef",                               "chefs"),
+        ("police-officer",                     "police-officers"),
+        ("firefighter",                        "firefighters"),
+    ]
+    singular_rules = ""
+    for old, new in singular_to_plural:
+        singular_rules += f"/salary/{old}/ /salary/{new}/ 301\n"
+        singular_rules += f"/salary/{old}/* /salary/{new}/:splat 301\n"
+
     redirects = (
         f"https://usasalaries.pages.dev/* https://{SITE_DOMAIN}/:splat 301\n"
+        + singular_rules
         # City-level URLs → state page (old builds had city pages with different slugs)
-        f"/salary/:job/:state/:city/ /salary/:job/:state/ 301\n"
-        f"/salary/ / 301\n"
+        + f"/salary/:job/:state/:city/ /salary/:job/:state/ 301\n"
+        + f"/salary/ / 301\n"
     )
     (OUTPUT_DIR / "_redirects").write_text(redirects, encoding="utf-8")
 
