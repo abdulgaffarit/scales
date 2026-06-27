@@ -230,7 +230,8 @@ def generate_job_national(job, all_jobs, states):
     ctx = base_context()
     ctx.update({
         "page_title": f"{title} Salary 2026 | {SITE_NAME}",
-        "meta_description": f"{title} salary: ${fmt(avg)}/yr avg in 2026. Pay by state, percentile & experience. Source: BLS OES.",
+        "meta_description": f"Average {title} salary is ${fmt(avg)}/yr in the US (2026). See pay by state, experience level & trend data from official BLS OES — all 50 states covered.",
+        "og_image": f"https://{SITE_DOMAIN}/og-default.png",
         "canonical_url": url,
         "h1_title": f"{title} Salary in the United States (2026)",
         "hero_subtitle": f"Based on U.S. Bureau of Labor Statistics data · Updated 2026 · {job['demand']} Demand",
@@ -313,8 +314,9 @@ def generate_job_state(job, state, all_cities, all_jobs, states):
 
     ctx = base_context()
     ctx.update({
-        "page_title": f"{title} Salary in {sname} (2026) | ${fmt(avg)}/yr",
-        "meta_description": f"{title} salary in {sname}: ${fmt(avg)}/yr (2026). Pay by city, trend data & state comparison. Source: BLS OES.",
+        "page_title": f"{title} Salary in {sname} (2026) | {SITE_NAME}",
+        "meta_description": f"{title} salary in {sname} is ${fmt(avg)}/yr (2026) — {abs(diff_national)}% {'above' if diff_national >= 0 else 'below'} the US average. City-level breakdown, experience tiers & trend data from BLS OES.",
+        "og_image": f"https://{SITE_DOMAIN}/og-default.png",
         "canonical_url": url,
         "h1_title": f"{title} Salary in {sname} (2026)",
         "hero_subtitle": f"{sname} · {abs(diff_national)}% {'above' if diff_national >= 0 else 'below'} national average · {job['demand']} Demand",
@@ -393,8 +395,9 @@ def generate_job_city(job, state, city, all_jobs):
 
     ctx = base_context()
     ctx.update({
-        "page_title": f"{title} Salary in {cname}, {sname} (2026) | ${fmt(avg)}/yr",
-        "meta_description": f"{title} salary in {cname}, {sname}: ${fmt(avg)}/yr (2026). Hourly rate, percentiles & city comparison. Source: BLS OES.",
+        "page_title": f"{title} Salary in {cname}, {sname} (2026) | {SITE_NAME}",
+        "meta_description": f"{title} salary in {cname}, {sname} is ${fmt(avg)}/yr (2026). Hourly rate ${hourly(avg)}/hr. See percentiles, experience tiers & comparison vs state average. Source: BLS OES.",
+        "og_image": f"https://{SITE_DOMAIN}/og-default.png",
         "canonical_url": url,
         "h1_title": f"{title} Salary in {cname}, {sname} (2026)",
         "hero_subtitle": f"{cname}, {sname} · {city['metro_type']} · {abs(diff_national)}% {'above' if diff_national >= 0 else 'below'} national average",
@@ -517,12 +520,24 @@ def generate_homepage(jobs, states):
         }
     }, indent=2)
 
+    org_schema_json = json.dumps({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": SITE_NAME,
+        "url": f"https://{SITE_DOMAIN}",
+        "logo": f"https://{SITE_DOMAIN}/apple-touch-icon.png",
+        "description": f"Official US salary data for {len(jobs)}+ jobs across all 50 states, sourced from BLS.",
+        "sameAs": [f"https://{SITE_DOMAIN}"]
+    }, indent=2)
+
     html = hp_template.render(
         site_domain=SITE_DOMAIN,
         site_name=SITE_NAME,
         page_title=f"US Salary Data 2026 by Job, State & City | {SITE_NAME}",
-        meta_description=f"Explore 2026 US salary data for {len(jobs)}+ jobs across every state and major city. Compare pay by location, career level, and industry using BLS data.",
+        meta_description=f"Explore 2026 US salary data for {len(jobs)}+ jobs across every state and major city. Compare pay by location, career level, and industry using official BLS data.",
         schema_json=Markup(schema_json),
+        org_schema_json=Markup(org_schema_json),
+        og_image=f"https://{SITE_DOMAIN}/og-default.png",
         job_count=len(jobs),
         page_count=f"{len(jobs) * len(states) + len(jobs) + 1:,}",
         cat_nav=Markup(cat_nav),
@@ -539,23 +554,24 @@ def generate_homepage(jobs, states):
 def generate_sitemap(jobs, states, cities):
     from datetime import date
     today = date.today().strftime("%Y-%m-%d")
+    data_release_date = "2026-05-01"  # BLS OES May 2025 release date — only update when data refreshes
 
     # Sitemap 1: high-priority pages (homepage + all national job pages)
     priority_urls = []
-    priority_urls.append((f"https://{SITE_DOMAIN}/", "1.0", "weekly"))
+    priority_urls.append((f"https://{SITE_DOMAIN}/", "1.0", "weekly", today))
     for j in jobs:
-        priority_urls.append((f"https://{SITE_DOMAIN}/salary/{j['job_slug']}/", "0.9", "monthly"))
+        priority_urls.append((f"https://{SITE_DOMAIN}/salary/{j['job_slug']}/", "0.9", "monthly", data_release_date))
 
     # Sitemap 2: state pages (lower priority — large volume, less unique)
     state_urls = []
     for j in jobs:
         for s in states:
-            state_urls.append((f"https://{SITE_DOMAIN}/salary/{j['job_slug']}/{s['state_slug']}/", "0.6", "monthly"))
+            state_urls.append((f"https://{SITE_DOMAIN}/salary/{j['job_slug']}/{s['state_slug']}/", "0.6", "monthly", data_release_date))
 
     def write_urlset(url_list, filename):
         sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        for loc, pri, freq in url_list:
-            sm += f"  <url><loc>{loc}</loc><lastmod>{today}</lastmod><changefreq>{freq}</changefreq><priority>{pri}</priority></url>\n"
+        for loc, pri, freq, lastmod in url_list:
+            sm += f"  <url><loc>{loc}</loc><lastmod>{lastmod}</lastmod><changefreq>{freq}</changefreq><priority>{pri}</priority></url>\n"
         sm += "</urlset>"
         (OUTPUT_DIR / filename).write_text(sm, encoding="utf-8")
 
@@ -948,8 +964,16 @@ def generate_cloudflare_files():
     )
     (OUTPUT_DIR / "_redirects").write_text(redirects, encoding="utf-8")
 
-    # Cache headers: HTML pages short TTL (content updates), assets long TTL
-    headers = """/
+    # Cache headers + security headers for all routes
+    headers = """/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://static.cloudflareinsights.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://adservice.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://static.cloudflareinsights.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'
+
+/
   Cache-Control: public, max-age=3600, must-revalidate
 
 /salary/*
@@ -962,7 +986,11 @@ def generate_cloudflare_files():
   Cache-Control: public, max-age=3600
 """
     (OUTPUT_DIR / "_headers").write_text(headers, encoding="utf-8")
-    print("✅ Cloudflare _redirects and _headers generated")
+
+    ads_txt = "google.com, pub-8560601515267425, DIRECT, f08c47fec0942fa0\n"
+    (OUTPUT_DIR / "ads.txt").write_text(ads_txt, encoding="utf-8")
+
+    print("✅ Cloudflare _redirects, _headers, and ads.txt generated")
 
 
 def generate_robots():
