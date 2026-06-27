@@ -12,9 +12,11 @@
   <meta property="og:url" content="https://{{ site_domain }}{{ canonical_url }}">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="{{ site_name }}">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="{{ og_image }}">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ page_title }}">
   <meta name="twitter:description" content="{{ meta_description }}">
+  <meta name="twitter:image" content="{{ og_image }}">
   <meta name="author" content="{{ site_name }}">
   <meta name="copyright" content="{{ site_name }}">
   <link rel="shortcut icon" href="/favicon.ico">
@@ -26,6 +28,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8560601515267425"
+     crossorigin="anonymous"></script>
   <script type="application/ld+json">{{ schema_json | safe }}</script>
   <script type="application/ld+json">{{ breadcrumb_schema | safe }}</script>
   {% if faq_schema_json %}<script type="application/ld+json">{{ faq_schema_json | safe }}</script>{% endif %}
@@ -902,7 +906,7 @@ img { max-width: 100%; display: block }
     </div>
 
     <div class="trust-bar">
-      <div class="trust-item">🏛️ Source: <strong>U.S. Bureau of Labor Statistics</strong></div>
+      <div class="trust-item">🏛️ Source: <strong><a href="https://www.bls.gov/oes/" target="_blank" rel="noopener noreferrer" style="color:inherit">U.S. Bureau of Labor Statistics</a></strong></div>
       <div class="trust-item">📅 Dataset: <strong>OES May 2025</strong></div>
       <div class="trust-item">🔄 Published: <strong>May 2026</strong></div>
       <div class="trust-item">📍 Coverage: <strong>All 50 States + DC</strong></div>
@@ -976,7 +980,7 @@ img { max-width: 100%; display: block }
         <p>{{ insight_p2 }}</p>
         <p>{{ insight_p3 }}</p>
       </div>
-      <div class="source-tag">🏛️ U.S. Bureau of Labor Statistics · Occupational Employment and Wage Statistics (OES) · May 2025</div>
+      <div class="source-tag">🏛️ <a href="https://www.bls.gov/oes/" target="_blank" rel="noopener noreferrer" style="color:inherit">U.S. Bureau of Labor Statistics</a> · Occupational Employment and Wage Statistics (OES) · May 2025</div>
     </div>
 
     <div class="data-card">
@@ -1081,7 +1085,7 @@ img { max-width: 100%; display: block }
 
     <div class="sidebar-card" style="background:linear-gradient(135deg, var(--primary-50) 0%, #e0e7ff 100%);border-color:var(--primary-200)">
       <div class="sidebar-title" style="color:var(--primary)">🏛️ Data Source</div>
-      <p style="font-size:0.8rem;color:#1e40af;line-height:1.65">U.S. Bureau of Labor Statistics — Occupational Employment &amp; Wage Statistics (OES), May 2025 release. Covers 800+ occupations nationally.</p>
+      <p style="font-size:0.8rem;color:#1e40af;line-height:1.65"><a href="https://www.bls.gov/oes/" target="_blank" rel="noopener noreferrer" style="color:#1e40af;font-weight:600">U.S. Bureau of Labor Statistics</a> — Occupational Employment &amp; Wage Statistics (OES), May 2025 release. Covers 800+ occupations nationally.</p>
     </div>
   </aside>
 </div>
