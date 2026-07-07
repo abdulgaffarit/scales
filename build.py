@@ -929,6 +929,43 @@ def generate_llms_txt(jobs):
     print(f"✅ llms.txt generated ({len(jobs)} jobs listed)")
 
 
+def generate_404_page():
+    """Generate 404.html — its presence disables Cloudflare Pages SPA fallback.
+    Without it, every missing URL serves index.html with HTTP 200 (soft 404),
+    which poisons Google indexing (homepage canonical on every unknown URL)."""
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found (404) | {SITE_NAME}</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <style>
+    body {{ font-family: 'Inter', -apple-system, sans-serif; background: #f9fafb; color: #111827;
+           display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px }}
+    .box {{ text-align: center; max-width: 480px }}
+    h1 {{ font-size: 5rem; font-weight: 900; color: #1e40af; margin: 0 }}
+    h2 {{ font-size: 1.4rem; margin: 8px 0 12px }}
+    p {{ color: #6b7280; line-height: 1.6 }}
+    a.btn {{ display: inline-block; margin-top: 16px; background: #1e40af; color: #fff;
+             padding: 12px 28px; border-radius: 50px; text-decoration: none; font-weight: 600 }}
+    a.btn:hover {{ background: #1e3a8a }}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>404</h1>
+    <h2>Page Not Found</h2>
+    <p>This salary page doesn't exist or has moved. Browse all jobs and states from the homepage.</p>
+    <a class="btn" href="/">Browse All Salaries</a>
+  </div>
+</body>
+</html>"""
+    (OUTPUT_DIR / "404.html").write_text(html, encoding="utf-8")
+    print("✅ 404.html generated (disables SPA fallback)")
+
+
 def generate_cloudflare_files():
     """Generate _redirects and _headers for Cloudflare Pages"""
     # Redirect pages.dev subdomain → custom domain (fixes 'alternate page with proper canonical' in GSC)
@@ -1104,6 +1141,7 @@ def main():
     generate_static_pages(jobs)
     generate_cloudflare_files()
     generate_llms_txt(jobs)
+    generate_404_page()
 
     # Copy favicon files to output automatically
     favicon_files = ["favicon.ico","favicon_16.png","favicon_32.png",
