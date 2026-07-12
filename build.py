@@ -1082,6 +1082,7 @@ def generate_cloudflare_files():
 
     redirects = (
         f"https://usasalaries.pages.dev/* https://{SITE_DOMAIN}/:splat 301\n"
+        f"https://scales-dui.pages.dev/* https://{SITE_DOMAIN}/:splat 301\n"
         + singular_rules
         # City-level URLs → state page (old builds had city pages with different slugs)
         + f"/salary/:job/:state/:city/ /salary/:job/:state/ 301\n"
