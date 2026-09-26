@@ -72,13 +72,22 @@ def download(url):
     return r.read() if r else None
 
 
+RAW_DIR = DATA_DIR / "raw"
+
+
 def fetch_release(kind):
-    """Try the newest release first. Returns (year, rows) or (None, None)."""
+    """Newest release first: a manually uploaded data/raw/oesmYY{kind}.zip wins
+    (bls.gov blocks cloud IPs), else download. Returns (year, rows) or (None, None)."""
     this_year = date.today().year
     for yy in range(this_year - 2000, this_year - 2000 - 3, -1):
-        url = f"{BASE}/oesm{yy:02d}{kind}.zip"
-        print(f"Fetching {url}")
-        blob = download(url)
+        local = RAW_DIR / f"oesm{yy:02d}{kind}.zip"
+        if local.exists():
+            print(f"Using {local}")
+            blob = local.read_bytes()
+        else:
+            url = f"{BASE}/oesm{yy:02d}{kind}.zip"
+            print(f"Fetching {url}")
+            blob = download(url)
         if not blob:
             continue
         with zipfile.ZipFile(io.BytesIO(blob)) as z:
@@ -160,7 +169,11 @@ def main():
     if rows is None:
         flat = from_flat_file(socs, states)
         if not flat:
-            sys.exit("Could not download OEWS data from bls.gov (zip or time-series file)")
+            # Not fatal: the site builds from existing data/estimates. Surface it as a warning.
+            print("::warning::bls.gov blocked the download (it rejects cloud IPs). Download "
+                  "oesmYYnat.zip and oesmYYst.zip from https://www.bls.gov/oes/tables.htm in a "
+                  "browser and commit them to data/raw/ — this workflow will parse them.")
+            return
         write_outputs(*flat)
         return
     nat = []

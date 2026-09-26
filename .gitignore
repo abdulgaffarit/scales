@@ -6,3 +6,4 @@ oesm25nat.zip
 national_M2025_dl.xlsx
 national-M2025-dl.xlsx
 *.xlsx
+!data/raw/*.zip
