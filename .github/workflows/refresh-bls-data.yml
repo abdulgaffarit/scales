@@ -28,6 +28,9 @@ jobs:
       - run: pip install openpyxl
 
       - name: Fetch OEWS national + state data
+        env:
+          # Optional: an email for the User-Agent, which bls.gov asks scripted clients to send
+          BLS_CONTACT: ${{ secrets.BLS_CONTACT }}
         run: python scripts/fetch_oews.py
 
       - name: Commit updated data
