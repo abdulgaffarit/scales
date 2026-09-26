@@ -1,0 +1,23 @@
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo">USA<span>Salaries</span></a>
+    <div class="header-search">{% with search_xl=False %}{% include "partials/search_box.html" %}{% endwith %}</div>
+    <nav class="header-nav" aria-label="Main">
+      <a href="/salary/"{% if nav_current == 'salary' %} aria-current="page"{% endif %}>Browse salaries</a>
+      <a href="/methodology/"{% if nav_current == 'methodology' %} aria-current="page"{% endif %}>About the data</a>
+    </nav>
+    <button class="icon-btn first" type="button" data-toggle="search" aria-expanded="false" aria-label="Search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    </button>
+    <button class="icon-btn" type="button" data-toggle="menu" aria-expanded="false" aria-controls="mobile-menu" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <nav class="mobile-menu" id="mobile-menu" aria-label="Menu">
+    <a href="/salary/">Browse salaries <span aria-hidden="true">→</span></a>
+    <a href="/methodology/">About the data <span aria-hidden="true">→</span></a>
+    <a href="/about/">About <span aria-hidden="true">→</span></a>
+    <a href="/contact/">Contact <span aria-hidden="true">→</span></a>
+  </nav>
+</header>

@@ -145,6 +145,8 @@ def write_csv(jobs):
     print(f"\n✅ Written {len(jobs)} jobs to {out}")
 
 if __name__ == "__main__":
+    from data_guard import require_force
+    require_force("parse_bls_data.py")
     print("🚀 BLS OES May 2025 → jobs.csv converter")
     print("=" * 50)
     jobs = parse_xlsx()

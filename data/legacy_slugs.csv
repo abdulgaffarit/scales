@@ -1,4 +1,13 @@
 old_slug,new_slug,gsc_deep_hits
+chefs-and-head-cooks,chefs,0
+training-and-development-specialists,training-development-specialists,0
+hvac-mechanics-and-installers,hvac-technicians,0
+welders-cutters-solderers-and-brazers,welders,0
+police-and-sheriff-patrol-officers,police-officers,0
+school-counselors,educational-guidance-and-career-counselors,0
+respiratory-therapists-advanced,respiratory-therapists,0
+esl-teachers,adult-basic-education-teachers,0
+public-relations-and-fundraising-managers,public-relations-managers,0
 financial-examiner,financial-examiners,39
 database-administrator,database-administrators,35
 hvac-technician,hvac-technicians,35
@@ -54,7 +63,7 @@ financial-manager,financial-managers,21
 market-research-analyst,market-research-analysts,21
 middle-school-teacher,middle-school-teachers,21
 natural-sciences-manager,natural-sciences-managers,21
-public-relations-manager,public-relations-and-fundraising-managers,21
+public-relations-manager,public-relations-managers,21
 special-education-teacher,special-education-teachers,21
 compensation-and-benefits-manager,compensation-and-benefits-specialists,20
 dental-hygienist,dental-hygienists,20
@@ -126,7 +135,7 @@ butcher,butchers-and-meat-cutters,3
 cook-institution,cooks-institution-and-cafeteria,3
 customer-service-representative,customer-service-representatives,3
 environmental-science-technician,environmental-science-technicians,3
-esl-teacher,esl-teachers,3
+esl-teacher,adult-basic-education-teachers,3
 financial-risk-analyst,financial-and-investment-analysts,3
 glazier,glaziers,3
 kindergarten-teacher,kindergarten-teachers,3
@@ -174,7 +183,7 @@ production-supervisor,first-line-supervisors-of-production-workers,2
 purchasing-agent,purchasing-managers,2
 recreation-worker,recreation-workers,2
 retail-salesperson,retail-salespersons,2
-school-counselor,school-counselors,2
+school-counselor,educational-guidance-and-career-counselors,2
 surgical-technologist,surgical-technologists,2
 systems-administrator,network-and-computer-systems-administrators,2
 tax-preparer,tax-preparers,2
@@ -268,7 +277,7 @@ fire-investigator,detectives-and-criminal-investigators,0
 first-line-food-supervisor,first-line-supervisors-of-food-preparation,0
 forest-conservation-worker,forest-and-conservation-workers,0
 frontend-developer,web-developers,0
-fundraiser,public-relations-and-fundraising-managers,0
+fundraiser,fundraising-managers,0
 insurance-sales-agent,insurance-sales-agents,0
 logistics-manager,logisticians,0
 marine-engineer,marine-engineers-and-naval-architects,0
@@ -286,7 +295,7 @@ psychiatric-technician,psychiatric-technicians,0
 quality-assurance-engineer,software-quality-assurance-analysts,0
 reinforcing-iron-worker,reinforcing-iron-and-rebar-workers,0
 renewable-energy-engineer,engineers-all-other,0
-respiratory-therapist-advanced,respiratory-therapists-advanced,0
+respiratory-therapist-advanced,respiratory-therapists,0
 security-manager,security-guards,0
 skincare-specialist,skincare-specialists,0
 substance-abuse-counselor,mental-health-counselors,0

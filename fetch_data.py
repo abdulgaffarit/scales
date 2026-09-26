@@ -759,4 +759,6 @@ BLS_OCCUPATIONS.extend(ADDITIONAL_OCCUPATIONS)
 
 
 if __name__ == "__main__":
+    from data_guard import require_force
+    require_force("fetch_data.py", also_writes=("states.csv", "cities.csv"))
     main()

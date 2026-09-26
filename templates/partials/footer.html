@@ -1,0 +1,42 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="/" class="logo">USA<span>Salaries</span></a>
+        <p class="footer-desc">Salary information for U.S. occupations, nationally and by state, from BLS OEWS data.</p>
+      </div>
+      <div class="footer-col">
+        <p class="footer-h">Top jobs</p>
+        {% if footer_top_jobs %}{{ footer_top_jobs | safe }}{% else %}
+        <a href="/salary/registered-nurses/">Registered Nurse</a>
+        <a href="/salary/software-developers/">Software Developer</a>
+        <a href="/salary/physician-assistants/">Physician Assistant</a>
+        <a href="/salary/electricians/">Electrician</a>
+        <a href="/salary/accountants-and-auditors/">Accountant</a>
+        {% endif %}
+      </div>
+      <div class="footer-col">
+        <p class="footer-h">Registered Nurses by state</p>
+        {% if footer_states %}{{ footer_states | safe }}{% else %}
+        <a href="/salary/registered-nurses/california/">California</a>
+        <a href="/salary/registered-nurses/texas/">Texas</a>
+        <a href="/salary/registered-nurses/new-york/">New York</a>
+        <a href="/salary/registered-nurses/florida/">Florida</a>
+        <a href="/salary/registered-nurses/washington/">Washington</a>
+        {% endif %}
+      </div>
+      <div class="footer-col">
+        <p class="footer-h">Company</p>
+        <a href="/about/">About</a>
+        <a href="/methodology/">Methodology</a>
+        <a href="/privacy/">Privacy Policy</a>
+        <a href="/contact/">Contact</a>
+        <a href="/sitemap.xml">Sitemap</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 USASalaries · Data from U.S. Bureau of Labor Statistics · For informational purposes only.</span>
+      <div class="footer-links"><a href="/privacy/">Privacy</a><a href="/methodology/">Methodology</a><a href="/sitemap.xml">Sitemap</a></div>
+    </div>
+  </div>
+</footer>
