@@ -1131,7 +1131,8 @@ def generate_404_page():
 
 def generate_cloudflare_files():
     """Generate _redirects and _headers for Cloudflare Pages"""
-    # Legacy job slugs (old singular/short slugs → current BLS slugs).
+    # Legacy job slugs (old singular/short slugs → current BLS slugs), sorted by
+    # gsc_deep_hits so the most-crawled old state/city URLs get the limited splat slots.
     # Sources: GSC "alternate page with proper canonical" export (2026-07-07) plus
     # SOC-code matches between fetch_data.py (old slugs) and generate_from_bls.py.
     legacy = load_csv("legacy_slugs.csv")
