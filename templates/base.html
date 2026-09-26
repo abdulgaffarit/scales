@@ -24,1248 +24,205 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <meta name="theme-color" content="#1e40af">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0B6B4F">
+{% include "partials/head_assets.html" %}
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8560601515267425"
      crossorigin="anonymous"></script>
   <script type="application/ld+json">{{ schema_json | safe }}</script>
   <script type="application/ld+json">{{ breadcrumb_schema | safe }}</script>
   {% if faq_schema_json %}<script type="application/ld+json">{{ faq_schema_json | safe }}</script>{% endif %}
-  <style>
-:root {
-  --primary: #1e40af;
-  --primary-light: #3b82f6;
-  --primary-lighter: #60a5fa;
-  --primary-50: #eff6ff;
-  --primary-100: #dbeafe;
-  --primary-200: #bfdbfe;
-  --accent: #059669;
-  --accent-light: #10b981;
-  --accent-50: #ecfdf5;
-  --red-500: #ef4444;
-  --amber-500: #f59e0b;
-  --amber-50: #fffbeb;
-  --purple-500: #8b5cf6;
-  --purple-50: #f5f3ff;
-  --gray-950: #030712;
-  --gray-900: #111827;
-  --gray-800: #1f2937;
-  --gray-700: #374151;
-  --gray-600: #4b5563;
-  --gray-500: #6b7280;
-  --gray-400: #9ca3af;
-  --gray-300: #d1d5db;
-  --gray-200: #e5e7eb;
-  --gray-100: #f3f4f6;
-  --gray-50: #f9fafb;
-  --white: #ffffff;
-  --shadow-xs: 0 1px 2px rgba(0,0,0,.04);
-  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
-  --shadow: 0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -2px rgba(0,0,0,.05);
-  --shadow-md: 0 10px 15px -3px rgba(0,0,0,.08), 0 4px 6px -4px rgba(0,0,0,.04);
-  --shadow-lg: 0 20px 25px -5px rgba(0,0,0,.08), 0 8px 10px -6px rgba(0,0,0,.04);
-  --radius-sm: 8px;
-  --radius: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --max: 1200px;
-  --tr: 0.2s cubic-bezier(.4,0,.2,1);
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100% }
-body { font-family: var(--font); background: var(--gray-50); color: var(--gray-900); line-height: 1.6; font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale }
-a { color: var(--primary-light); text-decoration: none; transition: color var(--tr) }
-a:hover { color: var(--primary); text-decoration: underline }
-img { max-width: 100%; display: block }
-
-/* HEADER */
-.site-header {
-  background: rgba(255,255,255,.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(0,0,0,.06);
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  box-shadow: var(--shadow-xs);
-}
-.header-inner {
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 0 28px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-.logo {
-  font-size: 1.25rem;
-  font-weight: 900;
-  color: var(--primary);
-  text-decoration: none;
-  white-space: nowrap;
-  flex-shrink: 0;
-  letter-spacing: -.3px;
-}
-.logo span { color: var(--accent) }
-.logo:hover { text-decoration: none }
-.header-search { flex: 1; max-width: 420px; position: relative }
-.header-search input {
-  width: 100%;
-  padding: 10px 16px 10px 40px;
-  border: 1.5px solid var(--gray-200);
-  border-radius: 50px;
-  font-size: 0.875rem;
-  color: var(--gray-900);
-  background: var(--gray-50);
-  outline: none;
-  transition: all var(--tr);
-  font-family: var(--font);
-}
-.header-search input:focus {
-  border-color: var(--primary-light);
-  background: var(--white);
-  box-shadow: 0 0 0 4px var(--primary-100);
-}
-.header-search input::placeholder { color: var(--gray-400) }
-.search-icon {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--gray-400);
-  pointer-events: none;
-  width: 16px;
-  height: 16px;
-}
-
-.header-nav { display: flex; align-items: center; gap: 4px; margin-left: auto }
-.header-nav a {
-  color: var(--gray-600);
-  font-size: 0.84rem;
-  font-weight: 500;
-  padding: 7px 14px;
-  border-radius: 8px;
-  transition: all var(--tr);
-  white-space: nowrap;
-}
-.header-nav a:hover {
-  color: var(--primary);
-  background: var(--primary-50);
-  text-decoration: none;
-}
-.mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px; color: var(--gray-700); transition: background var(--tr) }
-.mobile-menu-btn:hover { background: var(--gray-100) }
-.mobile-menu-btn svg { width: 22px; height: 22px; display: block }
-.mobile-nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 999; opacity: 0; transition: opacity .25s }
-.mobile-nav-overlay.active { display: block; opacity: 1 }
-.mobile-nav { position: fixed; top: 0; right: -280px; width: 280px; height: 100%; background: var(--white); z-index: 1000; padding: 20px; box-shadow: -4px 0 20px rgba(0,0,0,.15); transition: right .3s cubic-bezier(.4,0,.2,1); overflow-y: auto }
-.mobile-nav.active { right: 0 }
-.mobile-nav-close { display: flex; align-items: center; justify-content: flex-end; margin-bottom: 20px }
-.mobile-nav-close button { background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px; color: var(--gray-600) }
-.mobile-nav-close button:hover { background: var(--gray-100) }
-.mobile-nav-links { display: flex; flex-direction: column; gap: 4px }
-.mobile-nav-links a { display: block; padding: 12px 16px; border-radius: 8px; font-size: 0.95rem; font-weight: 500; color: var(--gray-700); transition: all var(--tr) }
-.mobile-nav-links a:hover { background: var(--primary-50); color: var(--primary); text-decoration: none }
-
-/* BREADCRUMB */
-.breadcrumb { background: var(--white); border-bottom: 1px solid var(--gray-100) }
-.mobile-search { display: none; padding: 10px 16px; background: var(--white); border-bottom: 1px solid var(--gray-100) }
-.mobile-search input {
-  width: 100%; padding: 10px 16px 10px 40px;
-  border: 1.5px solid var(--gray-200); border-radius: 50px;
-  font-size: 0.875rem; color: var(--gray-900); background: var(--gray-50);
-  outline: none; transition: all var(--tr); font-family: var(--font);
-}
-.mobile-search input:focus { border-color: var(--primary-light); background: var(--white); box-shadow: 0 0 0 3px var(--primary-100) }
-.mobile-search input::placeholder { color: var(--gray-400) }
-.mobile-search { position: relative }
-.mobile-search .search-icon { position: absolute; left: 30px; top: 50%; transform: translateY(-50%); color: var(--gray-400); width: 16px; height: 16px; pointer-events: none }
-.breadcrumb-inner {
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 10px 28px;
-  font-size: 0.8rem;
-  color: var(--gray-500);
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-.breadcrumb-inner a { color: var(--gray-500); transition: color var(--tr) }
-.breadcrumb-inner a:hover { color: var(--primary-light); text-decoration: none }
-.breadcrumb-inner span { color: var(--gray-300); font-size: 0.7rem }
-
-/* LAYOUT */
-.page-wrap {
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 32px 28px 80px;
-  display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 32px;
-  align-items: start;
-}
-/* Prevent grid children from overflowing their cell */
-.page-wrap > main, .page-wrap > .sidebar { min-width: 0 }
-
-/* HERO CARD */
-.hero-card {
-  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 40%, #2563eb 100%);
-  color: var(--white);
-  border-radius: var(--radius-xl);
-  padding: 36px 32px;
-  margin-bottom: 24px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 20px 40px -12px rgba(30,64,175,.35);
-}
-.hero-card::before {
-  content: '';
-  position: absolute;
-  right: -60px;
-  top: -60px;
-  width: 240px;
-  height: 240px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.05);
-  pointer-events: none;
-}
-.hero-card::after {
-  content: '';
-  position: absolute;
-  left: -40px;
-  bottom: -40px;
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.03);
-  pointer-events: none;
-}
-
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255,255,255,.12);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255,255,255,.15);
-  border-radius: 50px;
-  padding: 5px 14px;
-  font-size: 0.73rem;
-  font-weight: 600;
-  letter-spacing: .3px;
-  margin-bottom: 16px;
-}
-.hero-card h1 {
-  font-size: 1.75rem;
-  font-weight: 900;
-  line-height: 1.2;
-  margin-bottom: 8px;
-  letter-spacing: -.3px;
-}
-.hero-sub {
-  opacity: .8;
-  font-size: 0.9rem;
-  margin-bottom: 28px;
-  line-height: 1.5;
-}
-.salary-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-.stat-box {
-  background: rgba(255,255,255,.1);
-  backdrop-filter: blur(4px);
-  border-radius: var(--radius);
-  padding: 18px 14px;
-  text-align: center;
-  border: 1px solid rgba(255,255,255,.12);
-  transition: background var(--tr);
-}
-.stat-box:hover { background: rgba(255,255,255,.15) }
-.stat-label {
-  font-size: 0.68rem;
-  opacity: .7;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 6px;
-  font-weight: 600;
-}
-.stat-value { font-size: 1.5rem; font-weight: 900; line-height: 1 }
-.stat-sub { font-size: 0.7rem; opacity: .6; margin-top: 4px }
-
-/* TRUST BAR */
-.trust-bar {
-  background: var(--white);
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius-lg);
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-  box-shadow: var(--shadow-xs);
-}
-.trust-item {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 0.8rem;
-  color: var(--gray-600);
-}
-.trust-item strong { color: var(--gray-900); font-weight: 600 }
-
-/* DATA CARD */
-.data-card {
-  background: var(--white);
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  margin-bottom: 20px;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--tr);
-}
-.data-card:hover { box-shadow: var(--shadow) }
-.card-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--gray-100);
-}
-.card-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-sm);
-  background: var(--primary-50);
-  color: var(--primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  flex-shrink: 0;
-}
-.card-title { font-size: 1rem; font-weight: 700; color: var(--gray-900); letter-spacing: -.2px }
-.card-sub { font-size: 0.78rem; color: var(--gray-500); margin-top: 2px }
-
-/* PERCENTILE */
-.pct-item { margin-bottom: 16px }
-.pct-item:last-child { margin-bottom: 0 }
-.pct-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
-  gap: 12px;
-}
-.pct-label { font-size: 0.84rem; color: var(--gray-600); flex: 1; min-width: 0 }
-.pct-value { font-size: 0.9rem; font-weight: 700; color: var(--gray-900); white-space: nowrap }
-.pbar {
-  height: 8px;
-  background: var(--gray-100);
-  border-radius: 6px;
-  overflow: hidden;
-}
-.pbar-fill {
-  height: 100%;
-  border-radius: 6px;
-  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-lighter) 100%);
-  transition: width 0.8s cubic-bezier(.4,0,.2,1);
-}
-
-/* TREND CHART */
-.trend-chart {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  height: 120px;
-  padding: 8px 0 0;
-}
-.trend-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-}
-.trend-bar {
-  width: 100%;
-  background: linear-gradient(180deg, var(--primary-light) 0%, var(--primary) 100%);
-  border-radius: 6px 6px 0 0;
-  opacity: .85;
-  transition: all var(--tr);
-  position: relative;
-}
-.trend-bar:hover { opacity: 1; transform: scaleY(1.02); transform-origin: bottom }
-.trend-year { font-size: 0.7rem; color: var(--gray-500); font-weight: 500 }
-.trend-amt { font-size: 0.65rem; color: var(--primary); font-weight: 700 }
-
-/* INFO BOX */
-.info-box {
-  background: var(--primary-50);
-  border-left: 4px solid var(--primary-light);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  padding: 14px 18px;
-  margin-top: 18px;
-  font-size: 0.86rem;
-  color: #1e40af;
-  line-height: 1.6;
-}
-
-/* TABLE */
-.table-wrap {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--gray-100);
-}
-.data-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; min-width: 440px }
-.data-table thead th {
-  background: var(--gray-50);
-  color: var(--gray-500);
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .6px;
-  padding: 12px 16px;
-  text-align: left;
-  border-bottom: 1px solid var(--gray-200);
-  white-space: nowrap;
-}
-.data-table tbody td {
-  padding: 13px 16px;
-  border-bottom: 1px solid var(--gray-100);
-  color: var(--gray-700);
-  vertical-align: middle;
-}
-.data-table tbody tr:last-child td { border-bottom: none }
-.data-table tbody tr:hover td { background: var(--gray-50) }
-.data-table tbody tr:nth-child(even) td { background: rgba(249,250,251,.5) }
-.data-table tbody tr:nth-child(even):hover td { background: var(--gray-100) }
-.cell-salary { font-weight: 700; color: var(--gray-900) }
-.cell-link { color: var(--primary-light); font-weight: 500 }
-.cell-link:hover { text-decoration: underline; color: var(--primary) }
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 10px;
-  border-radius: 50px;
-  font-size: 0.7rem;
-  font-weight: 600;
-}
-.badge-green { background: var(--accent-50); color: var(--accent) }
-.badge-blue { background: var(--primary-50); color: var(--primary-light) }
-.badge-amber { background: var(--amber-50); color: var(--amber-500) }
-.badge-orange { background: var(--amber-50); color: var(--amber-500) }
-.badge-gray { background: var(--gray-100); color: var(--gray-600) }
-.diff-pos { color: var(--accent); font-size: 0.82rem; font-weight: 600 }
-.diff-neg { color: var(--red-500); font-size: 0.82rem; font-weight: 600 }
-
-/* INSIGHT */
-.insight-section p {
-  color: var(--gray-700);
-  font-size: 0.9rem;
-  line-height: 1.8;
-  margin-bottom: 14px;
-}
-.insight-section p:last-child { margin-bottom: 0 }
-.source-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--gray-100);
-  border-radius: 50px;
-  padding: 6px 12px;
-  font-size: 0.73rem;
-  color: var(--gray-600);
-  font-weight: 500;
-  margin-top: 16px;
-}
-
-/* JOBS GRID */
-.jobs-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 12px;
-}
-.job-tile {
-  background: var(--white);
-  border: 1.5px solid var(--gray-200);
-  border-radius: var(--radius);
-  padding: 16px;
-  transition: all var(--tr);
-  text-decoration: none;
-  display: block;
-}
-.job-tile:hover {
-  border-color: var(--primary-light);
-  box-shadow: var(--shadow-md);
-  text-decoration: none;
-  transform: translateY(-2px);
-}
-.job-tile-name {
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: var(--gray-900);
-  margin-bottom: 6px;
-  line-height: 1.3;
-}
-.job-tile-salary { font-size: 1.05rem; font-weight: 800; color: var(--primary) }
-.job-tile-diff { font-size: 0.75rem; margin-top: 4px }
-
-/* FAQ accordion */
-.faq-list { list-style: none }
-.faq-item { border-bottom: 1px solid var(--gray-100) }
-.faq-item:last-child { border-bottom: none }
-.faq-q {
-  font-weight: 600;
-  font-size: 0.92rem;
-  color: var(--gray-900);
-  padding: 16px 0;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  user-select: none;
-  -webkit-user-select: none;
-}
-.faq-q:hover { color: var(--primary) }
-.faq-toggle {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--primary-50);
-  color: var(--primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  font-weight: 400;
-  flex-shrink: 0;
-  transition: all var(--tr);
-  line-height: 1;
-}
-.faq-item.faq-open .faq-toggle { background: var(--primary); color: var(--white); transform: rotate(45deg) }
-.faq-a {
-  font-size: 0.88rem;
-  color: var(--gray-600);
-  line-height: 1.75;
-  padding-bottom: 16px;
-  display: none;
-}
-.faq-item.faq-open .faq-a { display: block }
-
-/* RELATED */
-.related-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-.rel-link {
-  padding: 12px 16px;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius-sm);
-  font-size: 0.84rem;
-  font-weight: 500;
-  color: var(--gray-700);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all var(--tr);
-}
-.rel-link:hover {
-  border-color: var(--primary-light);
-  color: var(--primary);
-  background: var(--primary-50);
-  text-decoration: none;
-  transform: translateX(2px);
-}
-.rel-link::before {
-  content: '→';
-  font-size: 0.8rem;
-  color: var(--primary-light);
-  flex-shrink: 0;
-}
-
-/* SIDEBAR */
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  position: sticky;
-  top: 84px;
-}
-.sidebar-card {
-  background: var(--white);
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius-lg);
-  padding: 20px;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--tr);
-}
-.sidebar-card:hover { box-shadow: var(--shadow) }
-.sidebar-title {
-  font-size: 0.86rem;
-  font-weight: 700;
-  color: var(--gray-900);
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-.s-list { list-style: none }
-.s-list li {
-  padding: 9px 0;
-  border-bottom: 1px solid var(--gray-100);
-  font-size: 0.84rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.s-list li:last-child { border-bottom: none }
-.s-list a { color: var(--gray-700); font-weight: 500; transition: color var(--tr) }
-.s-list a:hover { color: var(--primary-light); text-decoration: none }
-.s-salary { font-weight: 700; color: var(--gray-900); font-size: 0.82rem }
-
-/* FOOTER */
-.site-footer {
-  background: var(--gray-950);
-  color: var(--gray-400);
-  padding: 56px 28px 32px;
-  margin-top: 80px;
-}
-.footer-grid {
-  max-width: var(--max);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 2.2fr 1fr 1fr 1fr;
-  gap: 40px;
-  margin-bottom: 40px;
-}
-.footer-logo {
-  font-size: 1.2rem;
-  font-weight: 900;
-  color: var(--white);
-  margin-bottom: 12px;
-}
-.footer-desc { font-size: 0.84rem; line-height: 1.7; max-width: 280px }
-.footer-col h4 {
-  font-size: 0.73rem;
-  font-weight: 700;
-  color: #e2e8f0;
-  text-transform: uppercase;
-  letter-spacing: .8px;
-  margin-bottom: 14px;
-}
-.footer-col a {
-  display: block;
-  font-size: 0.84rem;
-  color: var(--gray-400);
-  margin-bottom: 9px;
-  transition: color var(--tr);
-}
-.footer-col a:hover { color: var(--white); text-decoration: none }
-.footer-bottom {
-  max-width: var(--max);
-  margin: 0 auto;
-  padding-top: 24px;
-  border-top: 1px solid var(--gray-800);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  font-size: 0.8rem;
-}
-.footer-links { display: flex; gap: 20px }
-.footer-links a { color: var(--gray-500) }
-.footer-links a:hover { color: var(--gray-300); text-decoration: none }
-
-/* RESPONSIVE — Mobile-first comprehensive coverage */
-@media (max-width: 1100px) {
-  .header-search { max-width: 320px }
-  .page-wrap { grid-template-columns: 1fr 280px; gap: 24px; padding: 24px 20px 64px }
-}
-@media (max-width: 1024px) {
-  .page-wrap { grid-template-columns: 1fr; padding: 24px 20px 60px }
-  .sidebar { position: static; display: grid; grid-template-columns: 1fr 1fr; gap: 16px }
-  .header-search { max-width: 280px }
-}
-@media (max-width: 900px) {
-  .header-search { display: none }
-  .header-nav { display: none }
-  .mobile-menu-btn { display: block; margin-left: auto }
-  .mobile-search { display: block }
-}
-@media (max-width: 768px) {
-  .header-inner { padding: 0 16px; height: 56px; gap: 8px }
-  .header-nav a { font-size: 0.78rem; padding: 6px 10px }
-  .page-wrap { padding: 16px 14px 48px; gap: 16px }
-  .hero-card { padding: 24px 18px; border-radius: var(--radius-lg) }
-  .hero-card h1 { font-size: 1.35rem; word-wrap: break-word; line-height: 1.25 }
-  .hero-sub { font-size: 0.85rem; margin-bottom: 20px; line-height: 1.5 }
-  .hero-badge { font-size: 0.66rem; padding: 4px 11px; margin-bottom: 13px }
-  .salary-stats { grid-template-columns: repeat(3, 1fr); gap: 6px }
-  .stat-box { padding: 12px 6px }
-  .stat-label { font-size: 0.6rem; letter-spacing: 0.4px; margin-bottom: 4px }
-  .stat-value { font-size: 1.05rem; font-weight: 800 }
-  .stat-sub { font-size: 0.6rem; margin-top: 2px }
-  .data-card { padding: 18px 16px; margin-bottom: 14px; border-radius: var(--radius) }
-  .card-header { margin-bottom: 14px; padding-bottom: 12px; gap: 10px }
-  .card-icon { width: 32px; height: 32px; font-size: 0.9rem }
-  .card-title { font-size: 0.92rem }
-  .card-sub { font-size: 0.74rem }
-  .trust-bar { padding: 12px 14px; gap: 12px; flex-direction: column; align-items: flex-start }
-  .trust-item { font-size: 0.76rem }
-  .pct-item { margin-bottom: 14px }
-  .pct-row { gap: 10px; margin-bottom: 5px }
-  .pct-label { font-size: 0.78rem; line-height: 1.3 }
-  .pct-value { font-size: 0.84rem; font-weight: 700; flex-shrink: 0 }
-  .pbar { height: 6px }
-  .trend-chart { height: 100px; gap: 4px }
-  .trend-col { overflow: hidden }
-  .trend-amt { font-size: 0.5rem; white-space: nowrap; overflow: hidden; max-width: 100% }
-  .trend-year { font-size: 0.6rem }
-  .info-box { font-size: 0.82rem; padding: 12px 14px; margin-top: 14px }
-  .table-wrap { margin: 0 -16px; border-radius: 0; border-left: none; border-right: none }
-  .data-table { font-size: 0.8rem; min-width: 380px }
-  .data-table thead th { padding: 10px 12px; font-size: 0.66rem }
-  .data-table tbody td { padding: 10px 12px }
-  .insight-section p { font-size: 0.86rem; line-height: 1.7; margin-bottom: 12px }
-  .related-grid { grid-template-columns: 1fr }
-  .rel-link { padding: 11px 14px; font-size: 0.82rem }
-  .jobs-grid { grid-template-columns: 1fr 1fr; gap: 8px }
-  .job-tile { padding: 12px }
-  .job-tile-name { font-size: 0.78rem; margin-bottom: 4px }
-  .job-tile-salary { font-size: 0.95rem }
-  .job-tile-diff { font-size: 0.7rem }
-  .faq-q { font-size: 0.88rem; padding: 14px 0 6px }
-  .faq-a { font-size: 0.84rem; padding-bottom: 14px; line-height: 1.65 }
-  .sidebar { grid-template-columns: 1fr; gap: 12px }
-  .sidebar-card { padding: 16px }
-  .sidebar-title { font-size: 0.84rem; margin-bottom: 12px }
-  .s-list li { font-size: 0.82rem; padding: 8px 0 }
-  .s-salary { font-size: 0.78rem }
-  .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; padding: 0 4px }
-  .footer-bottom { flex-direction: column; text-align: center; gap: 8px; font-size: 0.74rem }
-  .footer-links { gap: 14px }
-  .source-tag { font-size: 0.68rem; padding: 5px 10px }
-  .breadcrumb-inner { padding: 8px 14px; font-size: 0.72rem; gap: 4px }
-  .site-footer { padding: 40px 16px 24px; margin-top: 48px }
-  .footer-desc { font-size: 0.78rem }
-  .footer-col h4 { font-size: 0.68rem; margin-bottom: 10px }
-  .footer-col a { font-size: 0.78rem; margin-bottom: 6px }
-}
-@media (max-width: 540px) {
-  .page-wrap { padding: 14px 12px 44px }
-  .salary-stats { grid-template-columns: 1fr; gap: 8px }
-  .stat-box {
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    text-align: left;
-  }
-  .stat-label { margin-bottom: 0; font-size: 0.7rem }
-  .stat-value { font-size: 1.35rem }
-  .stat-sub { display: none }
-  .hero-card h1 { font-size: 1.2rem }
-  .hero-sub { font-size: 0.8rem }
-}
-@media (max-width: 480px) {
-  .header-inner { padding: 0 14px; height: 54px; gap: 6px }
-  .logo { font-size: 1.08rem }
-  .header-nav { gap: 0 }
-  .header-nav a { font-size: 0.72rem; padding: 5px 8px }
-  .page-wrap { padding: 12px 10px 40px }
-  .hero-card { padding: 20px 16px; border-radius: 12px }
-  .hero-card h1 { font-size: 1.1rem }
-  .hero-sub { font-size: 0.76rem; margin-bottom: 16px }
-  .hero-badge { font-size: 0.62rem; padding: 3px 9px }
-  .stat-value { font-size: 1.25rem }
-  .stat-box { padding: 11px 14px }
-  .data-card { padding: 14px 12px }
-  .card-header { gap: 8px; margin-bottom: 12px; padding-bottom: 10px }
-  .card-icon { width: 28px; height: 28px; font-size: 0.78rem }
-  .card-title { font-size: 0.86rem }
-  .card-sub { font-size: 0.68rem }
-  .pct-label { font-size: 0.74rem }
-  .pct-value { font-size: 0.78rem }
-  .jobs-grid { grid-template-columns: 1fr }
-  .trend-chart { height: 80px; gap: 3px }
-  .footer-grid { grid-template-columns: 1fr; gap: 20px; padding: 0 }
-  .info-box { font-size: 0.78rem; padding: 11px 13px }
-  .breadcrumb-inner { font-size: 0.68rem; padding: 7px 12px }
-  .table-wrap { margin: 0 -12px }
-  .data-table { font-size: 0.76rem; min-width: 340px }
-  .data-table thead th { padding: 9px 10px; font-size: 0.63rem }
-  .data-table tbody td { padding: 9px 10px }
-  .insight-section p { font-size: 0.82rem }
-  .source-tag { font-size: 0.64rem }
-  .trust-bar { padding: 10px 12px; gap: 8px }
-  .trust-item { font-size: 0.72rem }
-  .faq-q { font-size: 0.84rem }
-  .faq-a { font-size: 0.8rem }
-  .sidebar-card { padding: 14px }
-}
-@media (max-width: 360px) {
-  .logo { font-size: 1rem }
-  .page-wrap { padding: 10px 8px 36px }
-  .hero-card { padding: 16px 14px }
-  .hero-card h1 { font-size: 1rem }
-  .hero-sub { font-size: 0.72rem }
-  .stat-value { font-size: 1.15rem }
-  .data-card { padding: 12px 10px }
-  .card-title { font-size: 0.82rem }
-  .info-box { font-size: 0.74rem; padding: 10px 12px }
-  .table-wrap { margin: 0 -8px }
-  .data-table { min-width: 300px }
-  .footer-bottom { font-size: 0.7rem }
-}
-    .key-facts{margin:0;padding-left:20px;line-height:1.7}
-  .key-facts li{margin:4px 0}
-</style>
 </head>
 <body>
+{% include "partials/header.html" %}
 
-<header class="site-header">
-  <div class="header-inner">
-    <a href="/" class="logo">USA<span>Salaries</span></a>
-    <div class="header-search">
-      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" placeholder="Search by job title or state…" aria-label="Search salaries">
-    </div>
-    <nav class="header-nav">
-      <a href="/">Browse</a>
-      <a href="/salary/registered-nurses/">Healthcare</a>
-      <a href="/salary/software-developers/">Tech</a>
-      <a href="/salary/electricians/">Trades</a>
-    </nav>
-    <button class="mobile-menu-btn" aria-label="Open menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
-    </button>
-  </div>
-</header>
+<main id="main" class="container">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="breadcrumb-inner">{{ breadcrumb_html }}</div>
+  </nav>
 
-<div class="mobile-nav-overlay" id="mobileOverlay"></div>
-<nav class="mobile-nav" id="mobileNav">
-  <div class="mobile-nav-close"><button aria-label="Close menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
-  <div class="mobile-nav-links">
-    <a href="/">Browse All Jobs</a>
-    <a href="/salary/registered-nurses/">Healthcare</a>
-    <a href="/salary/software-developers/">Tech</a>
-    <a href="/salary/electricians/">Trades</a>
-    <a href="/about/">About</a>
-    <a href="/methodology/">Methodology</a>
-    <a href="/contact/">Contact</a>
-  </div>
-</nav>
-
-<nav class="breadcrumb" aria-label="Breadcrumb">
-  <div class="breadcrumb-inner">{{ breadcrumb_html }}</div>
-</nav>
-
-<div class="mobile-search">
-  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-  <input type="text" placeholder="Search job titles or states…" aria-label="Search salaries">
-</div>
-
-<div class="page-wrap">
-  <main>
-
-    <div class="hero-card">
-      <div class="hero-badge">📊 {{ source_badge or 'BLS Official Data · May 2025 Release' }}</div>
-      <h1>{{ h1_title }}</h1>
-      <p class="hero-sub">{{ hero_subtitle }}</p>
-      <div class="salary-stats">
-        <div class="stat-box">
-          <div class="stat-label">Average</div>
-          <div class="stat-value">${{ avg_salary_fmt }}</div>
-          <div class="stat-sub">per year</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-label">Median</div>
-          <div class="stat-value">${{ median_salary_fmt }}</div>
-          <div class="stat-sub">per year</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-label">Hourly</div>
-          <div class="stat-value">${{ hourly_rate }}</div>
-          <div class="stat-sub">per hour</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="trust-bar">
-      <div class="trust-item">🏛️ Source: <strong><a href="https://www.bls.gov/oes/" target="_blank" rel="noopener noreferrer" style="color:inherit">U.S. Bureau of Labor Statistics</a></strong></div>
-      <div class="trust-item">📅 Dataset: <strong>{{ dataset_label or 'OEWS May 2025' }}</strong></div>
-      <div class="trust-item">🔄 Published: <strong>May 2026</strong></div>
-      <div class="trust-item">📍 Coverage: <strong>All 50 States + DC</strong></div>
-    </div>
-
-    <div class="data-card">
-      <div class="card-header">
-        <div class="card-icon">📊</div>
-        <div><div class="card-title">Salary Range & Percentiles</div><div class="card-sub">Pay distribution across experience levels</div></div>
-      </div>
-      <div class="pct-item"><div class="pct-row"><span class="pct-label">10th Percentile — Entry Level</span><span class="pct-value">${{ p10_fmt }}</span></div><div class="pbar"><div class="pbar-fill" style="width:18%"></div></div></div>
-      <div class="pct-item"><div class="pct-row"><span class="pct-label">25th Percentile — Junior</span><span class="pct-value">${{ p25_fmt }}</span></div><div class="pbar"><div class="pbar-fill" style="width:38%"></div></div></div>
-      <div class="pct-item"><div class="pct-row"><span class="pct-label">50th Percentile — Median</span><span class="pct-value">${{ median_salary_fmt }}</span></div><div class="pbar"><div class="pbar-fill" style="width:58%"></div></div></div>
-      <div class="pct-item"><div class="pct-row"><span class="pct-label">75th Percentile — Senior</span><span class="pct-value">${{ p75_fmt }}</span></div><div class="pbar"><div class="pbar-fill" style="width:77%"></div></div></div>
-      <div class="pct-item"><div class="pct-row"><span class="pct-label">90th Percentile — Top Earners</span><span class="pct-value">${{ p90_fmt }}</span></div><div class="pbar"><div class="pbar-fill" style="width:100%"></div></div></div>
-      <div class="info-box">💡 {{ percentile_insight }}</div>
-    </div>
-
-    {% if key_facts %}
-    <div class="data-card">
-      <div class="card-header">
-        <div class="card-icon">📌</div>
-        <div><div class="card-title">{{ key_facts_title }}</div><div class="card-sub">{{ key_facts_sub }}</div></div>
-      </div>
-      <ul class="key-facts">
-        {% for f in key_facts %}<li>{{ f }}</li>
-        {% endfor %}
-      </ul>
-    </div>
+  <section class="hero" aria-labelledby="page-title">
+    <div class="provenance"><span>{% if is_estimate %}<span class="tag est">{{ source_badge }}</span>{% else %}{{ source_badge or 'BLS Official Data · May 2025 Release' }}{% endif %}</span></div>
+    {% if pair %}
+    <h1 id="page-title"><a href="{{ pair.occ_url }}">{{ pair.occ_title }}</a> in {{ pair.place }}</h1>
+    {% else %}
+    <h1 id="page-title">{{ h1_title }}</h1>
+    <p class="hero-sub">{{ hero_subtitle }}</p>
     {% endif %}
+    {% if bls_occupation_note %}<p class="hero-sub">{{ bls_occupation_note }}</p>{% endif %}
+    <div class="figure-row">
+      <span class="value num">${{ avg_salary_fmt }}</span>
+      <span class="value-label num"><b>/ year</b> · average (mean) annual wage<br>${{ hourly_rate }} per hour</span>
+    </div>
+    {% if pair %}
+    <p class="pair-context num"><span class="delta {{ 'up' if pair.above else 'down' }}">{{ '▲' if pair.above else '▼' }} {{ pair.diff_pct }}% {{ 'above' if pair.above else 'below' }} U.S. average</span><span aria-hidden="true">·</span><span>{{ pair.rank }} of {{ pair.n_states }} states</span></p>
+    {% endif %}
+    <div class="provenance">
+      <span>Source: <strong><a href="https://www.bls.gov/oes/" target="_blank" rel="noopener noreferrer">U.S. Bureau of Labor Statistics</a></strong></span>
+      <span>Dataset: <strong>{{ dataset_label or 'OEWS May 2025' }}</strong></span>
+      <span>Published: <strong>May 2026</strong></span>
+      <span>Coverage: <strong>All 50 States + DC</strong></span>
+    </div>
+  </section>
 
-    <div class="data-card">
-      <div class="card-header">
-        <div class="card-icon">📈</div>
-        <div><div class="card-title">Salary Growth Trend (2021–2026)</div><div class="card-sub">Six-year compensation trajectory</div></div>
-      </div>
-      <div class="trend-chart">
-        {% for bar in trend_bars %}
-        <div class="trend-col">
-          <div class="trend-amt">${{ bar.short }}</div>
-          <div class="trend-bar" style="height:{{ bar.height }}px"></div>
-          <div class="trend-year">{{ bar.year }}</div>
+  <div class="stats num">
+    <div><span class="k">Average</span><span class="v">${{ avg_salary_fmt }}</span><span class="s">per year</span></div>
+    <div><span class="k">Median</span><span class="v">${{ median_salary_fmt }}</span><span class="s">per year</span></div>
+    <div><span class="k">Hourly</span><span class="v">${{ hourly_rate }}</span><span class="s">per hour</span></div>
+    <div><span class="k">10th – 90th percentile</span><span class="v">${{ p10_fmt }} – ${{ p90_fmt }}</span><span class="s">per year</span></div>
+  </div>
+
+  <div class="page-grid">
+    <div class="content">
+
+      <section class="sec" aria-labelledby="sec-range">
+        <h2 id="sec-range">{{ range_title or 'Salary Range & Percentiles' }}</h2>
+        <p class="sec-sub">Pay distribution across experience levels</p>
+        {% if range_pos %}
+        <div class="range" role="img" aria-label="10th percentile ${{ p10_fmt }}, 25th ${{ p25_fmt }}, median ${{ median_salary_fmt }}, 75th ${{ p75_fmt }}, 90th ${{ p90_fmt }}">
+          <div class="range-track"><div class="band"></div><div class="iqr" style="left:{{ range_pos.p25 }}%;width:{{ range_pos.iqr }}%"></div><div class="mark" style="left:{{ range_pos.median }}%"></div></div>
         </div>
-        {% endfor %}
+        {% endif %}
+        <ul class="pct-list num">
+          <li><span>10th Percentile — Entry Level</span><span class="v">${{ p10_fmt }}</span></li>
+          <li><span>25th Percentile — Junior</span><span class="v">${{ p25_fmt }}</span></li>
+          <li class="mid"><span>50th Percentile — Median</span><span class="v">${{ median_salary_fmt }}</span></li>
+          <li><span>75th Percentile — Senior</span><span class="v">${{ p75_fmt }}</span></li>
+          <li><span>90th Percentile — Top Earners</span><span class="v">${{ p90_fmt }}</span></li>
+        </ul>
+        <p class="info">{{ percentile_insight }}</p>
+      </section>
+
+      {% if key_facts %}
+      <section class="sec" aria-labelledby="sec-facts">
+        <h2 id="sec-facts">{{ key_facts_title }}</h2>
+        <p class="sec-sub">{{ key_facts_sub }}</p>
+        <ul class="facts">
+          {% for f in key_facts %}<li>{{ f }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+
+      {% if comparison_rows %}
+      <section class="sec" aria-labelledby="sec-compare">
+        <h2 id="sec-compare">{{ comparison_table_title }}</h2>
+        <p class="sec-sub">Geographic salary comparison</p>
+        <div class="table-wrap">
+          <table class="data-table num">
+            <thead><tr><th scope="col">{{ comparison_col1 }}</th><th scope="col" class="r">Avg Salary</th><th scope="col" class="r">vs National</th></tr></thead>
+            <tbody>
+              {% for row in comparison_rows %}
+              <tr>
+                <td>
+                  {% if row.url and row.url != canonical_url %}
+                    <a href="{{ row.url }}" class="cell-link">{{ row.name }}</a>
+                  {% else %}
+                    <strong>{{ row.name }}</strong>
+                  {% endif %}
+                </td>
+                <td class="r cell-salary">${{ row.salary_fmt }}</td>
+                <td class="r {{ 'diff-pos' if row.diff_positive else 'diff-neg' }}">{{ '+' if row.diff_positive else '-' }}{{ row.diff_pct }}%</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      {% endif %}
+
+      <section class="sec" aria-labelledby="sec-insight">
+        <h2 id="sec-insight">{{ insight_title }}</h2>
+        <p class="sec-sub">Key factors affecting compensation</p>
+        <div class="prose">
+          <p>{{ insight_p1 }}</p>
+          <p>{{ insight_p2 }}</p>
+          <p>{{ insight_p3 }}</p>
+        </div>
+        <p class="provenance"><a href="https://www.bls.gov/oes/" target="_blank" rel="noopener noreferrer">U.S. Bureau of Labor Statistics</a> · Occupational Employment and Wage Statistics (OES) · May 2025</p>
+      </section>
+
+      <section class="sec" aria-labelledby="sec-related">
+        <h2 id="sec-related">{{ related_jobs_title or 'Compare with Similar Jobs' }}</h2>
+        <p class="sec-sub">Related career salary benchmarks</p>
+        <ul class="rows num">
+          {% for job in related_jobs %}
+          <li><a href="{{ job.url }}" class="row">
+            <span class="t">{{ job.title }}</span>
+            <span class="v">${{ job.salary_fmt }}<span class="m">/yr</span></span>
+            <span class="m">{% if pair %}{{ pair.place }}{% else %}United States{% endif %}</span>
+            <span class="d {{ 'diff-pos' if job.diff_positive else 'diff-neg' }}">{{ '+' if job.diff_positive else '' }}{{ job.diff_pct }}% vs this role</span>
+          </a></li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section class="sec" aria-labelledby="sec-faq">
+        <h2 id="sec-faq">Frequently Asked Questions</h2>
+        <p class="sec-sub">Common questions about this salary</p>
+        <div class="faq">
+          {% for faq in faqs %}
+          <details{% if loop.first %} open{% endif %}>
+            <summary>{{ faq.q }}</summary>
+            <p class="a">{{ faq.a }}</p>
+          </details>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="sec" aria-labelledby="sec-links">
+        <h2 id="sec-links">Related Salary Pages</h2>
+        <p class="sec-sub">Explore more salary data</p>
+        <div class="links-grid">
+          {% for link in related_links %}
+          <a href="{{ link.url }}">{{ link.text }}</a>
+          {% endfor %}
+        </div>
+      </section>
+
+    </div>
+
+    <aside class="aside" aria-label="Quick facts">
+      <div class="panel">
+        <p class="panel-h">Quick Stats</p>
+        <ul class="plain num">
+          <li><span>Average/Year</span><span class="v">${{ avg_salary_fmt }}</span></li>
+          <li><span>Median/Year</span><span class="v">${{ median_salary_fmt }}</span></li>
+          <li><span>Hourly Rate</span><span class="v">${{ hourly_rate }}/hr</span></li>
+          <li><span>Entry Level</span><span class="v">${{ p10_fmt }}/yr</span></li>
+          <li><span>Top 10%</span><span class="v">${{ p90_fmt }}/yr</span></li>
+        </ul>
       </div>
-      <div class="info-box" style="margin-top:16px">📈 {{ trend_insight }}</div>
-    </div>
 
-    <div class="data-card">
-      <div class="card-header">
-        <div class="card-icon">🗺️</div>
-        <div><div class="card-title">{{ comparison_table_title }}</div><div class="card-sub">Geographic salary comparison</div></div>
+      {% if top_states %}
+      <div class="panel">
+        <p class="panel-h">Top Paying States{% if pair %} for {{ pair.occ_title }}{% endif %}</p>
+        <ul class="plain num">
+          {% for s in top_states %}
+          <li><a href="{{ s.url }}">{{ s.name }}</a><span class="v">${{ s.salary_fmt }}</span></li>
+          {% endfor %}
+        </ul>
       </div>
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead><tr><th>{{ comparison_col1 }}</th><th>Avg Salary</th><th>vs National</th><th>Demand</th></tr></thead>
-          <tbody>
-            {% for row in comparison_rows %}
-            <tr>
-              <td>
-                {% if row.url and row.url != canonical_url %}
-                  <a href="{{ row.url }}" class="cell-link">{{ row.name }}</a>
-                {% else %}
-                  <strong>{{ row.name }}</strong>
-                {% endif %}
-              </td>
-              <td class="cell-salary">${{ row.salary_fmt }}</td>
-              <td class="{{ 'diff-pos' if row.diff_positive else 'diff-neg' }}">{{ '+' if row.diff_positive else '-' }}{{ row.diff_pct }}%</td>
-              <td><span class="badge {{ row.demand_class }}">{{ row.demand }}</span></td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+      {% endif %}
+
+      {% if category_jobs %}
+      <div class="panel">
+        <p class="panel-h">Same Category</p>
+        <ul class="plain">
+          {% for j in category_jobs %}
+          <li><a href="{{ j.url }}">{{ j.title }}</a></li>
+          {% endfor %}
+        </ul>
       </div>
-    </div>
+      {% endif %}
 
-    <div class="data-card">
-      <div class="card-header">
-        <div class="card-icon">🔍</div>
-        <div><div class="card-title">{{ insight_title }}</div><div class="card-sub">Key factors affecting compensation</div></div>
+      <div class="panel">
+        <p class="panel-h">Data Source</p>
+        <p><a href="https://www.bls.gov/oes/" target="_blank" rel="noopener noreferrer">U.S. Bureau of Labor Statistics</a> — Occupational Employment &amp; Wage Statistics (OES), May 2025 release. Covers 800+ occupations nationally.</p>
       </div>
-      <div class="insight-section">
-        <p>{{ insight_p1 }}</p>
-        <p>{{ insight_p2 }}</p>
-        <p>{{ insight_p3 }}</p>
-      </div>
-      <div class="source-tag">🏛️ <a href="https://www.bls.gov/oes/" target="_blank" rel="noopener noreferrer" style="color:inherit">U.S. Bureau of Labor Statistics</a> · Occupational Employment and Wage Statistics (OES) · May 2025</div>
-    </div>
-
-    <div class="data-card">
-      <div class="card-header">
-        <div class="card-icon">⚖️</div>
-        <div><div class="card-title">{{ related_jobs_title or 'Compare with Similar Jobs' }}</div><div class="card-sub">Related career salary benchmarks</div></div>
-      </div>
-      <div class="jobs-grid">
-        {% for job in related_jobs %}
-        <a href="{{ job.url }}" class="job-tile">
-          <div class="job-tile-name">{{ job.title }}</div>
-          <div class="job-tile-salary">${{ job.salary_fmt }}<span style="font-size:.73rem;font-weight:500;color:var(--gray-500)">/yr</span></div>
-          <div class="job-tile-diff {{ 'diff-pos' if job.diff_positive else 'diff-neg' }}">{{ '+' if job.diff_positive else '' }}{{ job.diff_pct }}% vs this role</div>
-        </a>
-        {% endfor %}
-      </div>
-    </div>
-
-    <div class="data-card">
-      <div class="card-header">
-        <div class="card-icon">❓</div>
-        <div><div class="card-title">Frequently Asked Questions</div><div class="card-sub">Common questions about this salary</div></div>
-      </div>
-      <ul class="faq-list">
-        {% for faq in faqs %}
-        <li class="faq-item">
-          <div class="faq-q" role="button" aria-expanded="false">
-            <span>{{ faq.q }}</span>
-            <span class="faq-toggle" aria-hidden="true">+</span>
-          </div>
-          <div class="faq-a">{{ faq.a }}</div>
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-
-    <div class="data-card">
-      <div class="card-header">
-        <div class="card-icon">🔗</div>
-        <div><div class="card-title">Related Salary Pages</div><div class="card-sub">Explore more salary data</div></div>
-      </div>
-      <div class="related-grid">
-        {% for link in related_links %}
-        <a href="{{ link.url }}" class="rel-link">{{ link.text }}</a>
-        {% endfor %}
-      </div>
-    </div>
-
-  </main>
-
-  <aside class="sidebar">
-    <div class="sidebar-card">
-      <div class="sidebar-title">📊 Quick Stats</div>
-      <ul class="s-list">
-        <li><span>Average/Year</span><span class="s-salary">${{ avg_salary_fmt }}</span></li>
-        <li><span>Median/Year</span><span class="s-salary">${{ median_salary_fmt }}</span></li>
-        <li><span>Hourly Rate</span><span class="s-salary">${{ hourly_rate }}/hr</span></li>
-        <li><span>Entry Level</span><span class="s-salary">${{ p10_fmt }}/yr</span></li>
-        <li><span>Top 10%</span><span class="s-salary">${{ p90_fmt }}/yr</span></li>
-      </ul>
-    </div>
-
-    {% if top_states %}
-    <div class="sidebar-card">
-      <div class="sidebar-title">🏆 Top Paying States</div>
-      <ul class="s-list">
-        {% for s in top_states %}
-        <li><a href="{{ s.url }}">{{ s.name }}</a><span class="s-salary">${{ s.salary_fmt }}</span></li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endif %}
-
-    {% if top_cities %}
-    <div class="sidebar-card">
-      <div class="sidebar-title">🏙️ Top Paying Cities</div>
-      <ul class="s-list">
-        {% for c in top_cities %}
-        <li>
-          {% if c.url and c.url != canonical_url %}
-            <a href="{{ c.url }}">{{ c.name }}</a>
-          {% else %}
-            <span>{{ c.name }}</span>
-          {% endif %}
-          <span class="s-salary">${{ c.salary_fmt }}</span>
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endif %}
-
-    {% if category_jobs %}
-    <div class="sidebar-card">
-      <div class="sidebar-title">💼 Same Category</div>
-      <ul class="s-list">
-        {% for j in category_jobs %}
-        <li><a href="{{ j.url }}">{{ j.title }}</a></li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endif %}
-
-    <div class="sidebar-card" style="background:linear-gradient(135deg, var(--primary-50) 0%, #e0e7ff 100%);border-color:var(--primary-200)">
-      <div class="sidebar-title" style="color:var(--primary)">🏛️ Data Source</div>
-      <p style="font-size:0.8rem;color:#1e40af;line-height:1.65"><a href="https://www.bls.gov/oes/" target="_blank" rel="noopener noreferrer" style="color:#1e40af;font-weight:600">U.S. Bureau of Labor Statistics</a> — Occupational Employment &amp; Wage Statistics (OES), May 2025 release. Covers 800+ occupations nationally.</p>
-    </div>
-  </aside>
-</div>
-
-<footer class="site-footer">
-  <div class="footer-grid">
-    <div>
-      <div class="footer-logo">USASalaries</div>
-      <p class="footer-desc">Comprehensive salary intelligence for every job, state, and city in America. Sourced from official BLS data.</p>
-    </div>
-    <div class="footer-col">
-      <h4>Top Jobs</h4>
-      <a href="/salary/registered-nurses/">Registered Nurse</a>
-      <a href="/salary/software-developers/">Software Developer</a>
-      <a href="/salary/physician-assistants/">Physician Assistant</a>
-      <a href="/salary/electricians/">Electrician</a>
-      <a href="/salary/accountants-and-auditors/">Accountant</a>
-    </div>
-    <div class="footer-col">
-      <h4>Browse by State</h4>
-      <a href="/salary/registered-nurses/california/">California</a>
-      <a href="/salary/registered-nurses/texas/">Texas</a>
-      <a href="/salary/registered-nurses/new-york/">New York</a>
-      <a href="/salary/registered-nurses/florida/">Florida</a>
-      <a href="/salary/registered-nurses/washington/">Washington</a>
-    </div>
-    <div class="footer-col">
-      <h4>Company</h4>
-      <a href="/about/">About</a>
-      <a href="/methodology/">Methodology</a>
-      <a href="/privacy/">Privacy Policy</a>
-      <a href="/contact/">Contact</a>
-    </div>
+    </aside>
   </div>
-  <div class="footer-bottom">
-    <span>© 2026 USASalaries · Data from U.S. Bureau of Labor Statistics · For informational purposes only.</span>
-    <div class="footer-links"><a href="/privacy/">Privacy</a><a href="/methodology/">Methodology</a><a href="/sitemap.xml">Sitemap</a></div>
-  </div>
-</footer>
+</main>
 
-<script>
-(function(){
-  // Mobile menu
-  var btn=document.querySelector('.mobile-menu-btn');
-  var nav=document.getElementById('mobileNav');
-  var overlay=document.getElementById('mobileOverlay');
-  var closeBtn=nav?nav.querySelector('.mobile-nav-close button'):null;
-  function openMenu(){nav.classList.add('active');overlay.classList.add('active');document.body.style.overflow='hidden'}
-  function closeMenu(){nav.classList.remove('active');overlay.classList.remove('active');document.body.style.overflow=''}
-  if(btn)btn.addEventListener('click',openMenu);
-  if(closeBtn)closeBtn.addEventListener('click',closeMenu);
-  if(overlay)overlay.addEventListener('click',closeMenu);
-
-  // Search
-  var idx=null,dd=null,wrap=null,activeIdx=-1;
-  function init(){
-    document.querySelectorAll('.header-search input, .hero-search input, .mobile-search input').forEach(function(inp){
-      inp.addEventListener('input',onInput);
-      inp.addEventListener('keydown',onKey);
-      inp.addEventListener('focus',function(){if(inp.value.length>1)onInput.call(inp)});
-      inp.addEventListener('click',function(e){e.stopPropagation()});
-    });
-    document.addEventListener('click',function(e){hideAll()});
-  }
-  function getOrCreateDD(inp){
-    var p=inp.closest('.header-search')||inp.closest('.hero-search')||inp.closest('.mobile-search');
-    if(!p)return null;
-    var d=p.querySelector('.search-dd');
-    if(!d){
-      d=document.createElement('div');
-      d.className='search-dd';
-      d.style.cssText='position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.15);max-height:340px;overflow-y:auto;z-index:9999;margin-top:8px;display:none';
-      p.style.position='relative';
-      p.appendChild(d);
-    }
-    return d;
-  }
-  function loadIndex(cb){
-    if(idx)return cb();
-    fetch('/search-index.json').then(function(r){return r.json()}).then(function(d){idx=d;cb()}).catch(function(){});
-  }
-  function doSearch(q){
-    q=(q||'').trim().toLowerCase();
-    if(q.length<2)return;
-    loadIndex(function(){
-      var results=idx.filter(function(item){return item.t.toLowerCase().indexOf(q)>-1});
-      if(results.length>0)window.location.href=results[0].u;
-    });
-  }
-  function onInput(){
-    var inp=this,q=inp.value.trim().toLowerCase();
-    dd=getOrCreateDD(inp);wrap=inp;activeIdx=-1;
-    if(q.length<2){if(dd)dd.style.display='none';return}
-    loadIndex(function(){render(q)});
-  }
-  function render(q){
-    if(!dd||!idx)return;
-    var results=idx.filter(function(item){return item.t.toLowerCase().indexOf(q)>-1}).slice(0,8);
-    if(!results.length){dd.innerHTML='<div style="padding:12px 16px;color:#6b7280;font-size:0.85rem">No results found</div>';dd.style.display='block';return}
-    dd.innerHTML=results.map(function(r,i){
-      return '<a href="'+r.u+'" class="sr-item" data-i="'+i+'" style="display:flex;justify-content:space-between;align-items:center;padding:11px 16px;text-decoration:none;color:#111827;font-size:0.88rem;border-bottom:1px solid #f3f4f6;transition:background .15s">'
-        +'<span style="font-weight:500">'+highlight(r.t,q)+'</span>'
-        +'<span style="font-size:0.78rem;color:#6b7280">'+(r.s?'$'+r.s+'/yr':r.c)+'</span>'
-        +'</a>';
-    }).join('');
-    dd.style.display='block';
-    dd.querySelectorAll('.sr-item').forEach(function(a){
-      a.addEventListener('mouseenter',function(){setActive(+a.dataset.i)});
-    });
-  }
-  function highlight(text,q){
-    var i=text.toLowerCase().indexOf(q);
-    if(i<0)return text;
-    return text.slice(0,i)+'<strong style="color:#2563eb">'+text.slice(i,i+q.length)+'</strong>'+text.slice(i+q.length);
-  }
-  function onKey(e){
-    if(e.key==='Enter'){
-      e.preventDefault();
-      if(dd&&dd.style.display!=='none'&&activeIdx>=0){
-        var items=dd.querySelectorAll('.sr-item');
-        if(items[activeIdx])items[activeIdx].click();
-      }else{
-        doSearch(e.target.value);
-      }
-      return;
-    }
-    if(!dd||dd.style.display==='none')return;
-    var items=dd.querySelectorAll('.sr-item');
-    if(e.key==='ArrowDown'){e.preventDefault();setActive(Math.min(activeIdx+1,items.length-1))}
-    else if(e.key==='ArrowUp'){e.preventDefault();setActive(Math.max(activeIdx-1,0))}
-    else if(e.key==='Escape'){dd.style.display='none'}
-  }
-  function setActive(i){
-    activeIdx=i;
-    var items=dd.querySelectorAll('.sr-item');
-    items.forEach(function(a,j){a.style.background=j===i?'#eff6ff':''});
-  }
-  function hideAll(){
-    document.querySelectorAll('.search-dd').forEach(function(d){d.style.display='none'});
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-
-  // FAQ accordion
-  (function(){
-    var items=document.querySelectorAll('.faq-item');
-    // Open first by default
-    if(items.length>0)items[0].classList.add('faq-open');
-    items.forEach(function(item){
-      var q=item.querySelector('.faq-q');
-      if(!q)return;
-      q.addEventListener('click',function(){
-        var isOpen=item.classList.contains('faq-open');
-        items.forEach(function(i){
-          i.classList.remove('faq-open');
-          var btn=i.querySelector('.faq-q');
-          if(btn)btn.setAttribute('aria-expanded','false');
-        });
-        if(!isOpen){
-          item.classList.add('faq-open');
-          q.setAttribute('aria-expanded','true');
-        }
-      });
-    });
-  })();
-})();
-</script>
+{% include "partials/footer.html" %}
 </body>
 </html>

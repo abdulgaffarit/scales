@@ -83,6 +83,15 @@ def trend_data(avg, yoy_growth, years=6):
         b["height"] = round(30 + 70 * (b["value"] - min_val) / (max_val - min_val + 1))
     return bars
 
+def range_pos(p10, p25, median, p75, p90):
+    """Positions (% of the 10th–90th percentile span) for the pay-range bar."""
+    span = p90 - p10
+    if span <= 0:
+        return None
+    pos = lambda v: round(min(max((v - p10) / span * 100, 0), 100), 1)
+    return {"p25": pos(p25), "median": pos(median), "iqr": round(pos(p75) - pos(p25), 1)}
+
+
 def demand_badge(demand):
     mapping = {
         "Very High": "badge-green",
@@ -98,8 +107,25 @@ def write_page(path, context):
     html = template.render(**context)
     out_path.write_text(html, encoding="utf-8")
 
+ASSETS_DIR  = BASE_DIR / "assets"
+
+
+def asset_version():
+    """Short content hash of the shared CSS/JS, appended as ?v= so the long-lived
+    /assets/* cache is refreshed whenever either file changes."""
+    import hashlib
+    h = hashlib.sha256()
+    for name in ("site.css", "search.js"):
+        h.update((ASSETS_DIR / name).read_bytes())
+    return h.hexdigest()[:10]
+
+
+ASSET_VERSION = asset_version()
+
+
 def base_context():
     return {
+        "asset_version": ASSET_VERSION,
         "site_domain": SITE_DOMAIN,
         "site_name": SITE_NAME,
         "adsense_id": ADSENSE_ID,
@@ -121,11 +147,71 @@ def load_csv(filename):
 # run by the "Refresh BLS OEWS Data" workflow). Without those files the build
 # falls back to cost-of-living estimates so deploys never break.
 
-WAGES = {"job_soc": {}, "national": {}, "state": {}, "release": "May 2025"}
+WAGES = {"job_soc": {}, "national": {}, "state": {}, "release": "May 2025", "fetched": None}
 NAT = {}   # job_slug -> national_stats()
 ST = {}    # job_slug -> {state_slug: state_stats()}
 ROBOTS_INDEX = "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
 ROBOTS_NOINDEX = "noindex, follow"
+
+
+# Jobs whose BLS occupation title is broader than the site's page title
+BLS_OCCUPATION_NOTES = {
+    "mental-health-counselors": "Substance Abuse, Behavioral Disorder, and Mental Health Counselors",
+}
+
+
+def bls_occupation_note(slug):
+    title = BLS_OCCUPATION_NOTES.get(slug)
+    soc = WAGES["job_soc"].get(slug)
+    return f"BLS occupation: {title} (SOC {soc})" if title and soc else ""
+
+
+def no_bls_reason(slug):
+    """None when BLS publishes annual wages; 'hourly' when BLS publishes hourly
+    wages only; 'none' when there is no matching BLS occupation."""
+    if NAT[slug]["real"]:
+        return None
+    row = WAGES["national"].get(WAGES["job_soc"].get(slug))
+    return "hourly" if row and row.get("tot_emp") else "none"
+
+
+def generate_no_bls_page(job, all_jobs, state=None):
+    """Information page (no salary figures, noindex) for jobs without a verified
+    BLS annual wage, so the URL stays reachable without presenting unverified numbers."""
+    slug, title = job["job_slug"], job["job_title"]
+    reason = no_bls_reason(slug)
+    where = f" in {state['state_name']}" if state else ""
+    url = f"/salary/{slug}/{state['state_slug']}/" if state else f"/salary/{slug}/"
+    if reason == "hourly":
+        soc = WAGES["job_soc"][slug]
+        why = (f"The BLS Occupational Employment and Wage Statistics survey (OEWS {WAGES['release']}) publishes only "
+               f"hourly wages for {title}, because this work is rarely full-time and year-round, so no annual salary "
+               f"figure exists. This site does not yet present hourly-only data, so no salary figure is shown here. "
+               f'See the <a href="https://www.bls.gov/oes/current/oes{soc.replace("-", "")}.htm" rel="noopener">BLS '
+               f"occupation profile (SOC {soc})</a> for hourly wages.")
+    else:
+        why = (f"The U.S. Bureau of Labor Statistics does not publish a separate occupation for {title}, and no "
+               f"verified salary source is available, so no salary figure is shown here.")
+    related = [j for j in all_jobs if j["category"] == job["category"] and j["job_slug"] != slug
+               and NAT[j["job_slug"]]["real"]][:8]
+    links = "".join(f'<li><a href="/salary/{j["job_slug"]}/">{j["job_title"]} salary</a></li>' for j in related)
+    back = f'<p><a href="/salary/{slug}/">About {title} salary data</a></p>' if state else ""
+    content = (f"<h1>{title} Salary{where}</h1><p>{why}</p>{back}"
+               + (f"<h2>Related {job['category']} occupations with BLS data</h2><ul>{links}</ul>" if links else "")
+               + '<p><a href="/salary/">Browse all salaries</a></p>')
+    html = env.get_template("static.html").render(
+        **base_context(),
+        page_title=f"{title} Salary{where} | {SITE_NAME}",
+        meta_description=(f"BLS publishes only hourly wages for {title}; annual salary figures are not available."
+                          if reason == "hourly" else
+                          f"No verified salary source is available for {title}{where}; BLS publishes no matching occupation."),
+        canonical_url=url,
+        robots_meta=ROBOTS_NOINDEX,
+        content=Markup(content),
+    )
+    out = OUTPUT_DIR / url.strip("/")
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "index.html").write_text(html, encoding="utf-8")
 
 
 def indexable(stats):
@@ -142,7 +228,14 @@ def load_wages():
     WAGES["state"] = {(r["soc"], r["state"]): r for r in opt("state_wages.csv")}
     meta = DATA_DIR / "oews_meta.json"
     if meta.exists():
-        WAGES["release"] = json.loads(meta.read_text())["release"]
+        info = json.loads(meta.read_text())
+        WAGES["release"] = info["release"]
+        # Sitemap <lastmod> for data-driven pages; ignore anything that isn't YYYY-MM-DD
+        from datetime import date
+        try:
+            WAGES["fetched"] = date.fromisoformat(str(info.get("fetched", ""))).isoformat()
+        except ValueError:
+            WAGES["fetched"] = None
     return bool(WAGES["state"])
 
 
@@ -243,7 +336,6 @@ def generate_job_national(job, all_jobs, states):
     avg     = nat["avg"]
     median  = nat["median"]
     pct     = {k: nat[k] for k in ("p10", "p25", "p75", "p90")}
-    trend   = trend_data(avg, job["yoy_growth"])
     url     = f"/salary/{job['job_slug']}/"
     title   = job["job_title"]
 
@@ -256,6 +348,7 @@ def generate_job_national(job, all_jobs, states):
             "name": s["state_name"],
             "url": f"/salary/{job['job_slug']}/{s['state_slug']}/",
             "salary_val": s_salary,
+            "real": st[s["state_slug"]]["real"],
             "salary_fmt": fmt(s_salary),
             "diff_pct": abs(diff_pct),
             "diff_positive": diff_pct >= 0,
@@ -264,14 +357,20 @@ def generate_job_national(job, all_jobs, states):
         })
     # Sort by salary descending
     all_states_rows.sort(key=lambda x: x["salary_val"], reverse=True)
+    for r in all_states_rows:
+        if not r["real"]:
+            r["name"] += " (est.)"
+    # Rankings/insights quote only states with real BLS figures
+    real_rows = [r for r in all_states_rows if r["real"]] or all_states_rows
 
     # Related jobs (same category first, then others)
-    same_cat = [j for j in all_jobs if j["category"] == job["category"] and j["job_slug"] != job["job_slug"]]
-    other_jobs = [j for j in all_jobs if j["category"] != job["category"]]
+    bls_jobs = [j for j in all_jobs if NAT[j["job_slug"]]["real"]]   # only BLS-backed figures in tiles
+    same_cat = [j for j in bls_jobs if j["category"] == job["category"] and j["job_slug"] != job["job_slug"]]
+    other_jobs = [j for j in bls_jobs if j["category"] != job["category"]]
     related = (same_cat[:6] + other_jobs[:2]) if same_cat else [j for j in all_jobs if j["job_slug"] != job["job_slug"]][:8]
     related_jobs = []
     for r in related:
-        r_avg = int(r["national_avg"])
+        r_avg = NAT[r["job_slug"]]["avg"]
         diff  = round((r_avg - avg) / avg * 100, 1)
         related_jobs.append({
             "title": r["job_title"],
@@ -282,8 +381,8 @@ def generate_job_national(job, all_jobs, states):
         })
 
     # Top states sidebar
-    sidebar_states = [{"name": r["name"], "url": r["url"], "salary_fmt": r["salary_fmt"]} for r in all_states_rows[:6]]
-    top3 = [r["name"] for r in all_states_rows[:3]]
+    sidebar_states = [{"name": r["name"], "url": r["url"], "salary_fmt": r["salary_fmt"]} for r in real_rows[:6]]
+    top3 = [r["name"] for r in real_rows[:3]]
 
     # Category jobs for sidebar
     cat_jobs = [j for j in all_jobs if j["category"] == job["category"] and j["job_slug"] != job["job_slug"]][:6]
@@ -295,23 +394,27 @@ def generate_job_national(job, all_jobs, states):
         {"q": f"What is the starting salary for {title}?",
          "a": f"Entry-level {title} typically earn between ${fmt(pct['p10'])} and ${fmt(pct['p25'])} per year depending on location and employer."},
         {"q": f"What state pays {title} the most?",
-         "a": f"{top3[0]} pays {title} the most at ${all_states_rows[0]['salary_fmt']} per year on average, followed by {top3[1]} (${all_states_rows[1]['salary_fmt']}) and {top3[2]} (${all_states_rows[2]['salary_fmt']})."},
+         "a": f"{top3[0]} pays {title} the most at ${real_rows[0]['salary_fmt']} per year on average, followed by {top3[1]} (${real_rows[1]['salary_fmt']}) and {top3[2]} (${real_rows[2]['salary_fmt']})."},
         {"q": f"How much do {title} make per hour?",
          "a": f"Based on the average annual salary of ${fmt(avg)}, {title} earn approximately ${hourly(avg)} per hour (based on 2,080 working hours/year)."},
         {"q": f"Is {title} a good career in 2026?",
-         "a": f"Yes — the {title} role has {job['demand'].lower()} demand with {job['yoy_growth']}% year-over-year salary growth, indicating a strong and growing career path."},
+         "a": (f"BLS counts {fmt(nat['emp'])} {title} jobs in the United States, " if nat["emp"] else f"For {title}, BLS reports ")
+              + f"with a mean annual wage of ${fmt(avg)} and a median of ${fmt(median)} (OEWS {WAGES['release']}). "
+              "This site does not publish job-growth projections; the BLS Occupational Outlook Handbook covers the outlook for each occupation."},
     ]
 
     ctx = base_context()
     ctx.update({
         "page_title": f"{title} Salary 2026 | {SITE_NAME}",
-        "meta_description": f"Average {title} salary is ${fmt(avg)}/yr in the US (median ${fmt(median)}). Pay in all 50 states, percentiles & hourly rates from BLS OEWS {WAGES['release']} data.",
+        "meta_description": f"Average {title} salary is ${fmt(avg)}/yr in the US (median ${fmt(median)}). Pay in all 50 states, percentiles & hourly rates from BLS OEWS {WAGES['release']} data." if nat["real"] else f"{title}: BLS publishes no matching occupation, so salary figures on this page are unverified estimates.",
+        "robots_meta": ROBOTS_INDEX if nat["real"] else ROBOTS_NOINDEX,
         "og_image": f"https://{SITE_DOMAIN}/og-default.png",
         "canonical_url": url,
         "h1_title": f"{title} Salary in the United States (2026)",
-        "hero_subtitle": f"Based on U.S. Bureau of Labor Statistics data · {fmt(nat['emp'])} jobs nationwide · {job['demand']} Demand" if nat["emp"] else f"Based on U.S. Bureau of Labor Statistics data · {job['demand']} Demand",
-        "source_badge": f"BLS Official Data · OEWS {WAGES['release']}",
-        "dataset_label": f"OEWS {WAGES['release']}",
+        "hero_subtitle": (f"Based on U.S. Bureau of Labor Statistics data · {fmt(nat['emp'])} jobs nationwide · {job['demand']} Demand" if nat["emp"] else f"Based on U.S. Bureau of Labor Statistics data · {job['demand']} Demand") if nat["real"] else "No matching BLS occupation · figures below are unverified estimates, not official data",
+        "source_badge": f"BLS Official Data · OEWS {WAGES['release']}" if nat["real"] else "Unverified estimate · no BLS occupation",
+        "bls_occupation_note": bls_occupation_note(job["job_slug"]),
+        "dataset_label": f"OEWS {WAGES['release']}" if nat["real"] else "Unverified estimate",
         "avg_salary_fmt": fmt(avg),
         "median_salary_fmt": fmt(median),
         "hourly_rate": hourly(avg),
@@ -320,13 +423,13 @@ def generate_job_national(job, all_jobs, states):
         "p75_fmt": fmt(pct["p75"]),
         "p90_fmt": fmt(pct["p90"]),
         "percentile_insight": f"The top 10% of {title} earn ${fmt(pct['p90'])} or more per year. Entry-level professionals can expect to start around ${fmt(pct['p10'])}, with significant growth over the first 5 years.",
-        "trend_bars": trend,
-        "trend_insight": f"{title} salaries have grown {job['yoy_growth']}% year-over-year. Since 2020, the average salary has increased by approximately ${fmt(round(avg - trend[0]['value']))}.",
+        "range_pos": range_pos(pct["p10"], pct["p25"], median, pct["p75"], pct["p90"]),
+        "is_estimate": not nat["real"],
         "comparison_table_title": "Salary by State",
         "comparison_col1": "State",
         "comparison_rows": all_states_rows,
         "insight_title": f"What Factors Affect {title} Salary?",
-        "insight_p1": f"Pay for {title} is influenced by geographic location, years of experience, employer type, and educational background. Location alone is a large factor: {top3[0]} pays an average of ${all_states_rows[0]['salary_fmt']}, while {all_states_rows[-1]['name']} pays ${all_states_rows[-1]['salary_fmt']} — a gap of ${fmt(all_states_rows[0]['salary_val'] - all_states_rows[-1]['salary_val'])} per year.",
+        "insight_p1": f"Pay for {title} is influenced by geographic location, years of experience, employer type, and educational background. Location alone is a large factor: {top3[0]} pays an average of ${real_rows[0]['salary_fmt']}, while {real_rows[-1]['name']} pays ${real_rows[-1]['salary_fmt']} — a gap of ${fmt(real_rows[0]['salary_val'] - real_rows[-1]['salary_val'])} per year.",
         "insight_p2": f"Experience plays a major role in compensation. Entry-level {title} typically earn ${fmt(pct['p10'])}–${fmt(pct['p25'])} per year, while senior professionals with 10+ years of experience can command ${fmt(pct['p75'])}–${fmt(pct['p90'])} annually. Specialization and advanced certifications can further boost earning potential.",
         "insight_p3": f"Employer size also matters. Large corporations and government agencies tend to offer more competitive packages including benefits, retirement plans, and bonuses. The {title} role currently has {job['demand'].lower()} demand in the job market with a {job['yoy_growth']}% growth rate, making it one of the {'most' if float(job['yoy_growth']) > 4 else 'steadily'} growing careers in the {job['category']} sector.",
         "related_jobs": related_jobs,
@@ -336,7 +439,6 @@ def generate_job_national(job, all_jobs, states):
         "breadcrumb_schema": breadcrumb_schema([{"name": "Salaries", "url": "/salary/"}, {"name": f"{title} Salary", "url": url}]),
         "breadcrumb_html": breadcrumb_html([{"name": "Salaries", "url": "/salary/"}, {"name": f"{title} Salary", "url": url}]),
         "top_states": sidebar_states,
-        "top_cities": [],
         "category_jobs": category_jobs,
         "related_links": [{"url": r["url"], "text": f"{title} Salary in {r['name']}"} for r in all_states_rows[:8]],
     })
@@ -357,14 +459,16 @@ def generate_job_state(job, state, all_cities, all_jobs, states):
     avg       = stats["avg"]
     median    = stats["median"]
     pct       = {k: stats[k] for k in ("p10", "p25", "p75", "p90")}
-    trend     = trend_data(avg, job["yoy_growth"])
     url       = f"/salary/{slug}/{state['state_slug']}/"
     title     = job["job_title"]
     sname     = state["state_name"]
     real      = stats["real"]
 
-    # Rank among states by average pay (real data where BLS publishes it)
-    ranked = sorted(states, key=lambda s: st_all[s["state_slug"]]["avg"], reverse=True)
+    # Rank among states by average pay. A real-data page is only compared with other
+    # states that have real BLS figures, so no estimate appears next to BLS data.
+    pool = [s for s in states if st_all[s["state_slug"]]["real"]] if real else states
+    n_states = len(pool)
+    ranked = sorted(pool, key=lambda s: st_all[s["state_slug"]]["avg"], reverse=True)
     rank = next(i for i, s in enumerate(ranked, 1) if s["state_slug"] == state["state_slug"])
     diff_national = round((avg - nat_avg) / nat_avg * 100, 1)
     above = diff_national >= 0
@@ -375,7 +479,8 @@ def generate_job_state(job, state, all_cities, all_jobs, states):
     near_states = near[idx:idx + 8]
 
     # Other jobs in the same category in this state (crawl paths between state pages)
-    same_cat = [j for j in all_jobs if j["category"] == job["category"] and j["job_slug"] != slug]
+    same_cat = [j for j in all_jobs if j["category"] == job["category"] and j["job_slug"] != slug
+                and (ST[j["job_slug"]][state["state_slug"]]["real"] or not real)]
     same_cat.sort(key=lambda j: ST[j["job_slug"]][state["state_slug"]]["avg"], reverse=True)
     related_jobs = []
     for r in same_cat[:8]:
@@ -389,24 +494,8 @@ def generate_job_state(job, state, all_cities, all_jobs, states):
             "diff_positive": diff >= 0,
         })
 
-    # Metro estimates (BLS state average adjusted by metro cost of living)
-    state_cities = [c for c in all_cities if c["state_slug"] == state["state_slug"]]
-    city_rows = []
-    for c in state_cities:
-        c_salary = calc_salary(avg, c["col_multiplier"])
-        diff_pct = round((c_salary - avg) / avg * 100, 1)
-        city_rows.append({
-            "name": f"{c['city_name']} (est.)",
-            "url": "",
-            "salary_fmt": fmt(c_salary),
-            "diff_pct": abs(diff_pct),
-            "diff_positive": diff_pct >= 0,
-            "demand": job["demand"],
-            "demand_class": demand_badge(job["demand"]),
-        })
-
     # State-specific facts
-    facts = [f"{sname} ranks {ordinal(rank)} of {len(states)} states for {title} pay, at ${fmt(avg)} per year "
+    facts = [f"{sname} ranks {ordinal(rank)} of {n_states} states for {title} pay, at ${fmt(avg)} per year "
              f"({abs(diff_national)}% {'above' if above else 'below'} the U.S. average of ${fmt(nat_avg)})."]
     if stats["emp"]:
         share = f" — {round(stats['emp'] / nat['emp'] * 100, 1)}% of all U.S. {title} jobs" if nat["emp"] else ""
@@ -429,7 +518,7 @@ def generate_job_state(job, state, all_cities, all_jobs, states):
         {"q": f"What is the average {title} salary in {sname}?",
          "a": f"The average {title} salary in {sname} is ${fmt(avg)} per year (median ${fmt(median)}), which is {abs(diff_national)}% {'above' if above else 'below'} the national average of ${fmt(nat_avg)}."},
         {"q": f"How does {sname} rank for {title} pay?",
-         "a": f"{sname} ranks {ordinal(rank)} out of {len(states)} states. The highest-paying state is {top_state['state_name']} (${fmt(st_all[top_state['state_slug']]['avg'])}/yr)."},
+         "a": f"{sname} ranks {ordinal(rank)} out of {n_states} states. The highest-paying state is {top_state['state_name']} (${fmt(st_all[top_state['state_slug']]['avg'])}/yr)."},
         {"q": f"How much do entry-level {title} make in {sname}?",
          "a": f"The lowest-paid 10% of {title} in {sname} earn about ${fmt(pct['p10'])} per year and the 25th percentile is ${fmt(pct['p25'])}."},
         {"q": f"How much do {title} make per hour in {sname}?",
@@ -439,19 +528,25 @@ def generate_job_state(job, state, all_cities, all_jobs, states):
         faqs.append({"q": f"How many {title} work in {sname}?",
                      "a": f"BLS counts {fmt(stats['emp'])} {title} jobs in {sname} (OEWS {WAGES['release']})."})
 
-    source = f"BLS OEWS {WAGES['release']}" if real else "BLS national data adjusted for cost of living"
+    if real:
+        source = f"BLS OEWS {WAGES['release']}"
+    elif nat["real"]:
+        source = "BLS national data adjusted for cost of living"
+    else:
+        source = "unverified estimate (no matching BLS occupation)"
 
     ctx = base_context()
     ctx.update({
         "page_title": f"{title} Salary in {sname} (2026) | {SITE_NAME}",
-        "meta_description": f"{title} in {sname} earn ${fmt(avg)}/yr on average ({ordinal(rank)} of {len(states)} states), {abs(diff_national)}% {'above' if above else 'below'} the US average. Percentiles & hourly pay from {source}.",
+        "meta_description": f"{title} in {sname} earn ${fmt(avg)}/yr on average ({ordinal(rank)} of {n_states} states), {abs(diff_national)}% {'above' if above else 'below'} the US average. Percentiles & hourly pay from {source}.",
         "og_image": f"https://{SITE_DOMAIN}/og-default.png",
         "canonical_url": url,
         "robots_meta": ROBOTS_INDEX if indexable(stats) else ROBOTS_NOINDEX,
-        "source_badge": f"BLS Official Data · OEWS {WAGES['release']}" if real else "Estimate · based on BLS national data",
-        "dataset_label": f"OEWS {WAGES['release']}" if real else "Estimate (BLS national × cost of living)",
+        "source_badge": f"BLS Official Data · OEWS {WAGES['release']}" if real else ("Estimate · based on BLS national data" if nat["real"] else "Unverified estimate · no BLS occupation"),
+        "dataset_label": f"OEWS {WAGES['release']}" if real else ("Estimate (BLS national × cost of living)" if nat["real"] else "Unverified estimate"),
         "h1_title": f"{title} Salary in {sname} (2026)",
-        "hero_subtitle": f"{sname} · Ranked {ordinal(rank)} of {len(states)} states · {abs(diff_national)}% {'above' if above else 'below'} national average",
+        "bls_occupation_note": bls_occupation_note(slug),
+        "hero_subtitle": f"{sname} · Ranked {ordinal(rank)} of {n_states} states · {abs(diff_national)}% {'above' if above else 'below'} national average",
         "avg_salary_fmt": fmt(avg),
         "median_salary_fmt": fmt(median),
         "hourly_rate": hourly(avg),
@@ -463,11 +558,11 @@ def generate_job_state(job, state, all_cities, all_jobs, states):
         "key_facts_title": f"{title} in {sname}: Key Facts",
         "key_facts_sub": f"Source: {source}",
         "key_facts": facts,
-        "trend_bars": trend,
-        "trend_insight": f"Trend estimated from {sname}'s current average and the {job['yoy_growth']}% annual growth rate for {job['category'].lower()} occupations.",
-        "comparison_table_title": f"{title} Pay in {sname} Metro Areas (Estimated)",
-        "comparison_col1": "Metro area",
-        "comparison_rows": city_rows if city_rows else [{"name": "Statewide Average", "url": url, "salary_fmt": fmt(avg), "diff_pct": 0, "diff_positive": True, "demand": job["demand"], "demand_class": demand_badge(job["demand"])}],
+        "range_title": f"{title} Pay Range in {sname}",
+        "range_pos": range_pos(pct["p10"], pct["p25"], median, pct["p75"], pct["p90"]),
+        "is_estimate": not real,
+        "pair": {"occ_title": title, "occ_url": f"/salary/{slug}/", "place": sname, "above": above,
+                 "diff_pct": abs(diff_national), "rank": ordinal(rank), "n_states": n_states},
         "insight_title": f"{title} Job Market in {sname}",
         "insight_p1": f"{sname}'s key industries are {state['major_industries']}, and its job market is rated {state['job_market'].lower()}. {title} here earn ${fmt(avg)} on average, placing the state {ordinal(rank)} nationally.",
         "insight_p2": f"With a cost-of-living index of {state['col_multiplier']} (U.S. = 1.00), a {sname} salary of ${fmt(avg)} is roughly equivalent to ${fmt(round(avg / float(state['col_multiplier'])))} at the national average cost of living.",
@@ -480,7 +575,6 @@ def generate_job_state(job, state, all_cities, all_jobs, states):
         "breadcrumb_schema": breadcrumb_schema([{"name": "Salaries", "url": "/salary/"}, {"name": f"{title} Salary", "url": f"/salary/{slug}/"}, {"name": sname, "url": url}]),
         "breadcrumb_html": breadcrumb_html([{"name": "Salaries", "url": "/salary/"}, {"name": f"{title} Salary", "url": f"/salary/{slug}/"}, {"name": sname, "url": url}]),
         "top_states": [{"name": s["state_name"], "url": f"/salary/{slug}/{s['state_slug']}/", "salary_fmt": fmt(st_all[s["state_slug"]]["avg"])} for s in ranked[:6] if s["state_slug"] != state["state_slug"]][:5],
-        "top_cities": [],
         "category_jobs": [],
         "related_links": [{"url": f"/salary/{slug}/{s['state_slug']}/", "text": f"{title} Salary in {s['state_name']}"} for s in near_states],
     })
@@ -576,16 +670,21 @@ def generate_salary_hub(jobs):
     sections = ""
     for cat in sorted(by_cat):
         items = "".join(
-            f'<li><a href="/salary/{j["job_slug"]}/">{j["job_title"]}</a> — ${fmt(NAT[j["job_slug"]]["avg"])}</li>'
+            f'<li><a href="/salary/{j["job_slug"]}/">{j["job_title"]}</a> ' + (f'<span class="v">${fmt(NAT[j["job_slug"]]["avg"])}</span>' if NAT[j["job_slug"]]["real"] else ('<span class="na">BLS hourly data only</span>' if no_bls_reason(j["job_slug"]) == "hourly" else '<span class="na">no BLS occupation</span>')) + '</li>'
             for j in by_cat[cat])
-        sections += f'<h2>{cat} ({len(by_cat[cat])})</h2><ul class="hub-list">{items}</ul>'
+        sections += f'<section class="hub-cat"><h2>{cat} ({len(by_cat[cat])})</h2><ul class="hub-list num">{items}</ul></section>'
+    tools = ('<div class="hub-tools" data-hub-filter hidden><label class="search-box">'
+             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>'
+             '<span class="sr">Filter occupations</span><input type="search" autocomplete="off" placeholder="Filter occupations, e.g. teacher"></label>'
+             '<p class="hub-count" role="status" aria-live="polite"></p><p class="hub-empty" hidden>No occupation matches that filter.</p></div>')
     html = env.get_template("static.html").render(
         **base_context(),
+        nav_current="salary",
         page_title=f"All Salaries by Job ({len(jobs)} Occupations) | {SITE_NAME}",
         meta_description=f"Browse average salaries for {len(jobs)} occupations by category, with pay in every U.S. state from BLS OEWS {WAGES['release']} data.",
         canonical_url="/salary/",
         content=Markup(f"<h1>All Salaries by Job</h1><p>Average annual pay for {len(jobs)} occupations from the U.S. Bureau of Labor Statistics "
-                       f"(OEWS {WAGES['release']}). Choose a job to see pay in every state.</p>" + sections),
+                       f"(OEWS {WAGES['release']}). Choose a job to see pay in every state.</p>" + tools + sections),
     )
     (OUTPUT_DIR / "salary").mkdir(parents=True, exist_ok=True)
     (OUTPUT_DIR / "salary" / "index.html").write_text(html, encoding="utf-8")
@@ -594,6 +693,7 @@ def generate_salary_hub(jobs):
 
 def generate_homepage(jobs, states):
     """Generate modern homepage using template"""
+    jobs = [j for j in jobs if NAT[j["job_slug"]]["real"]]  # homepage shows BLS-backed figures only
     out_path = OUTPUT_DIR / "index.html"
     hp_template = env.get_template("homepage.html")
 
@@ -602,64 +702,67 @@ def generate_homepage(jobs, states):
     for j in jobs:
         categories[j["category"]].append(j)
 
-    cat_icons = {
-        "Healthcare":"🏥","Technology":"💻","Finance":"💰","Engineering":"⚙️",
-        "Education":"🎓","Management":"📊","Skilled Trades":"🔧","Transportation":"🚛",
-        "Sales":"📈","Legal":"⚖️","Marketing":"📣","Creative":"🎨","Science":"🔬",
-        "Social Services":"🤝","Public Safety":"🛡️","Human Resources":"👥",
-        "Construction":"🏗️","Real Estate":"🏠","Hospitality":"🍽️",
-        "Personal Services":"✂️","Business":"💼","Manufacturing":"🏭","Agriculture":"🌾",
-    }
-
     # Category nav pills
     cat_nav = "".join(
-        f'<a href="#cat-{c.lower().replace(" ","-")}">{cat_icons.get(c,"💼")} {c}</a>'
+        f'<a class="chip" href="#cat-{c.lower().replace(" ","-")}">{c}</a>'
         for c in sorted(categories.keys())
     )
 
-    # Category sections
+    # Category sections: every BLS-backed occupation, highest pay first
     cat_sections = ""
     for cat_name in sorted(categories.keys()):
-        cat_jobs = sorted(categories[cat_name], key=lambda x: int(x["national_avg"]), reverse=True)
-        icon = cat_icons.get(cat_name, "💼")
+        cat_jobs = sorted(categories[cat_name], key=lambda x: NAT[x["job_slug"]]["avg"], reverse=True)
         anchor = cat_name.lower().replace(" ", "-")
-        cards = "".join(
-            f'<a href="/salary/{j["job_slug"]}/" class="job-tile">'
-            f'<div class="tile-name">{j["job_title"]}</div>'
-            f'<div class="tile-salary">${fmt(int(j["national_avg"]))}<span>/yr</span></div>'
-            f'<div class="tile-demand {("d-high" if j["demand"] in ["Very High","High"] else "d-mid")}">{j["demand"]} Demand</div>'
-            f'</a>'
+        rows = "".join(
+            f'<li><a href="/salary/{j["job_slug"]}/"><span>{j["job_title"]}</span>'
+            f'<span class="v">${fmt(NAT[j["job_slug"]]["avg"])}</span></a></li>'
             for j in cat_jobs
         )
         cat_sections += (
-            f'<section class="cat-section" id="cat-{anchor}">'
-            f'<div class="cat-hdr"><span class="cat-icon">{icon}</span>'
-            f'<h2 class="cat-name">{cat_name}</h2>'
+            f'<section class="cat-section" id="cat-{anchor}" aria-labelledby="h-cat-{anchor}">'
+            f'<div class="cat-hdr"><h2 id="h-cat-{anchor}">{cat_name}</h2>'
             f'<span class="cat-count">{len(cat_jobs)} jobs</span></div>'
-            f'<div class="cat-grid">{cards}</div>'
+            f'<ul class="cat-grid num">{rows}</ul>'
             f'</section>'
         )
 
-    # Top paying jobs (sidebar)
-    top_jobs = sorted(jobs, key=lambda x: int(x["national_avg"]), reverse=True)[:8]
+    # Highest-paying occupations
+    top_jobs = sorted(jobs, key=lambda x: NAT[x["job_slug"]]["avg"], reverse=True)[:8]
     top_jobs_html = "".join(
-        f'<div class="top-job-item">'
-        f'<a href="/salary/{j["job_slug"]}/" class="top-job-name">{j["job_title"]}</a>'
-        f'<span class="top-job-salary">${fmt(int(j["national_avg"]))}</span>'
-        f'</div>'
+        f'<li><a href="/salary/{j["job_slug"]}/">{j["job_title"]}</a>'
+        f'<span class="v">${fmt(NAT[j["job_slug"]]["avg"])}</span></li>'
         for j in top_jobs
     )
 
-    # Trending jobs by growth
-    trending_html = "".join(
-        f'<li><span class="trending-num">{i+1}</span><a href="/salary/{j["job_slug"]}/">{j["job_title"]}</a></li>'
-        for i, j in enumerate(sorted(jobs, key=lambda x: float(x["yoy_growth"]), reverse=True)[:7])
+    # Largest occupations by BLS employment, with the 10th–90th percentile range on a shared scale
+    largest = sorted(jobs, key=lambda x: NAT[x["job_slug"]]["emp"] or 0, reverse=True)[:6]
+    popular_rows = "".join(
+        f'<li><a href="/salary/{j["job_slug"]}/" class="row"><span class="t">{j["job_title"]}</span>'
+        f'<span class="v">${fmt(NAT[j["job_slug"]]["avg"])}</span>'
+        f'<span class="m">{fmt(NAT[j["job_slug"]]["emp"])} jobs · median ${fmt(NAT[j["job_slug"]]["median"])}</span>'
+        f'<span class="d">${fmt(NAT[j["job_slug"]]["p10"])}–${fmt(NAT[j["job_slug"]]["p90"])}</span></a></li>'
+        for j in largest
     )
+    chip_slugs = ["registered-nurses", "software-developers", "electricians", "accountants-and-auditors"]
+    by_slug = {j["job_slug"]: j for j in jobs}
+    popular_chips = "".join(f'<a class="chip" href="/salary/{s}/">{by_slug[s]["job_title"]}</a>'
+                            for s in chip_slugs if s in by_slug)
+
+    # "Compare by state" example, from real BLS state figures only
+    compare_note = "Every occupation page ranks the states that have BLS data."
+    rn = ST.get("registered-nurses", {})
+    rn_real = sorted(((s, rn[s["state_slug"]]["avg"]) for s in states if rn.get(s["state_slug"], {}).get("real")),
+                     key=lambda x: x[1], reverse=True)
+    if len(rn_real) > 1:
+        (hi, hi_v), (lo, lo_v) = rn_real[0], rn_real[-1]
+        compare_note += (f' Example: Registered Nurses earn most in <a href="/salary/registered-nurses/{hi["state_slug"]}/">'
+                         f'{hi["state_name"]}</a> (${fmt(hi_v)}) and least in '
+                         f'<a href="/salary/registered-nurses/{lo["state_slug"]}/">{lo["state_name"]}</a> (${fmt(lo_v)}).')
 
     # Footer content
     footer_top_jobs = "".join(
         f'<a href="/salary/{j["job_slug"]}/">{j["job_title"]}</a>'
-        for j in sorted(jobs, key=lambda x: int(x["national_avg"]), reverse=True)[:6]
+        for j in sorted(jobs, key=lambda x: NAT[x["job_slug"]]["avg"], reverse=True)[:6]
     )
     footer_states = "".join(
         f'<a href="/salary/registered-nurses/{s["state_slug"]}/">{s["state_name"]}</a>'
@@ -691,19 +794,19 @@ def generate_homepage(jobs, states):
     }, indent=2)
 
     html = hp_template.render(
-        site_domain=SITE_DOMAIN,
-        site_name=SITE_NAME,
-        page_title=f"US Salary Data 2026 by Job, State & City | {SITE_NAME}",
-        meta_description=f"Explore 2026 US salary data for {len(jobs)}+ jobs across every state and major city. Compare pay by location, career level, and industry using official BLS data.",
+        **base_context(),
+        page_title=f"US Salary Data 2026 by Job & State | {SITE_NAME}",
+        meta_description=f"Explore 2026 U.S. salary data for {len(jobs)} jobs nationally, plus state-level pay from official BLS data. Compare salaries across the United States.",
         schema_json=Markup(schema_json),
-        org_schema_json=Markup(org_schema_json),
         og_image=f"https://{SITE_DOMAIN}/og-default.png",
         job_count=len(jobs),
-        page_count=f"{len(jobs) * len(states) + len(jobs) + 1:,}",
+        release=WAGES["release"],
         cat_nav=Markup(cat_nav),
         cat_sections=Markup(cat_sections),
         top_jobs_html=Markup(top_jobs_html),
-        trending_html=Markup(trending_html),
+        popular_rows=Markup(popular_rows),
+        popular_chips=Markup(popular_chips),
+        compare_note=Markup(compare_note),
         footer_top_jobs=Markup(footer_top_jobs),
         footer_states=Markup(footer_states),
     )
@@ -714,13 +817,16 @@ def generate_homepage(jobs, states):
 def generate_sitemap(jobs, states, cities):
     from datetime import date
     today = date.today().strftime("%Y-%m-%d")
-    data_release_date = "2026-05-01"  # BLS OES May 2025 release date — only update when data refreshes
+    # Data-driven pages change when BLS data is refreshed; fall back to the May 2025 release date
+    data_release_date = WAGES["fetched"] or "2026-05-01"
 
     # Sitemap 1: high-priority pages (homepage + all national job pages)
     priority_urls = []
     priority_urls.append((f"https://{SITE_DOMAIN}/", "1.0", "weekly", today))
     priority_urls.append((f"https://{SITE_DOMAIN}/salary/", "0.9", "monthly", data_release_date))
     for j in jobs:
+        if not NAT[j["job_slug"]]["real"]:
+            continue  # noindex: no BLS occupation
         priority_urls.append((f"https://{SITE_DOMAIN}/salary/{j['job_slug']}/", "0.9", "monthly", data_release_date))
 
     # Sitemap 2: state pages (lower priority — large volume, less unique)
@@ -759,24 +865,24 @@ def generate_sitemap(jobs, states, cities):
 
 
 def generate_search_index(jobs, states):
-    """Generate a lightweight JSON search index for client-side search"""
-    index = []
+    """Client-side search index (read by assets/search.js).
+
+    {"v": 2, "j": [[title, slug, category, us_mean, us_employment, [state ids without an
+    indexable page]]], "s": [[state name, slug, postal code]]}
+
+    Only indexable destinations are included: occupations without a BLS annual wage
+    (noindex info pages) are left out, and each occupation lists the states whose page
+    is noindex so search sends those queries to the national page instead. There are no
+    state overview pages, so states are never entries of their own."""
+    index = {"v": 2, "j": [], "s": [[s["state_name"], s["state_slug"], s["abbreviation"]] for s in states]}
     for j in jobs:
-        index.append({
-            "t": j["job_title"],
-            "u": f"/salary/{j['job_slug']}/",
-            "s": fmt(int(j["national_avg"])),
-            "c": j["category"],
-        })
-    for s in states:
-        index.append({
-            "t": s["state_name"],
-            "u": f"/salary/registered-nurses/{s['state_slug']}/",
-            "s": "",
-            "c": "State",
-        })
-    (OUTPUT_DIR / "search-index.json").write_text(json.dumps(index), encoding="utf-8")
-    print(f"✅ Search index: {len(index)} entries")
+        slug = j["job_slug"]
+        if not NAT[slug]["real"]:
+            continue
+        missing = [i for i, s in enumerate(states) if not indexable(ST[slug][s["state_slug"]])]
+        index["j"].append([j["job_title"], slug, j["category"], NAT[slug]["avg"], NAT[slug]["emp"] or 0, missing])
+    (OUTPUT_DIR / "search-index.json").write_text(json.dumps(index, separators=(",", ":")), encoding="utf-8")
+    print(f"✅ Search index: {len(index['j'])} occupations, {len(index['s'])} states")
 
 
 def generate_static_pages(jobs):
@@ -793,7 +899,7 @@ def generate_static_pages(jobs):
 <h1>About {SITE_NAME}</h1>
 <p class="subtitle">Comprehensive salary intelligence powered by official government data.</p>
 
-<p><strong>{SITE_NAME}</strong> provides accurate, up-to-date salary information for hundreds of occupations across every U.S. state and major city. Our mission is to help workers, job seekers, employers, and researchers make informed decisions about compensation.</p>
+<p><strong>{SITE_NAME}</strong> provides accurate, up-to-date salary information for hundreds of occupations across every U.S. state. Our mission is to help workers, job seekers, employers, and researchers make informed decisions about compensation.</p>
 
 <h2>What We Do</h2>
 <p>We transform complex government wage data into clear, accessible salary insights. Every data point on this site comes directly from the U.S. Bureau of Labor Statistics Occupational Employment and Wage Statistics (OES) program — the gold standard for occupational wage data in the United States.</p>
@@ -804,7 +910,6 @@ def generate_static_pages(jobs):
 <li><strong>{len(jobs)}+ occupations</strong> with detailed salary breakdowns</li>
 <li><strong>51 geographic areas</strong> (all 50 states + District of Columbia)</li>
 <li><strong>Percentile data</strong> from entry-level (10th) to top earners (90th)</li>
-<li><strong>Year-over-year trends</strong> showing salary growth trajectories</li>
 <li><strong>Updated annually</strong> with each new BLS data release</li>
 </ul>
 </div>
@@ -861,15 +966,13 @@ def generate_static_pages(jobs):
 <li><strong>90th percentile</strong> — Top-earner wages (only 10% earn more)</li>
 </ul>
 
-<h2>Geographic Adjustments</h2>
-<p>State-level salary estimates are calculated using cost-of-living multipliers derived from BLS regional price data. These multipliers reflect the relative cost of living in each state compared to the national average, providing a more accurate picture of compensation by location.</p>
+<h2>State Salary Figures</h2>
+<p>State salaries come from the BLS OEWS state estimates for the same May 2025 release. Each occupation is matched to its Standard Occupational Classification (SOC) code, and the state page shows the mean, median and 10th, 25th, 75th and 90th percentile annual wages, employment and location quotient that BLS publishes for that occupation in that state. National figures come from the BLS national estimates in the same way. Hourly equivalents are the annual mean divided by 2,080 hours.</p>
+<p>State rankings compare only states for which BLS publishes a figure for the occupation. BLS does not publish every occupation in every state, usually because the estimate would not meet its reliability or confidentiality standards.</p>
 
 <div class="highlight">
-<strong>Important:</strong> Geographic salary differences reflect both cost-of-living variations and local labor market conditions. A higher salary in an expensive state may not represent greater purchasing power.
+<strong>Where BLS publishes no state figure:</strong> the page shows an estimate calculated from the national BLS figure and a state cost-of-living multiplier. These pages are labelled as estimates, are kept out of search engines (noindex) and are not listed in the sitemap. Rankings and “highest-paying state” figures use only states with BLS data; where an occupation’s state table includes an estimate, it is marked “(est.)”.
 </div>
-
-<h2>Salary Growth Trends</h2>
-<p>Year-over-year growth rates are calculated from historical OES data releases. The 6-year trend charts show the trajectory of average wages for each occupation, helping users understand whether compensation is growing, stable, or declining.</p>
 
 <h2>Demand Indicators</h2>
 <p>Demand levels (Very High, High, Medium) are determined by total national employment in each occupation:</p>
@@ -1012,8 +1115,8 @@ def generate_static_pages(jobs):
         out_path = OUTPUT_DIR / slug / "index.html"
         out_path.parent.mkdir(parents=True, exist_ok=True)
         html = static_template.render(
-            site_domain=SITE_DOMAIN,
-            site_name=SITE_NAME,
+            **base_context(),
+            nav_current=slug,
             page_title=page["page_title"],
             meta_description=page["meta_description"],
             canonical_url=page["canonical_url"],
@@ -1026,12 +1129,13 @@ def generate_static_pages(jobs):
 
 def generate_llms_txt(jobs):
     """Generate llms.txt for AI crawler discovery and citation"""
+    jobs = [j for j in jobs if NAT[j["job_slug"]]["real"]]  # cite BLS-backed occupations only
     from collections import defaultdict
     cats = defaultdict(list)
     for j in jobs:
         cats[j["category"]].append(j["job_title"])
 
-    top_jobs = sorted(jobs, key=lambda x: int(x["national_avg"]), reverse=True)[:20]
+    top_jobs = sorted(jobs, key=lambda x: NAT[x["job_slug"]]["avg"], reverse=True)[:20]
 
     lines = [
         f"# {SITE_NAME}",
@@ -1059,7 +1163,7 @@ def generate_llms_txt(jobs):
         "",
     ]
     for j in top_jobs:
-        lines.append(f"- {j['job_title']}: ${int(j['national_avg']):,}/yr — https://{SITE_DOMAIN}/salary/{j['job_slug']}/")
+        lines.append(f"- {j['job_title']}: ${NAT[j['job_slug']]['avg']:,}/yr — https://{SITE_DOMAIN}/salary/{j['job_slug']}/")
 
     lines += [
         "",
@@ -1176,7 +1280,7 @@ def generate_cloudflare_files():
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://static.cloudflareinsights.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://adservice.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://static.cloudflareinsights.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://adservice.google.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://static.cloudflareinsights.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'
 
 /
   Cache-Control: public, max-age=3600, must-revalidate
@@ -1186,6 +1290,9 @@ def generate_cloudflare_files():
 
 /*.json
   Cache-Control: public, max-age=3600
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
 
 /*.xml
   Cache-Control: public, max-age=3600
@@ -1256,6 +1363,23 @@ Allow: /
     (OUTPUT_DIR / "robots.txt").write_text(robots)
 
 
+def run_search_tests():
+    """Search correctness is a build requirement: tests/search.test.js checks the
+    generated index against the built pages (right destination, never a noindex page,
+    a state alone never resolves to one occupation). Needs Node; skipped without it."""
+    import subprocess
+    node = shutil.which("node")
+    if not node:
+        print("⚠️  Node not found — search tests skipped")
+        return
+    res = subprocess.run([node, str(BASE_DIR / "tests" / "search.test.js"), str(OUTPUT_DIR)],
+                         capture_output=True, text=True)
+    print(res.stdout.strip())
+    if res.returncode != 0:
+        print(res.stderr.strip())
+        raise SystemExit("❌ Search tests failed")
+
+
 # ─── MAIN BUILD ────────────────────────────────────────────────────────────────
 def main():
     print("🚀 SalaryScale Build System Starting...")
@@ -1287,7 +1411,10 @@ def main():
 
     # National job pages
     for job in jobs:
-        generate_job_national(job, jobs, states)
+        if no_bls_reason(job["job_slug"]):
+            generate_no_bls_page(job, jobs)
+        else:
+            generate_job_national(job, jobs, states)
         total_pages += 1
 
     print(f"✅ {len(jobs)} national job pages generated")
@@ -1298,7 +1425,10 @@ def main():
     # State pages
     for job in jobs:
         for state in states:
-            generate_job_state(job, state, cities, jobs, states)
+            if no_bls_reason(job["job_slug"]):
+                generate_no_bls_page(job, jobs, state)
+            else:
+                generate_job_state(job, state, cities, jobs, states)
             total_pages += 1
 
     print(f"✅ {len(jobs) * len(states)} state pages generated")
@@ -1336,6 +1466,12 @@ def main():
         if src.exists():
             shutil.copy2(src, OUTPUT_DIR / dst_name)
     print(f"✅ Copied {copied} favicon files to output" if copied else "⚠️  No favicon files found")
+
+    # Shared stylesheet, search script and self-hosted fonts (no third-party font requests)
+    shutil.copytree(ASSETS_DIR, OUTPUT_DIR / "assets")
+    print(f"✅ Assets copied (version {ASSET_VERSION})")
+
+    run_search_tests()
 
     print(f"\n🎉 BUILD COMPLETE!")
     print(f"📄 Total pages: {total_pages:,}")

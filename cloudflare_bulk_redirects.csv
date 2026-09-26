@@ -1,5 +1,14 @@
 usasalaries.pages.dev/,https://usasalaries.com/,301,TRUE,FALSE,TRUE,TRUE
 scales-dui.pages.dev/,https://usasalaries.com/,301,TRUE,FALSE,TRUE,TRUE
+usasalaries.com/salary/chefs-and-head-cooks/,https://usasalaries.com/salary/chefs/,301,TRUE,FALSE,TRUE,TRUE
+usasalaries.com/salary/training-and-development-specialists/,https://usasalaries.com/salary/training-development-specialists/,301,TRUE,FALSE,TRUE,TRUE
+usasalaries.com/salary/hvac-mechanics-and-installers/,https://usasalaries.com/salary/hvac-technicians/,301,TRUE,FALSE,TRUE,TRUE
+usasalaries.com/salary/welders-cutters-solderers-and-brazers/,https://usasalaries.com/salary/welders/,301,TRUE,FALSE,TRUE,TRUE
+usasalaries.com/salary/police-and-sheriff-patrol-officers/,https://usasalaries.com/salary/police-officers/,301,TRUE,FALSE,TRUE,TRUE
+usasalaries.com/salary/school-counselors/,https://usasalaries.com/salary/educational-guidance-and-career-counselors/,301,TRUE,FALSE,TRUE,TRUE
+usasalaries.com/salary/respiratory-therapists-advanced/,https://usasalaries.com/salary/respiratory-therapists/,301,TRUE,FALSE,TRUE,TRUE
+usasalaries.com/salary/esl-teachers/,https://usasalaries.com/salary/adult-basic-education-teachers/,301,TRUE,FALSE,TRUE,TRUE
+usasalaries.com/salary/public-relations-and-fundraising-managers/,https://usasalaries.com/salary/public-relations-managers/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/financial-examiner/,https://usasalaries.com/salary/financial-examiners/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/database-administrator/,https://usasalaries.com/salary/database-administrators/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/hvac-technician/,https://usasalaries.com/salary/hvac-technicians/,301,TRUE,FALSE,TRUE,TRUE
@@ -55,7 +64,7 @@ usasalaries.com/salary/financial-manager/,https://usasalaries.com/salary/financi
 usasalaries.com/salary/market-research-analyst/,https://usasalaries.com/salary/market-research-analysts/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/middle-school-teacher/,https://usasalaries.com/salary/middle-school-teachers/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/natural-sciences-manager/,https://usasalaries.com/salary/natural-sciences-managers/,301,TRUE,FALSE,TRUE,TRUE
-usasalaries.com/salary/public-relations-manager/,https://usasalaries.com/salary/public-relations-and-fundraising-managers/,301,TRUE,FALSE,TRUE,TRUE
+usasalaries.com/salary/public-relations-manager/,https://usasalaries.com/salary/public-relations-managers/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/special-education-teacher/,https://usasalaries.com/salary/special-education-teachers/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/compensation-and-benefits-manager/,https://usasalaries.com/salary/compensation-and-benefits-specialists/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/dental-hygienist/,https://usasalaries.com/salary/dental-hygienists/,301,TRUE,FALSE,TRUE,TRUE
@@ -127,7 +136,7 @@ usasalaries.com/salary/butcher/,https://usasalaries.com/salary/butchers-and-meat
 usasalaries.com/salary/cook-institution/,https://usasalaries.com/salary/cooks-institution-and-cafeteria/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/customer-service-representative/,https://usasalaries.com/salary/customer-service-representatives/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/environmental-science-technician/,https://usasalaries.com/salary/environmental-science-technicians/,301,TRUE,FALSE,TRUE,TRUE
-usasalaries.com/salary/esl-teacher/,https://usasalaries.com/salary/esl-teachers/,301,TRUE,FALSE,TRUE,TRUE
+usasalaries.com/salary/esl-teacher/,https://usasalaries.com/salary/adult-basic-education-teachers/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/financial-risk-analyst/,https://usasalaries.com/salary/financial-and-investment-analysts/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/glazier/,https://usasalaries.com/salary/glaziers/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/kindergarten-teacher/,https://usasalaries.com/salary/kindergarten-teachers/,301,TRUE,FALSE,TRUE,TRUE
@@ -175,7 +184,7 @@ usasalaries.com/salary/production-supervisor/,https://usasalaries.com/salary/fir
 usasalaries.com/salary/purchasing-agent/,https://usasalaries.com/salary/purchasing-managers/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/recreation-worker/,https://usasalaries.com/salary/recreation-workers/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/retail-salesperson/,https://usasalaries.com/salary/retail-salespersons/,301,TRUE,FALSE,TRUE,TRUE
-usasalaries.com/salary/school-counselor/,https://usasalaries.com/salary/school-counselors/,301,TRUE,FALSE,TRUE,TRUE
+usasalaries.com/salary/school-counselor/,https://usasalaries.com/salary/educational-guidance-and-career-counselors/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/surgical-technologist/,https://usasalaries.com/salary/surgical-technologists/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/systems-administrator/,https://usasalaries.com/salary/network-and-computer-systems-administrators/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/tax-preparer/,https://usasalaries.com/salary/tax-preparers/,301,TRUE,FALSE,TRUE,TRUE
@@ -269,7 +278,7 @@ usasalaries.com/salary/fire-investigator/,https://usasalaries.com/salary/detecti
 usasalaries.com/salary/first-line-food-supervisor/,https://usasalaries.com/salary/first-line-supervisors-of-food-preparation/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/forest-conservation-worker/,https://usasalaries.com/salary/forest-and-conservation-workers/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/frontend-developer/,https://usasalaries.com/salary/web-developers/,301,TRUE,FALSE,TRUE,TRUE
-usasalaries.com/salary/fundraiser/,https://usasalaries.com/salary/public-relations-and-fundraising-managers/,301,TRUE,FALSE,TRUE,TRUE
+usasalaries.com/salary/fundraiser/,https://usasalaries.com/salary/fundraising-managers/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/insurance-sales-agent/,https://usasalaries.com/salary/insurance-sales-agents/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/logistics-manager/,https://usasalaries.com/salary/logisticians/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/marine-engineer/,https://usasalaries.com/salary/marine-engineers-and-naval-architects/,301,TRUE,FALSE,TRUE,TRUE
@@ -287,7 +296,7 @@ usasalaries.com/salary/psychiatric-technician/,https://usasalaries.com/salary/ps
 usasalaries.com/salary/quality-assurance-engineer/,https://usasalaries.com/salary/software-quality-assurance-analysts/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/reinforcing-iron-worker/,https://usasalaries.com/salary/reinforcing-iron-and-rebar-workers/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/renewable-energy-engineer/,https://usasalaries.com/salary/engineers-all-other/,301,TRUE,FALSE,TRUE,TRUE
-usasalaries.com/salary/respiratory-therapist-advanced/,https://usasalaries.com/salary/respiratory-therapists-advanced/,301,TRUE,FALSE,TRUE,TRUE
+usasalaries.com/salary/respiratory-therapist-advanced/,https://usasalaries.com/salary/respiratory-therapists/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/security-manager/,https://usasalaries.com/salary/security-guards/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/skincare-specialist/,https://usasalaries.com/salary/skincare-specialists/,301,TRUE,FALSE,TRUE,TRUE
 usasalaries.com/salary/substance-abuse-counselor/,https://usasalaries.com/salary/mental-health-counselors/,301,TRUE,FALSE,TRUE,TRUE

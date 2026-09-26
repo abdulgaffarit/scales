@@ -37,7 +37,6 @@ respiratory-therapists,Respiratory Therapists,Healthcare,77080,74540,53440,10302
 surgical-technologists,Surgical Technologists,Healthcare,63370,60700,40280,92350,4.2,Medium,116700
 veterinary-technologists,Veterinary Technologists,Healthcare,44430,42180,30280,60440,4.2,Medium,121800
 athletic-trainers,Athletic Trainers,Healthcare,57680,53750,36280,82680,4.2,Medium,32400
-respiratory-therapists-advanced,Respiratory Therapists Advanced,Healthcare,79420,76580,55230,105920,4.2,Medium,142100
 occupational-health-safety-specialists,Occupational Health Safety Specialists,Healthcare,82680,78450,50280,122680,4.2,Medium,128400
 software-developers,Software Developers,Technology,148100,135980,82460,214670,5.5,Very High,1687890
 information-security-analysts,Information Security Analysts,Technology,132510,129180,75090,199850,5.5,Medium,190650
@@ -64,7 +63,8 @@ construction-managers,Construction Managers,Management,124360,114990,69690,18944
 architectural-and-engineering-managers,Architectural and Engineering Managers,Management,181540,171270,120810,262760,3.5,High,220260
 medical-and-health-services-managers,Medical and Health Services Managers,Management,140970,123860,73390,224340,3.5,Very High,597080
 chief-executives,Chief Executives,Management,246440,218680,82680,428550,3.5,High,200520
-public-relations-and-fundraising-managers,Public Relations and Fundraising Managers,Management,148680,132450,68680,239200,3.5,Medium,76900
+public-relations-managers,Public Relations Managers,Management,164760,146910,82410,284990,3.5,Medium,74850
+fundraising-managers,Fundraising Managers,Management,140020,125470,75130,222350,3.5,Medium,38810
 administrative-services-managers,Administrative Services Managers,Management,115680,104680,62680,182680,3.5,High,338400
 facilities-managers,Facilities Managers,Management,108680,99680,58680,172680,3.5,Medium,128400
 industrial-production-managers,Industrial Production Managers,Management,126680,116680,72680,196680,3.5,Medium,198400
@@ -89,7 +89,6 @@ claims-adjusters-examiners-investigators,Claims Adjusters Examiners Investigator
 compliance-officers,Compliance Officers,Business,84680,75050,43730,140610,3.5,High,340800
 cost-estimators,Cost Estimators,Business,78560,74180,46280,120460,3.5,High,219600
 compensation-and-benefits-specialists,Compensation and Benefits Specialists,Business,79620,75560,47030,123580,3.5,Medium,89700
-training-and-development-specialists,Training and Development Specialists,Business,72680,68220,40780,112490,3.5,High,381900
 market-research-analysts,Market Research Analysts,Business,82680,74230,42870,136280,3.5,Very High,792900
 appraisers-and-assessors-of-real-estate,Appraisers and Assessors of Real Estate,Business,70460,63320,38830,117030,3.5,Medium,71700
 budget-analysts,Budget Analysts,Business,87260,84940,55290,129440,3.5,Medium,58600
@@ -137,8 +136,6 @@ self-enrichment-teachers,Self-Enrichment Teachers,Education,51620,46870,28510,84
 librarians-and-media-collections-specialists,Librarians and Media Collections Specialists,Education,71330,68780,44440,102060,2.2,Medium,143800
 instructional-coordinators,Instructional Coordinators,Education,76030,72290,45490,114130,2.2,Medium,162700
 teaching-assistants-postsecondary,Teaching Assistants Postsecondary,Education,38580,35450,25690,56580,2.2,Very High,1334600
-esl-teachers,ESL Teachers,Education,66420,64670,42200,95480,2.2,Medium,73200
-school-counselors,School Counselors,Education,69830,67410,42920,102210,2.2,High,360100
 lawyers,Lawyers,Legal,185840,159670,78360,351600,3.0,Very High,754500
 paralegals-and-legal-assistants,Paralegals and Legal Assistants,Legal,65280,62230,38320,96710,3.0,High,378000
 judicial-law-clerks,Judicial Law Clerks,Legal,68280,64280,42280,101280,3.0,Medium,28800
@@ -186,7 +183,6 @@ reinforcing-iron-and-rebar-workers,Reinforcing Iron and Rebar Workers,Constructi
 sheet-metal-workers,Sheet Metal Workers,Construction,67480,63280,40680,103280,3.5,Medium,148800
 structural-iron-and-steel-workers,Structural Iron and Steel Workers,Construction,77580,73280,46820,115580,3.5,Medium,96800
 construction-and-building-inspectors,Construction and Building Inspectors,Construction,72680,68680,42680,112680,3.5,Medium,128400
-hvac-mechanics-and-installers,HVAC Mechanics and Installers,Skilled Trades,64780,61010,40050,95210,3.2,High,409670
 automotive-service-technicians,Automotive Service Technicians,Skilled Trades,54480,51880,33620,82580,3.2,Very High,751400
 telecommunications-equipment-installers,Telecommunications Equipment Installers,Skilled Trades,67480,64480,42280,101480,3.2,High,218400
 electrical-power-line-installers,Electrical Power-Line Installers,Skilled Trades,82680,79280,48280,122680,3.2,Medium,128400
@@ -201,7 +197,6 @@ maintenance-and-repair-workers-general,Maintenance and Repair Workers General,Sk
 helpers-installation-maintenance-repair,Helpers Installation Maintenance Repair,Skilled Trades,38680,36280,26280,55680,3.2,Medium,128400
 computer-repair-technicians,Computer Repair Technicians,Skilled Trades,61280,58180,37280,92580,3.2,Medium,144800
 locksmiths-and-safe-repairers,Locksmiths and Safe Repairers,Skilled Trades,52680,49680,32280,80680,3.2,Medium,28800
-welders-cutters-solderers-and-brazers,Welders Cutters Solderers and Brazers,Manufacturing,56760,53750,39240,77530,2.5,High,416210
 first-line-supervisors-of-production-workers,First-Line Supervisors of Production Workers,Manufacturing,77280,72280,47280,118280,2.5,Very High,758800
 aircraft-structure-assemblers,Aircraft Structure Assemblers,Manufacturing,69280,66280,43280,101280,2.5,Medium,118800
 electrical-and-electronic-equipment-assemblers,Electrical and Electronic Equipment Assemblers,Manufacturing,46280,44280,31280,64280,2.5,Medium,148800
@@ -247,7 +242,6 @@ broadcast-announcers-and-radio-disc-jockeys,Broadcast Announcers and Radio Disc 
 news-analysts-reporters-and-journalists,News Analysts Reporters and Journalists,Creative,62280,53280,31280,104280,3.0,Medium,38800
 special-effects-artists-and-animators,Special Effects Artists and Animators,Creative,98680,90280,52280,158280,3.0,Medium,68800
 public-relations-specialists,Public Relations Specialists,Creative,78850,73440,44980,129260,3.0,High,270900
-police-and-sheriff-patrol-officers,Police and Sheriff Patrol Officers,Public Safety,79200,76210,47510,115120,2.5,Very High,670520
 firefighters,Firefighters,Public Safety,63630,59280,34910,101040,2.5,High,345990
 first-line-supervisors-of-police,First-Line Supervisors of Police,Public Safety,103860,99450,64390,153510,2.5,Medium,113200
 detectives-and-criminal-investigators,Detectives and Criminal Investigators,Public Safety,95280,89280,56280,145280,2.5,Medium,108800
@@ -255,7 +249,6 @@ security-guards,Security Guards,Public Safety,40280,37280,27280,58280,2.5,Very H
 first-line-supervisors-of-firefighting,First-Line Supervisors of Firefighting,Public Safety,92680,88280,56280,138280,2.5,Medium,78400
 correctional-officers-and-jailers,Correctional Officers and Jailers,Public Safety,56680,52280,34280,86280,2.5,High,378400
 private-detectives-and-investigators,Private Detectives and Investigators,Public Safety,66260,58280,35690,113690,2.5,Medium,21800
-chefs-and-head-cooks,Chefs and Head Cooks,Hospitality,66700,62470,37900,98560,3.0,High,200040
 first-line-supervisors-of-food-preparation,First-Line Supervisors of Food Preparation,Hospitality,45280,42280,30280,63280,3.0,Very High,968800
 cooks-fast-food,Cooks Fast Food,Hospitality,33280,31280,24280,43280,3.0,Very High,688800
 cooks-institution-and-cafeteria,Cooks Institution and Cafeteria,Hospitality,39280,36280,27280,55280,3.0,High,408800

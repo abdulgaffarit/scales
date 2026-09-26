@@ -460,4 +460,6 @@ def generate_csv():
 
 
 if __name__ == "__main__":
+    from data_guard import require_force
+    require_force("generate_from_bls.py")
     generate_csv()

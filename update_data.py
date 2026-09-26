@@ -303,4 +303,6 @@ def main():
 
 
 if __name__ == "__main__":
+    from data_guard import require_force
+    require_force("update_data.py")
     main()
