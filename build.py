@@ -968,127 +968,42 @@ def generate_404_page():
 
 def generate_cloudflare_files():
     """Generate _redirects and _headers for Cloudflare Pages"""
-    # Redirect pages.dev subdomain → custom domain (fixes 'alternate page with proper canonical' in GSC)
-    # Old site used singular slugs; new site uses plural BLS-style slugs.
-    # These redirect old cached Google URLs → correct current pages.
-    # Full list derived from GSC "alternate page with proper canonical tag" export
-    # (683 affected URLs, 2026-07-07) — old site used singular/legacy job slugs.
-    singular_to_plural = [
-        ("accountant", "accountants-and-auditors"),
-        ("aerospace-engineer", "aerospace-engineers"),
-        ("airline-pilot", "airline-pilots-copilots-and-flight-engineers"),
-        ("architect", "architects"),
-        ("architectural-manager", "architectural-and-engineering-managers"),
-        ("art-director", "art-directors"),
-        ("automotive-service-technician", "automotive-service-technicians"),
-        ("carpenter", "carpenters"),
-        ("chef", "chefs"),
-        ("chemical-engineer", "chemical-engineers"),
-        ("chemist", "chemists"),
-        ("child-family-social-worker", "child-family-and-school-social-workers"),
-        ("childcare-worker", "childcare-workers"),
-        ("civil-engineer", "civil-engineers"),
-        ("compensation-and-benefits-manager", "compensation-and-benefits-specialists"),
-        ("compliance-officer", "compliance-officers"),
-        ("computer-and-information-research-scientist", "computer-and-information-research-scientists"),
-        ("computer-network-architect", "computer-network-architects"),
-        ("computer-programmer", "computer-programmers"),
-        ("computer-user-support-specialist", "computer-user-support-specialists"),
-        ("conservation-scientist", "conservation-scientists"),
-        ("construction-laborer", "construction-laborers"),
-        ("construction-manager", "construction-managers"),
-        ("construction-supervisor", "first-line-supervisors-of-construction-trades"),
-        ("credit-analyst", "credit-analysts"),
-        ("data-analyst", "data-analysts"),
-        ("data-scientist", "data-scientists"),
-        ("database-administrator", "database-administrators"),
-        ("dental-hygienist", "dental-hygienists"),
-        ("diagnostic-medical-sonographer", "diagnostic-medical-sonographers"),
-        ("economist", "economists"),
-        ("electrical-engineer", "electrical-engineers"),
-        ("electrician", "electricians"),
-        ("elementary-school-teacher", "elementary-school-teachers"),
-        ("environmental-engineer", "environmental-engineers"),
-        ("environmental-scientist", "environmental-scientists-and-specialists"),
-        ("family-medicine-physician", "family-medicine-physicians"),
-        ("financial-analyst", "financial-and-investment-analysts"),
-        ("financial-examiner", "financial-examiners"),
-        ("financial-manager", "financial-managers"),
-        ("firefighter", "firefighters"),
-        ("food-service-manager", "food-service-managers"),
-        ("general-manager", "general-and-operations-managers"),
-        ("graphic-designer", "graphic-designers"),
-        ("hairdresser", "hairdressers-hairstylists-and-cosmetologists"),
-        ("heavy-truck-driver", "heavy-and-tractor-trailer-truck-drivers"),
-        ("hotel-manager", "lodging-managers"),
-        ("human-resources-manager", "human-resources-specialists"),
-        ("human-resources-specialist", "human-resources-specialists"),
-        ("hvac-technician", "hvac-technicians"),
-        ("industrial-engineer", "industrial-engineers"),
-        ("industrial-engineering-technician", "industrial-engineering-technologists"),
-        ("information-security-analyst", "information-security-analysts"),
-        ("instructional-coordinator", "instructional-coordinators"),
-        ("laborer-freight", "laborers-and-freight-stock-material-movers"),
-        ("lawyer", "lawyers"),
-        ("licensed-practical-nurse", "licensed-practical-nurses"),
-        ("loan-officer", "loan-officers"),
-        ("management-analyst", "management-analysts"),
-        ("market-research-analyst", "market-research-analysts"),
-        ("marketing-manager", "marketing-managers"),
-        ("mechanical-engineer", "mechanical-engineers"),
-        ("medical-scientist", "medical-scientists"),
-        ("mental-health-counselor", "mental-health-counselors"),
-        ("mental-health-social-worker", "mental-health-and-substance-abuse-social-workers"),
-        ("middle-school-teacher", "middle-school-teachers"),
-        ("mortgage-loan-officer", "loan-officers"),
-        ("natural-sciences-manager", "natural-sciences-managers"),
-        ("network-engineer", "computer-network-architects"),
-        ("nurse-practitioner", "nurse-practitioners"),
-        ("occupational-therapist", "occupational-therapists"),
-        ("operations-research-analyst", "operations-research-analysts"),
-        ("paralegal", "paralegals-and-legal-assistants"),
-        ("personal-financial-advisor", "personal-financial-advisors"),
-        ("pharmacist", "pharmacists"),
-        ("pharmacy-technician", "pharmacy-technicians"),
-        ("physical-therapist", "physical-therapists"),
-        ("physicist", "physicists"),
-        ("plumber", "plumbers-pipefitters-and-steamfitters"),
-        ("police-officer", "police-officers"),
-        ("police-supervisor", "first-line-supervisors-of-police"),
-        ("private-detective", "private-detectives-and-investigators"),
-        ("project-manager", "project-management-specialists"),
-        ("public-relations-manager", "public-relations-and-fundraising-managers"),
-        ("public-relations-specialist", "public-relations-specialists"),
-        ("real-estate-agent", "real-estate-agents"),
-        ("registered-nurse", "registered-nurses"),
-        ("roofer", "roofers"),
-        ("sales-manager", "sales-managers"),
-        ("sales-representative", "sales-reps-wholesale-and-manufacturing"),
-        ("secondary-school-teacher", "secondary-school-teachers"),
-        ("sociologist", "sociologists"),
-        ("software-developer", "software-developers"),
-        ("special-education-teacher", "special-education-teachers"),
-        ("speech-language-pathologist", "speech-language-pathologists"),
-        ("training-development-specialist", "training-development-specialists"),
-        ("urban-planner", "urban-and-regional-planners"),
-        ("veterinarian", "veterinarians"),
-        ("web-developer", "web-developers"),
-        ("welder", "welders"),
-    ]
-    singular_rules = ""
-    for old, new in singular_to_plural:
-        singular_rules += f"/salary/{old}/ /salary/{new}/ 301\n"
-        singular_rules += f"/salary/{old}/* /salary/{new}/:splat 301\n"
+    # Legacy job slugs (old singular/short slugs → current BLS slugs).
+    # Sources: GSC "alternate page with proper canonical" export (2026-07-07) plus
+    # SOC-code matches between fetch_data.py (old slugs) and generate_from_bls.py.
+    legacy = load_csv("legacy_slugs.csv")
 
-    redirects = (
-        f"https://usasalaries.pages.dev/* https://{SITE_DOMAIN}/:splat 301\n"
-        f"https://scales-dui.pages.dev/* https://{SITE_DOMAIN}/:splat 301\n"
-        + singular_rules
-        # City-level URLs → state page (old builds had city pages with different slugs)
-        + f"/salary/:job/:state/:city/ /salary/:job/:state/ 301\n"
-        + f"/salary/ / 301\n"
-    )
+    # Cloudflare Pages _redirects limits: 2,000 static + 100 dynamic rules.
+    # Rules past the limit are silently ignored, so order by importance and
+    # keep dynamic (splat/placeholder) rules under the cap. Domain-level rules
+    # (pages.dev → custom domain) are not supported in _redirects at all —
+    # those live in the Bulk Redirects CSV below.
+    MAX_DYNAMIC = 100
+    dynamic = [
+        # City-level URLs → state page (city pages removed to stay under 20k files)
+        "/salary/:job/:state/:city/ /salary/:job/:state/ 301",
+    ]
+    static = ["/salary/ / 301"]
+    for row in legacy:
+        old, new = row["old_slug"], row["new_slug"]
+        static.append(f"/salary/{old}/ /salary/{new}/ 301")
+        if len(dynamic) < MAX_DYNAMIC:
+            dynamic.append(f"/salary/{old}/* /salary/{new}/:splat 301")
+    redirects = "\n".join(static + dynamic) + "\n"
     (OUTPUT_DIR / "_redirects").write_text(redirects, encoding="utf-8")
+
+    # Bulk Redirects list (Cloudflare dashboard → Rules → Bulk Redirects → import CSV).
+    # Covers every legacy slug with subpath matching, so /salary/old/<state>/ works
+    # for all of them, plus the pages.dev → custom domain redirects.
+    # Columns: source_url,target_url,status_code,preserve_query_string,
+    #          include_subdomains,subpath_matching,preserve_path_suffix
+    bulk = [
+        f"usasalaries.pages.dev/,https://{SITE_DOMAIN}/,301,TRUE,FALSE,TRUE,TRUE",
+        f"scales-dui.pages.dev/,https://{SITE_DOMAIN}/,301,TRUE,FALSE,TRUE,TRUE",
+    ]
+    for row in legacy:
+        bulk.append(f"{SITE_DOMAIN}/salary/{row['old_slug']}/,https://{SITE_DOMAIN}/salary/{row['new_slug']}/,301,TRUE,FALSE,TRUE,TRUE")
+    (BASE_DIR / "cloudflare_bulk_redirects.csv").write_text("\n".join(bulk) + "\n", encoding="utf-8")
 
     # Cache headers + security headers for all routes
     headers = """/*
