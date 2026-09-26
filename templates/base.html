@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ page_title }}</title>
   <meta name="description" content="{{ meta_description }}">
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="robots" content="{{ robots_meta or 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1' }}">
   <link rel="canonical" href="https://{{ site_domain }}{{ canonical_url }}">
   <meta property="og:title" content="{{ page_title }}">
   <meta property="og:description" content="{{ meta_description }}">
@@ -833,7 +833,9 @@ img { max-width: 100%; display: block }
   .data-table { min-width: 300px }
   .footer-bottom { font-size: 0.7rem }
 }
-  </style>
+    .key-facts{margin:0;padding-left:20px;line-height:1.7}
+  .key-facts li{margin:4px 0}
+</style>
 </head>
 <body>
 
@@ -883,7 +885,7 @@ img { max-width: 100%; display: block }
   <main>
 
     <div class="hero-card">
-      <div class="hero-badge">📊 BLS Official Data · May 2025 Release</div>
+      <div class="hero-badge">📊 {{ source_badge or 'BLS Official Data · May 2025 Release' }}</div>
       <h1>{{ h1_title }}</h1>
       <p class="hero-sub">{{ hero_subtitle }}</p>
       <div class="salary-stats">
@@ -907,7 +909,7 @@ img { max-width: 100%; display: block }
 
     <div class="trust-bar">
       <div class="trust-item">🏛️ Source: <strong><a href="https://www.bls.gov/oes/" target="_blank" rel="noopener noreferrer" style="color:inherit">U.S. Bureau of Labor Statistics</a></strong></div>
-      <div class="trust-item">📅 Dataset: <strong>OES May 2025</strong></div>
+      <div class="trust-item">📅 Dataset: <strong>{{ dataset_label or 'OEWS May 2025' }}</strong></div>
       <div class="trust-item">🔄 Published: <strong>May 2026</strong></div>
       <div class="trust-item">📍 Coverage: <strong>All 50 States + DC</strong></div>
     </div>
@@ -924,6 +926,19 @@ img { max-width: 100%; display: block }
       <div class="pct-item"><div class="pct-row"><span class="pct-label">90th Percentile — Top Earners</span><span class="pct-value">${{ p90_fmt }}</span></div><div class="pbar"><div class="pbar-fill" style="width:100%"></div></div></div>
       <div class="info-box">💡 {{ percentile_insight }}</div>
     </div>
+
+    {% if key_facts %}
+    <div class="data-card">
+      <div class="card-header">
+        <div class="card-icon">📌</div>
+        <div><div class="card-title">{{ key_facts_title }}</div><div class="card-sub">{{ key_facts_sub }}</div></div>
+      </div>
+      <ul class="key-facts">
+        {% for f in key_facts %}<li>{{ f }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
 
     <div class="data-card">
       <div class="card-header">
@@ -986,7 +1001,7 @@ img { max-width: 100%; display: block }
     <div class="data-card">
       <div class="card-header">
         <div class="card-icon">⚖️</div>
-        <div><div class="card-title">Compare with Similar Jobs</div><div class="card-sub">Related career salary benchmarks</div></div>
+        <div><div class="card-title">{{ related_jobs_title or 'Compare with Similar Jobs' }}</div><div class="card-sub">Related career salary benchmarks</div></div>
       </div>
       <div class="jobs-grid">
         {% for job in related_jobs %}

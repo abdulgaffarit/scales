@@ -1,0 +1,43 @@
+name: Refresh BLS OEWS Data
+
+on:
+  schedule:
+    # OEWS is released each spring; check monthly and commit only when data changes
+    - cron: '0 1 1 * *'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/fetch_oews.py'
+      - 'data/job_soc.csv'
+      - '.github/workflows/refresh-bls-data.yml'
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - run: pip install openpyxl
+
+      - name: Fetch OEWS national + state data
+        run: python scripts/fetch_oews.py
+
+      - name: Commit updated data
+        run: |
+          git add data/national_wages.csv data/state_wages.csv data/oews_meta.json
+          if git diff --cached --quiet -- data/national_wages.csv data/state_wages.csv; then
+            echo "No data changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Refresh BLS OEWS national and state wage data"
+          git push
