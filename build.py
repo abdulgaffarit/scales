@@ -886,7 +886,7 @@ def generate_search_index(jobs, states):
 
 
 def generate_static_pages(jobs):
-    """Generate About, Methodology, Privacy, and Contact pages"""
+    """Generate About, Methodology, Privacy, Terms, and Contact pages"""
     static_template = env.get_template("static.html")
 
     pages = {
@@ -996,71 +996,128 @@ def generate_static_pages(jobs):
         },
         "privacy": {
             "page_title": f"Privacy Policy | {SITE_NAME}",
-            "meta_description": f"Privacy policy for {SITE_NAME}. We don't collect personal data. Learn what information Cloudflare and analytics tools may log.",
+            "meta_description": f"Privacy policy for {SITE_NAME}: what data is logged, how Google AdSense uses cookies to serve ads, and how to opt out of personalized advertising.",
             "canonical_url": "/privacy/",
             "content": f"""
 <div class="badge">🔒 Privacy</div>
 <h1>Privacy Policy</h1>
-<p class="subtitle">Last updated: May 2026</p>
+<p class="subtitle">Last updated: October 2026</p>
 
-<p>At <strong>{SITE_NAME}</strong>, we respect your privacy. This policy explains what information we collect and how we use it.</p>
+<p>This policy explains what information is collected when you visit <strong>{SITE_NAME}</strong> ({SITE_DOMAIN}), how it is used, and the choices you have. By using this site you agree to this policy.</p>
 
 <h2>Information We Collect</h2>
 
-<h3>Automatically Collected</h3>
-<p>When you visit our site, our hosting provider (Cloudflare) may automatically collect:</p>
-<ul>
-<li>IP address (anonymized)</li>
-<li>Browser type and version</li>
-<li>Pages visited and time spent</li>
-<li>Referring website</li>
-<li>Device type and screen resolution</li>
-</ul>
+<h3>Information you give us</h3>
+<p>The site has no accounts, sign-up forms, or comment sections. If you email us, we receive your email address and whatever you choose to include in your message, and we use it only to reply to you.</p>
 
-<h3>What We Don't Collect</h3>
+<h3>Information collected automatically</h3>
+<p>Our hosting and content delivery provider, Cloudflare, processes standard technical information when you load a page, such as:</p>
 <ul>
-<li>We do not require account creation or login</li>
-<li>We do not collect personal information (name, email, phone)</li>
-<li>We do not use tracking cookies for advertising purposes</li>
-<li>We do not sell any data to third parties</li>
+<li>IP address</li>
+<li>Browser type and version, and operating system</li>
+<li>Pages requested and the date and time of the request</li>
+<li>Referring website</li>
 </ul>
+<p>This information is used to deliver pages, keep the site secure (for example, blocking abusive traffic), and understand overall site usage. We do not use it to identify individual visitors.</p>
+
+<h2>Advertising</h2>
+<p>We use <strong>Google AdSense</strong> to show advertisements on this site. Google and its partners act as third-party vendors and use cookies and similar technologies to serve ads.</p>
+<ul>
+<li>Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites.</li>
+<li>Google's use of advertising cookies enables it and its partners to serve ads to you based on your visits to this site and/or other sites on the Internet.</li>
+<li>Third-party vendors and ad networks other than Google may also use cookies to serve ads on this site.</li>
+</ul>
+<p>To learn more about how Google uses data from sites that use its services, see <a href="https://policies.google.com/technologies/partner-sites" rel="nofollow">How Google uses information from sites or apps that use our services</a>.</p>
+
+<h3>Opting out of personalized advertising</h3>
+<ul>
+<li>You can opt out of personalized advertising from Google by visiting <a href="https://adssettings.google.com/" rel="nofollow">Google Ads Settings</a>.</li>
+<li>You can opt out of some third-party vendors' use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices/" rel="nofollow">www.aboutads.info</a>.</li>
+<li>Visitors in the European Union can also use <a href="https://www.youronlinechoices.eu/" rel="nofollow">www.youronlinechoices.eu</a>.</li>
+</ul>
+<p>If you opt out, you will still see ads, but they will not be personalized based on your browsing history.</p>
+
+<h3>Visitors in the EEA, UK, and Switzerland</h3>
+<p>Where required by law, we ask for your consent before personalized ads are shown or advertising cookies are stored on your device. You can change or withdraw your consent at any time using the privacy settings link shown with the consent message.</p>
 
 <h2>Cookies</h2>
-<p>We use minimal cookies necessary for site functionality:</p>
+<p>Cookies are small text files stored on your device. This site uses:</p>
 <ul>
-<li><strong>Essential cookies:</strong> Required for basic site operation (Cloudflare security)</li>
-<li><strong>Analytics cookies:</strong> Anonymous usage statistics to improve the site</li>
+<li><strong>Essential cookies</strong> set by Cloudflare for security and to protect the site against abuse.</li>
+<li><strong>Advertising cookies</strong> set by Google and its partners, as described above.</li>
 </ul>
+<p>You can block or delete cookies in your browser settings. Blocking cookies does not prevent you from using the site.</p>
 
 <h2>Third-Party Services</h2>
 <ul>
-<li><strong>Cloudflare:</strong> Hosting and CDN — subject to <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's Privacy Policy</a></li>
-<li><strong>Google Fonts:</strong> Typography — subject to <a href="https://policies.google.com/privacy">Google's Privacy Policy</a></li>
+<li><strong>Cloudflare</strong>: hosting, content delivery, and security, subject to <a href="https://www.cloudflare.com/privacypolicy/" rel="nofollow">Cloudflare's Privacy Policy</a>.</li>
+<li><strong>Google AdSense</strong>: advertising, subject to <a href="https://policies.google.com/privacy" rel="nofollow">Google's Privacy Policy</a>.</li>
 </ul>
+<p>Links to other websites, such as BLS.gov, are governed by those sites' own privacy policies.</p>
 
-<h2>Advertising</h2>
-<p>If advertising is displayed on this site, it may use cookies to serve relevant ads. Ad partners may collect anonymous browsing data. You can opt out of personalized advertising through your browser settings or at <a href="https://www.aboutads.info/choices/">aboutads.info</a>.</p>
+<h2>How We Share Information</h2>
+<p>We do not sell personal information. Information is shared only with the service providers listed above so they can operate the site and serve ads, or where required by law.</p>
+
+<h2>Your Privacy Rights</h2>
+<p>Depending on where you live (for example, the EU, UK, or California), you may have the right to access, correct, or delete personal information about you, to object to or restrict certain processing, and to opt out of personalized advertising. Because we do not keep accounts or profiles, most data relating to your visit is held by Cloudflare and Google; you can use the opt-out links above, or contact us and we will help where we can.</p>
 
 <h2>Data Security</h2>
-<p>Our site is served over HTTPS with TLS encryption. We use Cloudflare's security features including DDoS protection and Web Application Firewall.</p>
+<p>The site is served only over HTTPS and is protected by Cloudflare's security features, including DDoS protection and a web application firewall.</p>
 
 <h2>Children's Privacy</h2>
-<p>This site is not directed at children under 13. We do not knowingly collect information from children.</p>
-
-<h2>Your Rights</h2>
-<p>You have the right to:</p>
-<ul>
-<li>Access any personal data we hold about you (we hold none)</li>
-<li>Request deletion of any data</li>
-<li>Opt out of analytics tracking via browser settings</li>
-<li>Use ad-blocking software</li>
-</ul>
+<p>This site is not directed at children under 13, and we do not knowingly collect personal information from children.</p>
 
 <h2>Changes to This Policy</h2>
-<p>We may update this policy periodically. Changes will be posted on this page with an updated date.</p>
+<p>We may update this policy from time to time. Changes will be posted on this page with a new "Last updated" date.</p>
 
 <h2>Contact</h2>
-<p>For privacy-related questions, please visit our <a href="/contact/">contact page</a>.</p>
+<p>For privacy questions or requests, email <strong>contact@{SITE_DOMAIN}</strong> or visit our <a href="/contact/">contact page</a>.</p>
+"""
+        },
+        "terms": {
+            "page_title": f"Terms of Use | {SITE_NAME}",
+            "meta_description": f"Terms of use for {SITE_NAME}: permitted use of the site, data accuracy, third-party links and advertising, and limitation of liability.",
+            "canonical_url": "/terms/",
+            "content": f"""
+<div class="badge">📄 Terms</div>
+<h1>Terms of Use</h1>
+<p class="subtitle">Last updated: October 2026</p>
+
+<p>These terms govern your use of <strong>{SITE_NAME}</strong> ({SITE_DOMAIN}). By using the site, you agree to them. If you do not agree, please do not use the site.</p>
+
+<h2>Informational Purposes Only</h2>
+<p>The salary figures on this site are based on U.S. Bureau of Labor Statistics data and are provided for general information. They are not financial, legal, tax, employment, or career advice. Actual pay depends on employer, experience, location, and other factors. Make important decisions only after consulting appropriate sources or professionals.</p>
+
+<h2>Accuracy of Data</h2>
+<p>We work to present BLS data accurately, as described on our <a href="/methodology/">methodology page</a>, but we do not guarantee that any information on the site is complete, current, or error-free. Some state figures are estimates and are labelled as such. If you find an error, please <a href="/contact/">let us know</a>.</p>
+
+<h2>Permitted Use</h2>
+<p>You may view, link to, and quote reasonable portions of the site for personal, educational, journalistic, or research purposes with attribution to {SITE_NAME}. You may not:</p>
+<ul>
+<li>Copy or republish the site's pages, design, or written content in bulk</li>
+<li>Scrape or crawl the site at a rate that disrupts its operation</li>
+<li>Attempt to interfere with the site's security or availability</li>
+<li>Use the site for any unlawful purpose</li>
+</ul>
+<p>The underlying BLS data is in the public domain and is available directly from <a href="https://www.bls.gov/oes/" rel="nofollow">BLS.gov</a>.</p>
+
+<h2>Intellectual Property</h2>
+<p>The site's text, design, and presentation of data are owned by {SITE_NAME} and protected by copyright. This does not restrict your use of the public-domain BLS data itself.</p>
+
+<h2>Advertising and Third-Party Links</h2>
+<p>The site displays advertisements served by Google AdSense and may link to other websites. We do not control and are not responsible for the content, products, or services of advertisers or linked sites. How advertisers use cookies is described in our <a href="/privacy/">Privacy Policy</a>.</p>
+
+<h2>Disclaimer of Warranties</h2>
+<p>The site is provided "as is" and "as available", without warranties of any kind, express or implied, including warranties of accuracy, fitness for a particular purpose, and non-infringement.</p>
+
+<h2>Limitation of Liability</h2>
+<p>To the fullest extent permitted by law, {SITE_NAME} is not liable for any direct, indirect, incidental, or consequential damages arising from your use of, or reliance on, the site or its information.</p>
+
+<h2>Changes to These Terms</h2>
+<p>We may update these terms from time to time. Changes take effect when posted on this page with a new "Last updated" date.</p>
+
+<h2>Contact</h2>
+<p>Questions about these terms can be sent to <strong>contact@{SITE_DOMAIN}</strong>.</p>
 """
         },
         "contact": {
@@ -1124,7 +1181,7 @@ def generate_static_pages(jobs):
         )
         out_path.write_text(html, encoding="utf-8")
 
-    print(f"✅ {len(pages)} static pages generated (about, methodology, privacy, contact)")
+    print(f"✅ {len(pages)} static pages generated (about, methodology, privacy, terms, contact)")
 
 
 def generate_llms_txt(jobs):
@@ -1180,6 +1237,8 @@ def generate_llms_txt(jobs):
         f"- Homepage (all jobs): https://{SITE_DOMAIN}/",
         f"- Methodology: https://{SITE_DOMAIN}/methodology/",
         f"- About: https://{SITE_DOMAIN}/about/",
+        f"- Privacy Policy: https://{SITE_DOMAIN}/privacy/",
+        f"- Terms of Use: https://{SITE_DOMAIN}/terms/",
         f"- Sitemap: https://{SITE_DOMAIN}/sitemap.xml",
         "",
         "## Citation Guidance",
