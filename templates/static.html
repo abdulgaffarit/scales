@@ -12,6 +12,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <meta name="theme-color" content="#0B6B4F">
 {% include "partials/head_assets.html" %}
+  {% if schema_json %}<script type="application/ld+json">{{ schema_json | safe }}</script>{% endif %}
 </head>
 <body>
 {% include "partials/header.html" %}

@@ -835,6 +835,271 @@ def generate_homepage(jobs, states):
 
 
 # ─── SITEMAP GENERATOR ─────────────────────────────────────────────────────────
+# ─── RESEARCH ARTICLES ─────────────────────────────────────────────────────────
+# Data studies under /research/, computed from the same BLS data at build time so
+# every figure stays in sync with the salary pages after a data refresh. Cost of
+# living uses BEA Regional Price Parities (data/state_rpp.csv), not the
+# hand-entered col_multiplier in states.csv.
+
+RESEARCH_PUBLISHED = "2026-10-21"
+RESEARCH_URLS = []   # filled by generate_research(), read by generate_sitemap()
+JOBS_BY_SLUG = {}
+RPP_YEAR = "2024"
+BEA_RPP_URL = "https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area"
+BLS_OES_URL = "https://www.bls.gov/oes/"
+
+
+def load_rpp():
+    path = DATA_DIR / "state_rpp.csv"
+    if not path.exists():
+        return {}
+    return {r["state_slug"]: float(r["rpp_all_items_2024"]) for r in load_csv("state_rpp.csv")}
+
+
+def article_schema(headline, desc, url):
+    return json.dumps({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": headline,
+        "description": desc,
+        "url": f"https://{SITE_DOMAIN}{url}",
+        "datePublished": RESEARCH_PUBLISHED,
+        "dateModified": WAGES["fetched"] or RESEARCH_PUBLISHED,
+        "author": {"@type": "Organization", "name": SITE_NAME, "url": f"https://{SITE_DOMAIN}/about/"},
+        "publisher": {"@type": "Organization", "name": SITE_NAME},
+        "isBasedOn": [BLS_OES_URL, BEA_RPP_URL],
+    }, indent=2)
+
+
+def cite_box(title, url):
+    return (f'<div class="card"><h3>Cite this study</h3><p>{SITE_NAME}, "{title}," '
+            f'based on BLS OEWS {WAGES["release"]} and BEA Regional Price Parities {RPP_YEAR}. '
+            f'<a href="{url}">https://{SITE_DOMAIN}{url}</a></p>'
+            f'<p>Journalists and researchers are welcome to use these figures with a link to this page. '
+            f'Questions: <a href="/contact/">contact us</a>.</p></div>')
+
+
+def col_rows(slug, states, rpp):
+    """Real-BLS states for one occupation, with nominal and price-adjusted pay and ranks."""
+    rows = [{"slug": s["state_slug"], "name": s["state_name"], "avg": ST[slug][s["state_slug"]]["avg"],
+             "rpp": rpp[s["state_slug"]]}
+            for s in states if ST[slug][s["state_slug"]]["real"] and s["state_slug"] in rpp]
+    for r in rows:
+        r["adj"] = round(r["avg"] / (r["rpp"] / 100))
+    for i, r in enumerate(sorted(rows, key=lambda r: -r["avg"]), 1):
+        r["nom_rank"] = i
+    for i, r in enumerate(sorted(rows, key=lambda r: -r["adj"]), 1):
+        r["adj_rank"] = i
+    for r in rows:
+        r["move"] = r["nom_rank"] - r["adj_rank"]   # positive = climbs after adjusting
+    return sorted(rows, key=lambda r: r["adj_rank"])
+
+
+def col_section(slug, label, states, rpp):
+    """Findings + full table for one occupation. Returns (html, summary sentence)."""
+    title = JOBS_BY_SLUG[slug]["job_title"]
+    rows = col_rows(slug, states, rpp)
+    n = len(rows)
+    by_nom = sorted(rows, key=lambda r: r["nom_rank"])
+    top_nom, top_adj, bottom_adj = by_nom[0], rows[0], rows[-1]
+    climbers = sorted((r for r in rows if r["move"] > 0), key=lambda r: -r["move"])[:3]
+    fallers = sorted((r for r in rows if r["move"] < 0), key=lambda r: r["move"])[:3]
+    nat_avg = NAT[slug]["avg"]
+
+    if top_nom["slug"] == top_adj["slug"]:
+        lead = (f"{top_adj['name']} pays {label} the most both before and after adjusting for prices: "
+                f"${fmt(top_adj['avg'])} on paper, worth ${fmt(top_adj['adj'])} at national-average prices.")
+    else:
+        lead = (f"{top_nom['name']} has the highest average pay for {label} (${fmt(top_nom['avg'])}), but after "
+                f"adjusting for prices {top_adj['name']} comes out ahead, at ${fmt(top_adj['adj'])} in "
+                f"national-average dollars.")
+    findings = [lead]
+    if climbers:
+        findings.append("Biggest climbers once prices are counted: " + "; ".join(
+            f"{r['name']} (from {ordinal(r['nom_rank'])} to {ordinal(r['adj_rank'])})" for r in climbers) + ".")
+    if fallers:
+        findings.append("Biggest drops: " + "; ".join(
+            f"{r['name']} (from {ordinal(r['nom_rank'])} to {ordinal(r['adj_rank'])})" for r in fallers) + ".")
+    nom_gap = by_nom[0]["avg"] - by_nom[-1]["avg"]
+    adj_gap = top_adj["adj"] - bottom_adj["adj"]
+    findings.append(f"The gap between the best- and worst-paying state is ${fmt(nom_gap)} before adjusting and "
+                    f"${fmt(adj_gap)} after, so prices {'narrow' if adj_gap < nom_gap else 'widen'} the gap "
+                    f"by ${fmt(abs(nom_gap - adj_gap))}.")
+    findings.append(f"Lowest adjusted pay: {bottom_adj['name']}, at ${fmt(bottom_adj['adj'])} "
+                    f"(${fmt(bottom_adj['avg'])} before adjusting). The U.S. average is ${fmt(nat_avg)}.")
+
+    body = "".join(
+        f'<tr><td><a href="/salary/{slug}/{r["slug"]}/" class="cell-link">{r["name"]}</a></td>'
+        f'<td class="r">${fmt(r["avg"])}</td><td class="r">{r["rpp"]:.1f}</td>'
+        f'<td class="r cell-salary">${fmt(r["adj"])}</td>'
+        f'<td class="r {"diff-pos" if r["move"] > 0 else "diff-neg" if r["move"] < 0 else ""}">'
+        f'{ordinal(r["adj_rank"])} ({"+" if r["move"] > 0 else ""}{r["move"] if r["move"] else "no change"})</td></tr>'
+        for r in rows)
+    html = (f'<h2>{title}: pay by state after cost of living</h2>'
+            f'<ul>{"".join(f"<li>{f}</li>" for f in findings)}</ul>'
+            f'<div class="table-wrap scroll"><table class="study-table num"><thead><tr>'
+            f'<th scope="col">State</th><th scope="col" class="r">Average salary</th>'
+            f'<th scope="col" class="r">Price level</th><th scope="col" class="r">Adjusted salary</th>'
+            f'<th scope="col" class="r">Adjusted rank (change)</th></tr></thead><tbody>{body}</tbody></table></div>'
+            f'<p>All {n} states with published BLS figures, ranked by adjusted salary. Price level is the BEA '
+            f'Regional Price Parity ({RPP_YEAR}, U.S. = 100). Rank change compares the adjusted rank with the rank '
+            f'by average salary. <a href="/salary/{slug}/">See the full {title} salary page</a>.</p>')
+    return html, lead
+
+
+def col_method():
+    return (f'<h2>Methodology</h2>'
+            f'<p><strong>Wages:</strong> mean annual wages by state from the U.S. Bureau of Labor Statistics '
+            f'<a href="{BLS_OES_URL}" rel="noopener">Occupational Employment and Wage Statistics</a> '
+            f'({WAGES["release"]}). Only states for which BLS publishes a figure are included.</p>'
+            f'<p><strong>Prices:</strong> the U.S. Bureau of Economic Analysis '
+            f'<a href="{BEA_RPP_URL}" rel="noopener">Regional Price Parities</a> for {RPP_YEAR} (all items), '
+            f'the most recent year available. An RPP of 110 means prices in that state are 10% above the national '
+            f'average.</p>'
+            f'<p><strong>Adjusted salary</strong> = average salary ÷ (RPP ÷ 100). It shows what the average salary '
+            f'would buy at national-average prices.</p>'
+            f'<p><strong>Limitations:</strong> RPPs are statewide averages, so prices in a large city can be much '
+            f'higher than the state figure. The adjustment does not account for state and local taxes. Wages are '
+            f'employer-reported means and exclude overtime, benefits and self-employed workers. Wage and price data '
+            f'come from consecutive years ({WAGES["release"]} and {RPP_YEAR}).</p>')
+
+
+def render_article(url, page_title, desc, h1, content, schema):
+    out = OUTPUT_DIR / url.strip("/")
+    out.mkdir(parents=True, exist_ok=True)
+    html = env.get_template("static.html").render(
+        **base_context(),
+        nav_current="research",
+        page_title=page_title,
+        meta_description=desc,
+        canonical_url=url,
+        schema_json=schema,
+        content=Markup(content),
+    )
+    (out / "index.html").write_text(html, encoding="utf-8")
+    RESEARCH_URLS.append(url)
+
+
+def generate_research(jobs, states):
+    rpp = load_rpp()
+    if not rpp:
+        print("⚠️  data/state_rpp.csv missing — research articles skipped")
+        return
+    JOBS_BY_SLUG.update({j["job_slug"]: j for j in jobs})
+    articles = []
+    published = "October 2026"
+
+    # 1. Nurses
+    url = "/research/nurse-salary-by-state-cost-of-living/"
+    title = "Registered Nurse Salary by State, Adjusted for Cost of Living"
+    sec, lead = col_section("registered-nurses", "registered nurses", states, rpp)
+    desc = f"Which states pay nurses the most once prices are counted? BLS {WAGES['release']} wages adjusted with BEA price parities for all states."
+    content = (f'<div class="badge">Research</div><h1>{title}</h1>'
+               f'<p class="subtitle">Published {published} · BLS OEWS {WAGES["release"]} · BEA RPP {RPP_YEAR}</p>'
+               f'<p>Nurse pay varies by tens of thousands of dollars between states, but so do rent, groceries and '
+               f'other costs. This study divides each state\'s average registered nurse salary by its price level to '
+               f'show what that pay is actually worth.</p>'
+               f'<div class="highlight"><strong>Key finding:</strong> {lead}</div>'
+               + sec + col_method() + cite_box(title, url))
+    render_article(url, f"{title} ({WAGES['release'].split()[-1]}) | {SITE_NAME}", desc, title, content,
+                   article_schema(title, desc, url))
+    articles.append((url, title, desc))
+
+    # 2. Teachers (elementary + secondary)
+    url = "/research/teacher-salary-by-state-cost-of-living/"
+    title = "Teacher Salary by State, Adjusted for Cost of Living"
+    sec_e, lead_e = col_section("elementary-school-teachers", "elementary school teachers", states, rpp)
+    sec_s, lead_s = col_section("secondary-school-teachers", "high school teachers", states, rpp)
+    desc = f"Elementary and high school teacher pay in every state, adjusted for local prices with BEA price parities. BLS {WAGES['release']} data."
+    content = (f'<div class="badge">Research</div><h1>{title}</h1>'
+               f'<p class="subtitle">Published {published} · BLS OEWS {WAGES["release"]} · BEA RPP {RPP_YEAR}</p>'
+               f'<p>Headline teacher salaries make high-cost states look generous. Adjusting for prices shows where '
+               f'a teaching salary goes furthest, for both elementary and high school teachers.</p>'
+               f'<div class="highlight"><strong>Elementary:</strong> {lead_e}<br><strong>High school:</strong> {lead_s}</div>'
+               + sec_e + sec_s + col_method() + cite_box(title, url))
+    render_article(url, f"{title} ({WAGES['release'].split()[-1]}) | {SITE_NAME}", desc, title, content,
+                   article_schema(title, desc, url))
+    articles.append((url, title, desc))
+
+    # 3. Where state matters most: highest-to-lowest state pay ratio for common jobs
+    url = "/research/jobs-where-pay-depends-most-on-state/"
+    title = "The Jobs Where Your State Matters Most for Pay"
+    min_state_emp, min_nat_emp, min_states = 1000, 100000, 30
+    spread = []
+    for j in jobs:
+        slug = j["job_slug"]
+        # "All Other" SOC codes mix unrelated jobs, so their state gaps are not comparable
+        if not NAT[slug]["real"] or (NAT[slug]["emp"] or 0) < min_nat_emp or slug.endswith("-all-other"):
+            continue
+        cells = [(ST[slug][s["state_slug"]]["avg"], s) for s in states
+                 if ST[slug][s["state_slug"]]["real"] and (ST[slug][s["state_slug"]]["emp"] or 0) >= min_state_emp]
+        if len(cells) < min_states:
+            continue
+        cells.sort(key=lambda c: c[0])
+        lo, hi = cells[0], cells[-1]
+        spread.append({"slug": slug, "title": j["job_title"], "ratio": hi[0] / lo[0], "gap": hi[0] - lo[0],
+                       "lo": lo, "hi": hi, "n": len(cells)})
+    spread.sort(key=lambda r: -r["ratio"])
+
+    def spread_table(rows):
+        return ('<div class="table-wrap scroll"><table class="study-table num"><thead><tr><th scope="col">Occupation</th>'
+                '<th scope="col">Lowest-paying state</th><th scope="col">Highest-paying state</th>'
+                '<th scope="col" class="r">Highest ÷ lowest</th></tr></thead><tbody>'
+                + "".join(f'<tr><td><a href="/salary/{r["slug"]}/" class="cell-link">{r["title"]}</a></td>'
+                          f'<td><a href="/salary/{r["slug"]}/{r["lo"][1]["state_slug"]}/">{r["lo"][1]["state_name"]}</a> '
+                          f'${fmt(r["lo"][0])}</td>'
+                          f'<td><a href="/salary/{r["slug"]}/{r["hi"][1]["state_slug"]}/">{r["hi"][1]["state_name"]}</a> '
+                          f'${fmt(r["hi"][0])}</td><td class="r cell-salary">{r["ratio"]:.2f}×</td></tr>'
+                          for r in rows)
+                + '</tbody></table></div>')
+
+    widest, narrowest = spread[:15], spread[-15:][::-1]
+    w0, n0 = widest[0], narrowest[0]
+    desc = (f"For {len(spread)} common occupations, we compared the highest- and lowest-paying states. "
+            f"Pay for {w0['title']} varies {w0['ratio']:.1f}× by state; for {n0['title']} only {n0['ratio']:.2f}×.")
+    content = (f'<div class="badge">Research</div><h1>{title}</h1>'
+               f'<p class="subtitle">Published {published} · BLS OEWS {WAGES["release"]}</p>'
+               f'<p>For some jobs, moving states can double your pay. For others, pay is nearly the same everywhere. '
+               f'We compared the highest- and lowest-paying states for {len(spread)} common occupations, each '
+               f'employing at least {fmt(min_nat_emp)} people nationwide.</p>'
+               f'<div class="highlight"><strong>Key finding:</strong> Average pay for {w0["title"]} is '
+               f'{w0["ratio"]:.1f} times as high in {w0["hi"][1]["state_name"]} (${fmt(w0["hi"][0])}) as in '
+               f'{w0["lo"][1]["state_name"]} (${fmt(w0["lo"][0])}). At the other end, pay for {n0["title"]} barely '
+               f'changes from state to state: the best-paying state pays only {round((n0["ratio"] - 1) * 100)}% more '
+               f'than the lowest.</div>'
+               f'<h2>Where state matters most</h2>'
+               f'<p>The 15 occupations with the widest gap between their highest- and lowest-paying state.</p>'
+               + spread_table(widest) +
+               f'<h2>Where state matters least</h2>'
+               f'<p>The 15 occupations where pay is most similar from state to state.</p>'
+               + spread_table(narrowest) +
+               f'<h2>Methodology</h2>'
+               f'<p>Mean annual wages by state from the BLS <a href="{BLS_OES_URL}" rel="noopener">Occupational '
+               f'Employment and Wage Statistics</a> ({WAGES["release"]}). To keep small samples from driving the '
+               f'results, a state is counted only when BLS reports at least {fmt(min_state_emp)} workers in the '
+               f'occupation there, and an occupation is included only when at least {min_states} states qualify. '
+               f'The ratio is the highest state mean divided by the lowest. Figures are not adjusted for cost of '
+               f'living; see our <a href="/research/nurse-salary-by-state-cost-of-living/">cost-of-living studies</a> '
+               f'for that view.</p>'
+               + cite_box(title, url).replace(f" and BEA Regional Price Parities {RPP_YEAR}", ""))
+    render_article(url, f"{title} | {SITE_NAME}", desc, title, content, article_schema(title, desc, url))
+    articles.append((url, title, desc))
+
+    # Hub
+    hub = "/research/"
+    items = "".join(f'<div class="card"><h3><a href="{u}">{t}</a></h3><p>{d}</p></div>' for u, t, d in articles)
+    hub_desc = f"Original salary studies from {SITE_NAME}, built on BLS wage data and BEA price parities."
+    render_article(hub, f"Salary Research & Data Studies | {SITE_NAME}", hub_desc, "Salary Research",
+                   f'<div class="badge">Research</div><h1>Salary Research</h1>'
+                   f'<p class="subtitle">Data studies built on official U.S. government statistics</p>'
+                   f'<p>We analyze BLS wage data to answer questions headline salary figures miss, such as how far a '
+                   f'salary goes after local prices. All figures update automatically with each BLS data release. '
+                   f'See our <a href="/methodology/">methodology</a> for how the underlying data works.</p>{items}',
+                   None)
+    print(f"✅ {len(articles)} research articles + hub generated")
+
+
+
 def generate_sitemap(jobs, states, cities):
     from datetime import date
     today = date.today().strftime("%Y-%m-%d")
@@ -845,6 +1110,8 @@ def generate_sitemap(jobs, states, cities):
     priority_urls = []
     priority_urls.append((f"https://{SITE_DOMAIN}/", "1.0", "weekly", today))
     priority_urls.append((f"https://{SITE_DOMAIN}/salary/", "0.9", "monthly", data_release_date))
+    for u in RESEARCH_URLS:
+        priority_urls.append((f"https://{SITE_DOMAIN}{u}", "0.8", "monthly", data_release_date))
     for j in jobs:
         if not NAT[j["job_slug"]]["real"]:
             continue  # noindex: no BLS occupation
@@ -1257,6 +1524,7 @@ def generate_llms_txt(jobs):
         "",
         f"- Homepage (all jobs): https://{SITE_DOMAIN}/",
         f"- Methodology: https://{SITE_DOMAIN}/methodology/",
+        f"- Research (salary studies): https://{SITE_DOMAIN}/research/",
         f"- About: https://{SITE_DOMAIN}/about/",
         f"- Privacy Policy: https://{SITE_DOMAIN}/privacy/",
         f"- Terms of Use: https://{SITE_DOMAIN}/terms/",
@@ -1524,6 +1792,7 @@ def main():
     print(f"✅ City pages skipped (staying under 20k limit)")
 
     # Sitemap + robots + search + static pages + Cloudflare config
+    generate_research(jobs, states)
     generate_sitemap(jobs, states, cities)
     generate_robots()
     generate_search_index(jobs, states)

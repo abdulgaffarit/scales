@@ -5,6 +5,7 @@
     <div class="header-search">{% with search_xl=False %}{% include "partials/search_box.html" %}{% endwith %}</div>
     <nav class="header-nav" aria-label="Main">
       <a href="/salary/"{% if nav_current == 'salary' %} aria-current="page"{% endif %}>Browse salaries</a>
+      <a href="/research/"{% if nav_current == 'research' %} aria-current="page"{% endif %}>Research</a>
       <a href="/methodology/"{% if nav_current == 'methodology' %} aria-current="page"{% endif %}>About the data</a>
     </nav>
     <button class="icon-btn first" type="button" data-toggle="search" aria-expanded="false" aria-label="Search">
@@ -16,6 +17,7 @@
   </div>
   <nav class="mobile-menu" id="mobile-menu" aria-label="Menu">
     <a href="/salary/">Browse salaries <span aria-hidden="true">→</span></a>
+    <a href="/research/">Research <span aria-hidden="true">→</span></a>
     <a href="/methodology/">About the data <span aria-hidden="true">→</span></a>
     <a href="/about/">About <span aria-hidden="true">→</span></a>
     <a href="/contact/">Contact <span aria-hidden="true">→</span></a>

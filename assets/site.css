@@ -273,6 +273,15 @@ a.row:hover{background:var(--hover);color:inherit}
 .page-content .subtitle{color:var(--muted);font-size:18px}
 .page-content table{width:100%;border-collapse:collapse;font-size:14px;margin:0 0 16px}
 .page-content th,.page-content td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+/* research study tables: keep columns, scroll sideways on phones */
+.page-content .table-wrap.scroll{overflow-x:auto;margin:0 0 12px}
+.page-content .study-table{margin:0;min-width:600px}
+.study-table th{font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--canvas);white-space:nowrap}
+.study-table .r{text-align:right}
+.study-table td{white-space:nowrap}
+.study-table td a{color:var(--ink);font-weight:500}
+.study-table .cell-salary{font-weight:600}
+.study-table tbody tr:last-child td{border-bottom:0}
 @media (max-width:639px){.page-content h1{font-size:28px}}
 .hub-tools{display:grid;gap:12px;margin:20px 0 8px}
 .hub-tools .search-box{height:52px;background:var(--surface);border-color:var(--line-strong)}
