@@ -90,6 +90,18 @@
         <p class="info">{{ percentile_insight }}</p>
       </section>
 
+      {% if about_duties %}
+      <section class="sec" aria-labelledby="sec-about">
+        <h2 id="sec-about">{{ about_title }}</h2>
+        <p class="sec-sub">Role, training and entry requirements</p>
+        <div class="prose">
+          <p>{{ about_duties }}</p>
+          <h3>How to become one</h3>
+          <p>{{ about_path }}</p>
+        </div>
+      </section>
+      {% endif %}
+
       {% if key_facts %}
       <section class="sec" aria-labelledby="sec-facts">
         <h2 id="sec-facts">{{ key_facts_title }}</h2>

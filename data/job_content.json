@@ -1,0 +1,202 @@
+{
+  "retail-salespersons": {
+    "duties": "Retail salespersons help customers find products, answer questions about features and prices, process sales and returns, and keep the sales floor stocked and organized. The work ranges from general merchandise and clothing stores to specialized sellers of cars, furniture, electronics, and building materials.",
+    "path": "Most positions require no formal education beyond on-the-job training, which is why retail is a common first job. Product knowledge is learned at work, and some employers prefer a high school diploma for roles that handle financing or technical products.",
+    "pay": "What a store sells matters more than the job title. Workers selling high-ticket items such as vehicles, appliances, or electronics often earn commission on top of an hourly base, which pushes them toward the upper percentiles. Part-time schedules are common, so annual figures can understate what a full-time worker earns."
+  },
+  "fast-food-and-counter-workers": {
+    "duties": "Fast food and counter workers take orders, prepare simple food and drinks, handle payments, and keep counters and dining areas clean. The category covers quick-service restaurants, coffee shops, cafeterias, concession stands, and food counters inside other businesses.",
+    "path": "No formal education or experience is usually required; training happens on the job in a few days. Many workers are students or people entering the workforce, and food-safety certification may be needed in some states.",
+    "pay": "This is one of the lowest-paid occupations nationally, and state and local minimum-wage laws are the biggest driver of differences between states. Tips at counter-service businesses and shift differentials for late hours can add to base pay, and moving into a shift lead or supervisor role is the most common path to higher earnings."
+  },
+  "general-and-operations-managers": {
+    "duties": "General and operations managers plan, direct, and coordinate the day-to-day operations of an organization or a division within it. They set policies, manage budgets and staffing, oversee daily operations, and are accountable for results across several functions rather than a single department.",
+    "path": "Most hold a bachelor's degree, often in business administration or a field related to their industry, and several years of experience in a lower-level management or specialist role. An MBA is common at larger organizations but is not required everywhere.",
+    "pay": "Pay varies enormously with the size of the organization and the industry. A manager running a small local business and one running a regional division of a large company share the same occupation code, which is why the gap between the 10th and 90th percentile is so wide. Bonuses and profit sharing are common at the top of the range."
+  },
+  "registered-nurses": {
+    "duties": "Registered nurses assess patients, administer medications and treatments, monitor recovery, coordinate care with physicians and other providers, and teach patients and families how to manage health conditions. They work in hospitals, physician offices, home health, nursing facilities, schools, and outpatient centers.",
+    "path": "RNs complete either an associate degree in nursing (ADN) or a bachelor of science in nursing (BSN), then pass the NCLEX-RN exam and obtain a state license. Many hospitals prefer or require a BSN, and many ADN nurses later complete an RN-to-BSN program.",
+    "pay": "State is one of the largest pay factors for nurses, driven by local cost of living, union representation, and regional nursing shortages. Hospital settings generally pay more than physician offices or schools, and night, weekend, and specialty-unit differentials (ICU, ER, operating room) add meaningfully to base pay. Travel nursing contracts can pay well above staff rates."
+  },
+  "cashiers": {
+    "duties": "Cashiers process payments at checkout, scan or ring up items, issue receipts, handle returns and exchanges, and balance their cash drawer at the end of a shift. They work in grocery stores, general merchandise stores, gas stations, pharmacies, and many other retail settings.",
+    "path": "No formal education is usually required, and training takes place on the job. It is a common entry-level job, and many cashiers work part time.",
+    "pay": "Pay closely tracks state and local minimum wages, which explains most of the gap between the highest- and lowest-paying states. Grocery chains with union contracts and large retailers with higher starting wages tend to pay toward the top of the range, and moving into a head cashier or front-end supervisor role raises pay."
+  },
+  "laborers-and-freight-stock-material-movers": {
+    "duties": "Hand laborers and material movers load and unload trucks, move freight and stock by hand or with hand trucks, pick and pack orders, and keep warehouses and loading docks organized. Many work in warehousing, distribution centers, retail logistics, and transportation.",
+    "path": "Most jobs require no formal education, and training is short and on the job. Physical stamina matters, and workers who earn a forklift or other equipment certification can move into higher-paid operator roles.",
+    "pay": "Large distribution and e-commerce fulfillment centers have pushed starting wages up in many regions. Overtime during peak seasons, night-shift differentials, and union contracts in freight and grocery distribution are the main ways to earn above the median."
+  },
+  "customer-service-representatives": {
+    "duties": "Customer service representatives answer questions, resolve complaints, process orders and account changes, and explain products and policies by phone, chat, email, or in person. They work in call centers, insurance companies, banks, utilities, telecom, retailers, and healthcare organizations.",
+    "path": "A high school diploma is typical, with training provided by the employer on its products, systems, and policies. Roles in insurance or finance may require a state license or additional training.",
+    "pay": "Industry is the main pay driver: representatives at insurance carriers, banks, and utilities usually earn more than those in retail or outsourced call centers. Bilingual skills, technical support duties, and performance bonuses can raise pay, and many representatives advance into team lead or account management roles."
+  },
+  "office-clerks-general": {
+    "duties": "General office clerks handle a wide mix of administrative tasks: answering phones, filing, data entry, preparing documents, processing mail, and keeping records. Unlike more specialized clerks, their duties vary from day to day and depend heavily on the employer.",
+    "path": "A high school diploma is typically required, and skills are learned on the job. Familiarity with office software and basic bookkeeping helps applicants stand out.",
+    "pay": "Government agencies, hospitals, and large corporations tend to pay more than small businesses. Clerks who build skills in a specialty such as bookkeeping, payroll, or medical records often move into better-paid specialized roles."
+  },
+  "waiters-and-waitresses": {
+    "duties": "Waiters and waitresses take orders, serve food and drinks, explain menu items, process payments, and make sure guests have a good experience. They work in full-service restaurants, hotels, bars, catering, and private clubs.",
+    "path": "No formal education is required, and most training happens on the job. Upscale restaurants often prefer experienced servers with knowledge of wine and fine dining service.",
+    "pay": "Reported wages for servers include tips only to the extent they are reported to employers, and many states allow a lower tipped minimum wage, so actual take-home pay varies widely. Fine-dining restaurants, busy tourist areas, and evening and weekend shifts generally produce the highest earnings."
+  },
+  "heavy-and-tractor-trailer-truck-drivers": {
+    "duties": "Heavy and tractor-trailer truck drivers transport goods by truck with a gross vehicle weight over 26,000 pounds, often over long distances. They inspect their vehicles, plan routes, keep logs of hours, and sometimes load and unload cargo.",
+    "path": "Drivers need a commercial driver's license (CDL), usually earned through a professional truck-driving school. Federal rules set minimum ages and medical requirements, and endorsements for hazardous materials, tankers, or doubles open additional jobs.",
+    "pay": "How drivers are paid shapes what they earn: many long-haul drivers are paid per mile, while local drivers are often paid hourly. Specialized freight such as hazmat, tankers, and oversized loads pays more, as do private fleets and union jobs. Owner-operators are not counted in these wage figures because they are self-employed."
+  },
+  "secretaries-and-administrative-assistants": {
+    "duties": "Secretaries and administrative assistants keep offices running: managing schedules, answering calls, preparing documents and correspondence, organizing files, and coordinating meetings. This figure excludes legal, medical, and executive assistants, which BLS counts separately.",
+    "path": "A high school diploma is the usual minimum, with office skills learned through experience or short training programs. Strong software, communication, and organizational skills matter more than formal credentials.",
+    "pay": "Pay depends on the employer and the scope of the role. Assistants in government, professional services, and large companies tend to earn more than those in small offices, and taking on office management or bookkeeping duties can raise pay."
+  },
+  "software-developers": {
+    "duties": "Software developers design, build, test, and maintain applications and systems, from mobile and web apps to the operating systems and infrastructure they run on. They translate user needs into technical designs, write and review code, and work with product, design, and quality-assurance teams.",
+    "path": "Most developers have a bachelor's degree in computer science, software engineering, or a related field, though coding bootcamps and self-taught portfolios also lead to jobs. Experience with in-demand languages, frameworks, and cloud platforms carries a lot of weight in hiring.",
+    "pay": "Software developer pay is concentrated in a few high-cost tech hubs, which is why state averages vary so widely. Specialization (for example machine learning, security, or distributed systems), seniority, and employer size all matter. These BLS figures cover base wages only; stock grants and bonuses, which can be large at major tech companies, are not included."
+  },
+  "maintenance-and-repair-workers-general": {
+    "duties": "General maintenance and repair workers fix and maintain machines, mechanical equipment, and buildings. Their work spans plumbing, electrical, HVAC, carpentry, and painting tasks in apartment complexes, factories, schools, hospitals, and commercial buildings.",
+    "path": "Most learn the trade through on-the-job training or vocational programs after high school. Certifications in areas such as HVAC refrigerant handling can be required for some tasks.",
+    "pay": "Workers in manufacturing plants, hospitals, and government facilities generally earn more than those in residential property management. Broader skills, especially electrical and HVAC work, and on-call or overtime hours push earnings toward the upper percentiles."
+  },
+  "accountants-and-auditors": {
+    "duties": "Accountants and auditors prepare and examine financial records, ensure taxes are paid correctly, assess financial operations, and check that organizations follow laws and internal controls. They work in public accounting firms, corporations, government agencies, and nonprofits.",
+    "path": "A bachelor's degree in accounting or a related field is the standard requirement. Becoming a Certified Public Accountant (CPA) requires additional coursework, passing the CPA exam, and meeting state experience rules, and it significantly expands career options.",
+    "pay": "CPA licensure is one of the biggest pay factors in this field. Accountants at large public accounting firms and in corporate finance tend to earn more than those in small firms or government, and moving into controller or finance manager roles is the typical route to the top of the range."
+  },
+  "first-line-supervisors-of-office-workers": {
+    "duties": "First-line supervisors of office and administrative support workers oversee clerical and administrative staff. They assign and review work, train new employees, handle scheduling, and make sure office procedures run smoothly.",
+    "path": "Most are promoted from within after years of experience in the roles they now supervise. A high school diploma is common, and larger employers may prefer some college or a business degree.",
+    "pay": "Pay rises with the size of the team and the organization. Supervisors in government, finance, insurance, and healthcare administration typically earn more than those in small offices."
+  },
+  "cooks-restaurant": {
+    "duties": "Restaurant cooks prepare, season, and cook dishes such as soups, salads, entrees, and desserts in full-service restaurants. They follow recipes, prep ingredients, work a station on the line, and keep their area clean and food-safe.",
+    "path": "Most cooks learn on the job, often starting in prep or dishwashing roles. Culinary school or apprenticeship programs can speed advancement, especially in upscale kitchens.",
+    "pay": "Upscale restaurants, hotels, and busy urban markets pay more than casual dining. Advancing to sous chef or head chef is the main path to substantially higher pay, and those roles are counted under separate occupation codes."
+  },
+  "miscellaneous-assemblers-and-fabricators": {
+    "duties": "Assemblers and fabricators put together finished products and the parts that go into them, using hand tools, power tools, and machines. They work in factories producing everything from vehicles and appliances to electronics and furniture.",
+    "path": "A high school diploma is typical, and training takes place on the job. Assemblers working on complex products such as aircraft or electronics may need more specialized training.",
+    "pay": "Industry and product complexity drive pay: assemblers in aerospace, vehicle, and electronics manufacturing generally earn more than those in lighter manufacturing. Union contracts, shift differentials, and overtime add to annual earnings."
+  },
+  "elementary-school-teachers": {
+    "duties": "Elementary school teachers, excluding special education, teach students in kindergarten through fifth grade the basics of reading, writing, math, science, and social studies. They plan lessons, assess progress, manage classrooms, and communicate with parents.",
+    "path": "Public school teachers need a bachelor's degree and a state-issued teaching license or certification, which involves supervised student teaching and passing licensing exams. Private schools set their own requirements.",
+    "pay": "Public school teacher pay follows district salary schedules based on years of experience and education level, so a master's degree and seniority raise pay in predictable steps. State funding and local cost of living explain most of the differences between states, and these annual figures reflect a school-year contract rather than twelve months of work."
+  },
+  "bookkeeping-accounting-and-auditing-clerks": {
+    "duties": "Bookkeeping, accounting, and auditing clerks record financial transactions, update ledgers and statements, reconcile accounts, and check records for accuracy. In small businesses one bookkeeper may handle all of the books, while larger organizations divide the work among specialized clerks.",
+    "path": "A high school diploma plus on-the-job training is common, though many employers prefer some postsecondary coursework in accounting. Certification such as the Certified Bookkeeper credential can help with advancement.",
+    "pay": "Clerks with full-charge bookkeeping skills, payroll experience, and proficiency in accounting software earn toward the top of the range. Larger employers and professional services firms usually pay more than small businesses."
+  },
+  "security-guards": {
+    "duties": "Security guards patrol and protect property against theft, vandalism, and other illegal activity. They monitor alarms and cameras, control access to buildings, write reports, and respond to incidents in offices, stores, hospitals, schools, and events.",
+    "path": "Most states require guards to be registered or licensed, which typically involves a background check and short training. Armed guards need additional firearms training and a separate license.",
+    "pay": "Armed guards, guards at government facilities, and those working directly for a company (rather than a contract security firm) usually earn more. Overtime, overnight shifts, and supervisory roles add to pay."
+  },
+  "sales-reps-wholesale-and-manufacturing": {
+    "duties": "Wholesale and manufacturing sales representatives sell goods for manufacturers and wholesalers to businesses, government agencies, and other organizations. They find prospects, demonstrate products, negotiate prices, and maintain relationships with existing accounts. This figure excludes technical and scientific products, which BLS counts separately.",
+    "path": "Requirements vary from a high school diploma to a bachelor's degree, depending on the products sold. Product knowledge and sales experience matter most, and companies often provide formal sales training.",
+    "pay": "Many representatives are paid a base salary plus commission or bonus, so earnings depend heavily on territory, product line, and performance. That pay structure is a major reason the 90th percentile is far above the median."
+  },
+  "first-line-supervisors-of-food-preparation": {
+    "duties": "First-line supervisors of food preparation and serving workers direct the cooks, servers, and counter staff in restaurants, cafeterias, and other food service operations. They schedule shifts, train workers, enforce food-safety rules, and handle customer issues.",
+    "path": "Most are promoted from front-line food service jobs after gaining experience. A food-safety manager certification is commonly required.",
+    "pay": "Supervisors in hospitals, schools, hotels, and corporate cafeterias often earn more than those in fast food. Pay also rises with the size and sales volume of the operation."
+  },
+  "first-line-supervisors-of-retail-sales-workers": {
+    "duties": "First-line supervisors of retail sales workers oversee sales associates and cashiers. They schedule staff, train employees, handle customer problems, track inventory and sales targets, and often step in to help on the sales floor.",
+    "path": "Most are promoted from retail sales jobs, and experience is usually more important than education. Larger retailers may run formal management training programs.",
+    "pay": "Store size, sales volume, and the type of merchandise all affect pay, and many supervisors receive bonuses tied to store performance. Moving up to store or district manager is the main route to higher earnings."
+  },
+  "construction-laborers": {
+    "duties": "Construction laborers perform physically demanding tasks on building, highway, and other construction sites: preparing sites, digging trenches, setting braces, operating hand and power tools, and cleaning up debris.",
+    "path": "Many learn on the job, while others complete an apprenticeship that combines paid work with classroom instruction. Safety training such as OSHA courses is common, and some tasks require specific certifications.",
+    "pay": "Union membership, large commercial and infrastructure projects, and prevailing-wage public work push pay higher. Seasonal work and weather can reduce annual earnings, and laborers who learn a specialized trade often move into higher-paid craft occupations."
+  },
+  "project-management-specialists": {
+    "duties": "Project management specialists plan and coordinate projects from start to finish. They define scope, build schedules and budgets, coordinate team members and vendors, track progress, and report to stakeholders across industries such as technology, construction, healthcare, and consulting.",
+    "path": "Most have a bachelor's degree, often in business or a field related to their industry. Certifications such as the Project Management Professional (PMP) are widely recognized and can strengthen a candidate's prospects.",
+    "pay": "Industry and project scale matter most: specialists managing large technology, engineering, or defense projects tend to earn the most. Certification, technical expertise, and experience managing larger budgets and teams all move pay upward."
+  },
+  "secondary-school-teachers": {
+    "duties": "Secondary school teachers, excluding special and career/technical education, teach students in grades 9 through 12 in subjects such as math, English, science, history, and foreign languages. They prepare lessons, grade work, and help students prepare for college and careers.",
+    "path": "Public high school teachers need a bachelor's degree, often with a major in the subject they teach, and a state teaching license or certification. Some states require a master's degree within a set number of years.",
+    "pay": "District salary schedules reward years of experience and advanced degrees, and coaching or advising roles can add stipends. State education funding and cost of living drive the large differences between states."
+  },
+  "light-truck-drivers": {
+    "duties": "Light truck drivers operate trucks or vans with a gross vehicle weight of 26,000 pounds or less to pick up, transport, and deliver packages and goods, usually within a local area.",
+    "path": "A regular driver's license and a clean driving record are usually enough, plus short on-the-job training. Commercial licenses are not required for most light vehicles.",
+    "pay": "Delivery drivers for major parcel carriers, especially under union contracts, earn well above the median, while contract delivery work tends to pay less. Overtime during peak seasons adds to annual earnings."
+  },
+  "human-resources-specialists": {
+    "duties": "Human resources specialists recruit, screen, interview, and place workers, and they handle related tasks such as employee relations, compensation and benefits, training, and compliance with employment laws.",
+    "path": "A bachelor's degree in human resources, business, or a related field is typical. Certifications from SHRM or HRCI can help with advancement.",
+    "pay": "Specialists in professional and technical services, finance, and large corporations tend to earn more. Expertise in areas such as compensation, benefits, or HR information systems commands higher pay, and many move into HR management."
+  },
+  "market-research-analysts": {
+    "duties": "Market research analysts study market conditions to estimate potential sales of products and services. They design surveys, analyze data on consumers and competitors, and present findings that help companies decide what to sell, to whom, and at what price.",
+    "path": "A bachelor's degree in market research, statistics, business, or a related field is the usual requirement. Strong skills in statistics, data analysis software, and communication are essential, and senior roles often call for a master's degree.",
+    "pay": "Analysts with advanced quantitative and data science skills earn toward the top of the range. Pay is highest in large companies, consulting firms, and technology-heavy metro areas."
+  },
+  "management-analysts": {
+    "duties": "Management analysts, often called management consultants, recommend ways to improve an organization's efficiency and profitability. They gather and analyze data, interview staff, identify problems, and develop new procedures or systems.",
+    "path": "Most management analysts have at least a bachelor's degree, and many have an MBA. Several years of experience in a field such as finance, operations, or IT is common before moving into consulting.",
+    "pay": "Analysts at major consulting firms and those working in federal contracting tend to earn the most. Pay rises sharply with seniority and with expertise in a specialized industry or function."
+  },
+  "financial-managers": {
+    "duties": "Financial managers oversee the financial health of an organization. They produce financial reports, direct investment activities, and develop strategies and plans for long-term financial goals. Titles include controller, treasurer, finance officer, and finance director.",
+    "path": "A bachelor's degree in finance, accounting, economics, or business administration is the standard minimum, and many employers prefer a master's degree such as an MBA. Most have five or more years of experience in another financial occupation first.",
+    "pay": "Financial managers in securities, investment, and large corporate settings earn the most, and bonuses can make up a large share of total compensation. Pay is also highest in major financial centers, which drives the gap between states."
+  },
+  "first-line-supervisors-of-construction-trades": {
+    "duties": "First-line supervisors of construction trades and extraction workers directly oversee crews of tradespeople and laborers on job sites. They assign tasks, read plans, enforce safety rules, track progress against schedules, and coordinate with project managers.",
+    "path": "Most rise from the trades after many years of experience, often as a skilled craft worker. Some have degrees in construction management, and safety certifications are commonly required.",
+    "pay": "Large commercial and industrial projects, union work, and regions with heavy construction activity pay the most. Pay also rises with crew size and project complexity."
+  },
+  "electricians": {
+    "duties": "Electricians install, maintain, and repair electrical power, lighting, communications, and control systems in homes, businesses, and factories. They read blueprints, run wiring, test circuits, and make sure work meets electrical codes.",
+    "path": "Most electricians learn through a four- to five-year apprenticeship that combines paid on-the-job training with classroom instruction. Most states require electricians to pass an exam and hold a license, with journeyman and master levels.",
+    "pay": "Union membership, licensing level, and specialty (industrial, commercial, or residential) all shape pay. Electricians in large metro areas and on industrial or utility projects earn the most, while overtime and travel work add to annual earnings."
+  },
+  "bartenders": {
+    "duties": "Bartenders mix and serve drinks to customers directly or through wait staff. They check identification, take payments, keep the bar stocked and clean, and often serve food in bars, restaurants, hotels, and event venues.",
+    "path": "Most learn on the job, often starting as barbacks or servers. Some attend bartending schools, and many states require responsible alcohol service training.",
+    "pay": "Tips make up a large part of bartender income and are only partly captured in reported wages, so actual earnings can exceed these figures. High-volume bars, upscale venues, and tourist destinations offer the highest earning potential."
+  },
+  "lawyers": {
+    "duties": "Lawyers advise and represent individuals, businesses, and government agencies on legal issues and disputes. They research laws, draft documents such as contracts and wills, negotiate settlements, and argue cases in court.",
+    "path": "Lawyers need a bachelor's degree followed by a three-year Juris Doctor (JD) from a law school, and they must pass the bar exam in the state where they practice.",
+    "pay": "Lawyer pay is split sharply between large private firms, where salaries are very high, and government, public interest, and small-firm practice, where pay is much lower. Practice area and major legal markets also matter. Partners and solo practitioners who own their firms are not fully captured in these wage figures."
+  },
+  "computer-user-support-specialists": {
+    "duties": "Computer user support specialists, often called help desk or IT support technicians, help people with computer problems. They troubleshoot hardware and software issues, set up equipment, walk users through fixes by phone or in person, and escalate complex problems.",
+    "path": "Requirements range from some college coursework to a bachelor's degree in an IT field. Industry certifications such as CompTIA A+ are common entry points.",
+    "pay": "Specialists supporting complex enterprise systems or working in finance, government, and large technology firms earn more. Gaining networking, security, or systems administration skills is a common path into higher-paid IT roles."
+  },
+  "automotive-service-technicians": {
+    "duties": "Automotive service technicians and mechanics inspect, maintain, and repair cars and light trucks. They diagnose problems with computerized equipment, replace parts, perform routine maintenance, and explain repairs to customers.",
+    "path": "Many complete a postsecondary training program in automotive technology, and some start with on-the-job training. ASE certification is the industry standard, and EPA certification is required to work on air-conditioning systems.",
+    "pay": "Many technicians are paid on a flat-rate basis per job, so speed and skill directly affect earnings. Dealership technicians, those with ASE master certification, and specialists in diagnostics or electric and hybrid vehicles tend to earn the most."
+  },
+  "first-line-supervisors-of-production-workers": {
+    "duties": "First-line supervisors of production and operating workers oversee machine operators, assemblers, and other production staff in manufacturing plants. They monitor output and quality, schedule workers, enforce safety rules, and solve problems on the floor.",
+    "path": "Most are promoted from production jobs after gaining experience, though some employers prefer a degree in industrial management or engineering technology.",
+    "pay": "Supervisors in high-value manufacturing such as aerospace, chemicals, and pharmaceuticals earn the most. Shift differentials and plant size also affect pay."
+  },
+  "computer-and-information-systems-managers": {
+    "duties": "Computer and information systems managers, often called IT managers or IT project managers, plan, coordinate, and direct computer-related activities in an organization. They set technology goals, oversee IT staff, manage budgets, and evaluate new systems.",
+    "path": "A bachelor's degree in computer or information science is typical, along with several years of experience in IT. Many organizations prefer a graduate degree, such as an MBA with a technology focus.",
+    "pay": "This is one of the highest-paid occupations nationally. Pay is greatest at large technology, finance, and information companies, and the most senior roles, such as chief technology officer, earn far above the median."
+  },
+  "police-officers": {
+    "duties": "Police and sheriff's patrol officers protect lives and property. They patrol assigned areas, respond to calls for service, enforce laws, conduct traffic stops, make arrests, and write detailed reports.",
+    "path": "Candidates typically need a high school diploma or college degree, must meet physical and background requirements, and complete a training academy. Many agencies offer higher pay for officers with a college degree.",
+    "pay": "Large city and state agencies usually pay more than small departments. Overtime is a significant part of total earnings for many officers, and pay rises with rank and years of service."
+  }
+}

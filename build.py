@@ -150,6 +150,13 @@ def load_csv(filename):
 WAGES = {"job_soc": {}, "national": {}, "state": {}, "release": "May 2025", "fetched": None}
 NAT = {}   # job_slug -> national_stats()
 ST = {}    # job_slug -> {state_slug: state_stats()}
+# Hand-written role descriptions for the largest occupations (data/job_content.json)
+JOB_CONTENT = json.loads((DATA_DIR / "job_content.json").read_text(encoding="utf-8")) \
+    if (DATA_DIR / "job_content.json").exists() else {}
+# State pages are indexed only when BLS counts at least this many workers in the
+# state. Smaller cells are near-identical templates that Google crawls but declines
+# to index ("Crawled - currently not indexed"); they stay live but noindex.
+MIN_INDEXED_STATE_EMP = 5000
 ROBOTS_INDEX = "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
 ROBOTS_NOINDEX = "noindex, follow"
 
@@ -218,6 +225,12 @@ def indexable(stats):
     """Once real OEWS state data is loaded, only pages backed by it are indexed —
     cost-of-living estimates are near-duplicates Google declines to index."""
     return stats["real"] or not WAGES["state"]
+
+
+def index_state_page(stats):
+    """Robots/sitemap gate for state pages: real BLS data and a large enough
+    workforce for the page to carry distinct information."""
+    return indexable(stats) and (stats["emp"] or 0) >= MIN_INDEXED_STATE_EMP
 
 
 def load_wages():
@@ -403,6 +416,11 @@ def generate_job_national(job, all_jobs, states):
               "This site does not publish job-growth projections; the BLS Occupational Outlook Handbook covers the outlook for each occupation."},
     ]
 
+    content = JOB_CONTENT.get(job["job_slug"], {})
+    pay_p2 = content.get("pay") or (
+        f"The middle half of {title} earn between ${fmt(pct['p25'])} and ${fmt(pct['p75'])} per year. "
+        f"The lowest-paid 10% earn under ${fmt(pct['p10'])}, while the top 10% earn more than ${fmt(pct['p90'])}.")
+
     ctx = base_context()
     ctx.update({
         "page_title": f"{title} Salary 2026 | {SITE_NAME}",
@@ -430,8 +448,11 @@ def generate_job_national(job, all_jobs, states):
         "comparison_rows": all_states_rows,
         "insight_title": f"What Factors Affect {title} Salary?",
         "insight_p1": f"Pay for {title} is influenced by geographic location, years of experience, employer type, and educational background. Location alone is a large factor: {top3[0]} pays an average of ${real_rows[0]['salary_fmt']}, while {real_rows[-1]['name']} pays ${real_rows[-1]['salary_fmt']} — a gap of ${fmt(real_rows[0]['salary_val'] - real_rows[-1]['salary_val'])} per year.",
-        "insight_p2": f"Experience plays a major role in compensation. Entry-level {title} typically earn ${fmt(pct['p10'])}–${fmt(pct['p25'])} per year, while senior professionals with 10+ years of experience can command ${fmt(pct['p75'])}–${fmt(pct['p90'])} annually. Specialization and advanced certifications can further boost earning potential.",
-        "insight_p3": f"Employer size also matters. Large corporations and government agencies tend to offer more competitive packages including benefits, retirement plans, and bonuses. The {title} role currently has {job['demand'].lower()} demand in the job market with a {job['yoy_growth']}% growth rate, making it one of the {'most' if float(job['yoy_growth']) > 4 else 'steadily'} growing careers in the {job['category']} sector.",
+        "insight_p2": pay_p2,
+        "insight_p3": f"These figures are the wages employers report to BLS: base pay plus commissions, production bonuses and tips. They exclude overtime pay, shift differentials, year-end bonuses, benefits and self-employed workers, so total compensation can be higher than the numbers shown.",
+        "about_title": f"What {title} Do" if content else "",
+        "about_duties": content.get("duties", ""),
+        "about_path": content.get("path", ""),
         "related_jobs": related_jobs,
         "faqs": faqs,
         "schema_json": dataset_schema(f"{title} Salary 2026", f"Comprehensive salary data for {title} professionals in the United States.", url),
@@ -541,7 +562,7 @@ def generate_job_state(job, state, all_cities, all_jobs, states):
         "meta_description": f"{title} in {sname} earn ${fmt(avg)}/yr on average ({ordinal(rank)} of {n_states} states), {abs(diff_national)}% {'above' if above else 'below'} the US average. Percentiles & hourly pay from {source}.",
         "og_image": f"https://{SITE_DOMAIN}/og-default.png",
         "canonical_url": url,
-        "robots_meta": ROBOTS_INDEX if indexable(stats) else ROBOTS_NOINDEX,
+        "robots_meta": ROBOTS_INDEX if index_state_page(stats) else ROBOTS_NOINDEX,
         "source_badge": f"BLS Official Data · OEWS {WAGES['release']}" if real else ("Estimate · based on BLS national data" if nat["real"] else "Unverified estimate · no BLS occupation"),
         "dataset_label": f"OEWS {WAGES['release']}" if real else ("Estimate (BLS national × cost of living)" if nat["real"] else "Unverified estimate"),
         "h1_title": f"{title} Salary in {sname} (2026)",
@@ -833,7 +854,7 @@ def generate_sitemap(jobs, states, cities):
     state_urls = []
     for j in jobs:
         for s in states:
-            if not indexable(ST[j["job_slug"]][s["state_slug"]]):
+            if not index_state_page(ST[j["job_slug"]][s["state_slug"]]):
                 continue
             state_urls.append((f"https://{SITE_DOMAIN}/salary/{j['job_slug']}/{s['state_slug']}/", "0.6", "monthly", data_release_date))
 
@@ -879,7 +900,7 @@ def generate_search_index(jobs, states):
         slug = j["job_slug"]
         if not NAT[slug]["real"]:
             continue
-        missing = [i for i, s in enumerate(states) if not indexable(ST[slug][s["state_slug"]])]
+        missing = [i for i, s in enumerate(states) if not index_state_page(ST[slug][s["state_slug"]])]
         index["j"].append([j["job_title"], slug, j["category"], NAT[slug]["avg"], NAT[slug]["emp"] or 0, missing])
     (OUTPUT_DIR / "search-index.json").write_text(json.dumps(index, separators=(",", ":")), encoding="utf-8")
     print(f"✅ Search index: {len(index['j'])} occupations, {len(index['s'])} states")
